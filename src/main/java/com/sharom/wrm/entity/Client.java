@@ -20,6 +20,7 @@ public class Client extends AuditEntity {
 
     private String clientCode;
 
+    private int telegramId;
     private String email;
     private String phone;
 }
