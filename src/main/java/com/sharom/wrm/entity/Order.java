@@ -11,11 +11,13 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "orders")
 public class Order extends AuditEntity {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private Client client;
+    private User client;
+
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<BoxGroup> boxGroups;

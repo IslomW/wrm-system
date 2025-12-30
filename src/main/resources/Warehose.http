@@ -1,0 +1,12 @@
+# Create warehose
+POST http://localhost:8080/api/warehouses
+Content-Type: application/json
+
+{
+  "code": "TASH-A",
+  "name": "Tashkent Main Warehouse",
+  "country": "UZ",
+  "city": "Tashkent"
+}
+
+

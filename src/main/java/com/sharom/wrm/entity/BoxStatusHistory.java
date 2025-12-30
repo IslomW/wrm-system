@@ -1,26 +1,24 @@
 package com.sharom.wrm.entity;
 
+import com.sharom.wrm.audit.AuditEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Shipment extends BaseEntity {
+public class BoxStatusHistory extends AuditEntity {
 
-
-    private String shipmentNumber;// SHP-2025-001
+    @ManyToOne(optional = false)
+    private Box box;
 
     @Enumerated(EnumType.STRING)
-    private ShipmentStatus status;
+    private BoxStatus boxStatus;
 
 
-    @ManyToMany
-    private List<Box> boxes;
+
 }

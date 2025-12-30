@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import static jakarta.persistence.FetchType.*;
-
 
 @Entity
 @Getter
@@ -27,5 +25,13 @@ public class Box extends AuditEntity {
     // группа, к которой относится коробка
     @ManyToOne(optional = false)
     private BoxGroup boxGroup;
+
+//    @OneToMany(mappedBy = "box", cascade = CascadeType.ALL)
+//    private List<BoxStatusHistory> statusHistory;
+//
+//
+//
+//    @OneToMany(mappedBy = "box", cascade = CascadeType.ALL)
+//    private List<BoxLocationHistory> locationHistory;
 
 }

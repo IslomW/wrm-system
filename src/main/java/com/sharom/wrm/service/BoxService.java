@@ -1,19 +1,33 @@
 package com.sharom.wrm.service;
 
 import com.sharom.wrm.entity.Box;
+import com.sharom.wrm.entity.BoxStatus;
+import com.sharom.wrm.entity.BoxStatusHistory;
 
 import java.util.List;
 
 public interface BoxService {
 
-    Box create(Box box);
+//    Box create(Box box);
+//
+//    Box getById(Long id);
+//
+//    List<Box> getAll();
+//
+//    Box update(Long id, Box box);
+//
+//    void delete(Long id);
+//
+//    void changeStatus(Long boxId, BoxStatus newStatus, User user);
 
-    Box getById(Long id);
+    void changeStatus(
+            String boxId,
+            BoxStatus newStatus,
+            String changedBy
+    );
 
-    List<Box> getAll();
+    Box getById(String boxId);
 
-    Box update(Long id, Box box);
-
-    void delete(Long id);
+    List<BoxStatusHistory> getStatusHistory(String boxId);
 
 }

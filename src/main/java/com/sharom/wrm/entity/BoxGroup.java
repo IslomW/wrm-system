@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
-
 
 @Entity
 @Table(name = "box_group")
 @Getter
 @Setter
-public class BoxGroup  extends AuditEntity {
+public class BoxGroup extends AuditEntity {
 
 
     // описание группы (например: "Коробки 60x40x40, бытовая техника")
@@ -37,5 +35,4 @@ public class BoxGroup  extends AuditEntity {
     private int quantity;
 
     private String photoUrl;
-
 }
