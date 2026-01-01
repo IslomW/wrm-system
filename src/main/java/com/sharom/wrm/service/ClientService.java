@@ -1,18 +1,19 @@
 package com.sharom.wrm.service;
 
-import com.sharom.wrm.entity.Client;
+import com.sharom.wrm.entity.User;
+import com.sharom.wrm.payload.UserDTO;
 
 import java.util.List;
 
 public interface ClientService {
-    Client create(Client client);
+    UserDTO create(UserDTO client);
 
-    Client getById(Long id);
+    UserDTO getById(String id);
 
-    List<Client> getAll();
+    List<UserDTO> getAll();
 
-    Client update(Long id, Client client);
+    UserDTO update(String id, UserDTO client);
 
-    void delete(Long id);
+    void delete(String id);
 
 }

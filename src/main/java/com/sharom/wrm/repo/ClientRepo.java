@@ -1,7 +1,7 @@
 package com.sharom.wrm.repo;
 
-import com.sharom.wrm.entity.Client;
+import com.sharom.wrm.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClientRepo extends JpaRepository<Client, String> {
+public interface ClientRepo extends JpaRepository<User, String> {
 }
