@@ -1,19 +1,18 @@
 package com.sharom.wrm.service;
 
-import com.sharom.wrm.entity.User;
+import com.sharom.wrm.payload.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
-    User create(User user);
+    UserDTO create(UserDTO client);
 
-    User getById(Long id);
+    UserDTO getById(String id);
 
-    User getByUsername(String username);
+    List<UserDTO> getAll();
 
-    List<User> getAll();
+    UserDTO update(String id, UserDTO client);
 
-    User update(Long id, User user);
+    void delete(String id);
 
-    void delete(Long id);
 }

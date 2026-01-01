@@ -4,7 +4,6 @@ import com.sharom.wrm.entity.User;
 import com.sharom.wrm.mapper.UserMapper;
 import com.sharom.wrm.payload.UserDTO;
 import com.sharom.wrm.repo.UserRepo;
-import com.sharom.wrm.service.ClientService;
 import com.sharom.wrm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ClientServiceImpl implements ClientService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
     private final UserMapper userMapper;
