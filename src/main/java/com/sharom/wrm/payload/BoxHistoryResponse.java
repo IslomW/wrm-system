@@ -1,4 +1,6 @@
 package com.sharom.wrm.payload;
 
-public record BoxHistoryResponse() {
+import java.util.List;
+
+public record BoxHistoryResponse(BoxDTO box, List<StatusHistoryDTO> statuses,List<LocationHistoryDto> locations ) {
 }

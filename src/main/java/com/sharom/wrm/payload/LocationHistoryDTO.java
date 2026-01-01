@@ -1,4 +1,9 @@
 package com.sharom.wrm.payload;
 
-public record LocationHistoryDTO() {
+import java.time.LocalDateTime;
+
+public record LocationHistoryDTO(String warehouseName,
+                                 String hubName,
+                                 String transportInfo,
+                                 LocalDateTime arrivedAt) {
 }
