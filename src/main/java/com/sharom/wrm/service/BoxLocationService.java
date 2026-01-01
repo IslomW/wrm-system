@@ -7,10 +7,24 @@ import java.util.List;
 
 public interface BoxLocationService {
 
+    //void arriveToWarehouse(String boxId, String warehouseId) – коробка прибыла на склад
     void arriveToWarehouse(
             String boxId,
             String warehouseId
     );
+
+    void moveToTransit(
+            String boxId,
+            String hubName,
+            String transportInfo
+    );
+
+    void arriveToHub(
+            String boxId,
+            String hubName
+    );
+
+
 
     void moveBetweenWarehouses(
             String boxId,

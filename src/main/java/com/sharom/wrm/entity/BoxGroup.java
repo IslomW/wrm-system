@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "box_group")
@@ -28,6 +30,13 @@ public class BoxGroup extends AuditEntity {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+
+    @OneToMany(
+            mappedBy = "boxGroup",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Box> boxes = new ArrayList<>();
 
     // тип товара внутри (опционально)
     private String boxType;

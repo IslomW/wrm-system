@@ -1,7 +1,7 @@
 package com.sharom.wrm.controller;
 
 import com.sharom.wrm.payload.UserDTO;
-import com.sharom.wrm.service.ClientService;
+import com.sharom.wrm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/clients")
 @RequiredArgsConstructor
-public class ClientController {
-    private final ClientService clientService;
+public class UserController {
+    private final UserService userService;
 
 
 
@@ -21,21 +21,21 @@ public class ClientController {
     // CREATE
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = clientService.create(userDTO);
+        UserDTO createdUser = userService.create(userDTO);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getById(@PathVariable String id) {
-        UserDTO user = clientService.getById(id);
+        UserDTO user = userService.getById(id);
         return ResponseEntity.ok(user);
     }
 
     // GET ALL
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAll() {
-        List<UserDTO> users = clientService.getAll();
+        List<UserDTO> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 
@@ -45,14 +45,14 @@ public class ClientController {
             @PathVariable String id,
             @RequestBody UserDTO userDTO
     ) {
-        UserDTO updatedUser = clientService.update(id, userDTO);
+        UserDTO updatedUser = userService.update(id, userDTO);
         return ResponseEntity.ok(updatedUser);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        clientService.delete(id);
+        userService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

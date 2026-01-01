@@ -18,6 +18,9 @@ public class Order extends AuditEntity {
     @JoinColumn(name = "client_id")
     private User client;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<BoxGroup> boxGroups;

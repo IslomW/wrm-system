@@ -26,6 +26,9 @@ public class Box extends AuditEntity {
     @ManyToOne(optional = false)
     private BoxGroup boxGroup;
 
+    @ManyToOne
+    private Warehouse currentWarehouse;
+
 //    @OneToMany(mappedBy = "box", cascade = CascadeType.ALL)
 //    private List<BoxStatusHistory> statusHistory;
 //

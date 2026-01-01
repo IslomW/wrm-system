@@ -18,7 +18,7 @@ import lombok.Setter;
         )
 public class Warehouse extends BaseEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private String code;
     // "TSH-WH-01" — ЖИВЁТ ВЕЧНО
 

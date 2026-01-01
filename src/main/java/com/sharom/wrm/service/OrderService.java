@@ -1,20 +1,24 @@
 package com.sharom.wrm.service;
 
 import com.sharom.wrm.entity.Order;
+import com.sharom.wrm.entity.OrderStatus;
 
 import java.util.List;
 
 public interface OrderService {
-    Order create(Order order);
+    Order createOrder(String clientId);
 
-    Order getById(Long id);
+    Order getById(String  id);
 
     List<Order> getAll();
 
-    Order update(Long id, Order order);
+    void changeStatus(
+            String orderId,
+            OrderStatus newStatus
+    );
 
-    void delete(Long id);
+    void delete(String  id);
 
-    List<Order> getByClientId(Long clientId);
+    List<Order> getByClientId(String  clientId);
 
 }
