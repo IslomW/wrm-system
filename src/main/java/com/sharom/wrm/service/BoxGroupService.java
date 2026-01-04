@@ -1,13 +1,14 @@
 package com.sharom.wrm.service;
 
 import com.sharom.wrm.entity.Box;
-import com.sharom.wrm.entity.BoxGroup;
+import com.sharom.wrm.payload.BoxDTO;
 import com.sharom.wrm.payload.BoxGroupDTO;
+import com.sharom.wrm.payload.BoxGroupResponseDTO;
 
 import java.util.List;
 
 public interface BoxGroupService {
-    BoxGroup createGroup(
+    BoxGroupResponseDTO createGroup(
             String orderId,
             BoxGroupDTO dto
     );
@@ -16,5 +17,5 @@ public interface BoxGroupService {
 
     void removeBoxFromGroup(String groupId, String boxId);
 
-    List<Box> getBoxes(String groupId);
+    List<BoxDTO> getBoxes(String groupId);
 }

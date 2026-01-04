@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 public class BoxGroup extends AuditEntity {
 
-
+    private String  boxGroupCode;
     // описание группы (например: "Коробки 60x40x40, бытовая техника")
     @Column(length = 255)
     private String description;
@@ -33,8 +33,7 @@ public class BoxGroup extends AuditEntity {
 
     @OneToMany(
             mappedBy = "boxGroup",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
     private List<Box> boxes = new ArrayList<>();
 
@@ -44,4 +43,9 @@ public class BoxGroup extends AuditEntity {
     private int quantity;
 
     private String photoUrl;
+
+    public void removeBox(Box box) {
+        boxes.remove(box);      // обновляем коллекцию
+        box.setBoxGroup(null);  // обновляем owning side
+    }
 }

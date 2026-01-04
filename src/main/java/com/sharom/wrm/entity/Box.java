@@ -1,5 +1,6 @@
 package com.sharom.wrm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sharom.wrm.audit.AuditEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,6 +25,8 @@ public class Box extends AuditEntity {
 
     // группа, к которой относится коробка
     @ManyToOne(optional = false)
+    @JoinColumn(name = "box_group_id")
+    @JsonIgnore
     private BoxGroup boxGroup;
 
     @ManyToOne

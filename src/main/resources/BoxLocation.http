@@ -1,0 +1,29 @@
+### Box arrived to warehouse
+POST http://localhost:8080/api/v1/boxes/{{boxId}}/arrive/warehouse/{{warehouseId}}
+Content-Type: application/x-www-form-urlencoded
+
+### Move box to transit
+POST http://localhost:8080/api/v1/boxes/{{boxId}}/transit?
+    hubName={{$random.alphanumeric(8)}}&
+    transportInfo={{$random.alphanumeric(8)}}
+    Content-Type: application/x-www-form-urlencoded
+
+### Box arrived to hub
+POST http://localhost:8080/api/v1/boxes/{{boxId}}/arrive/hub?
+    hubName={{$random.alphanumeric(8)}}
+    Content-Type: application/x-www-form-urlencoded
+
+### Move box between warehouses
+POST http://localhost:8080/api/v1/boxes/{{boxId}}/move?
+    fromWarehouseId={{$random.alphanumeric(8)}}&
+    toWarehouseId={{$random.alphanumeric(8)}}
+    Content-Type: application/x-www-form-urlencoded
+
+### Get current warehouse of box
+GET http://localhost:8080/api/v1/boxes/{{boxId}}/warehouse
+
+### Get box location history
+GET http://localhost:8080/api/v1/boxes/{{boxId}}/history
+
+### Get box History
+GET http://localhost:8080/api/v1/boxes/box/history/{{boxId}}

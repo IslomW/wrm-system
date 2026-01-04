@@ -70,4 +70,14 @@ public class BoxLocationServiceImpl implements BoxLocationService {
     public List<BoxLocationHistory> getHistory(String boxId) {
         return historyRepository.findByBoxIdOrderByArrivedAtDesc(boxId);
     }
+
+    @Override
+    public void moveToTransit(String boxId, String hubName, String transportInfo) {
+
+    }
+
+    @Override
+    public void arriveToHub(String boxId, String hubName) {
+
+    }
 }

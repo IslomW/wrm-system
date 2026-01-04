@@ -1,0 +1,11 @@
+### Crate user
+POST http://localhost:8080/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "clientCode": "test",
+  "telegramId": 2132352,
+  "email": "islom@gmail.com",
+  "phone": "+998946292882"
+}

@@ -1,12 +1,45 @@
-# Create warehose
-POST http://localhost:8080/api/warehouses
+### Create warehose
+POST http://localhost:8080/api/v1/warehouses
 Content-Type: application/json
 
 {
-  "code": "TASH-A",
-  "name": "Tashkent Main Warehouse",
-  "country": "UZ",
-  "city": "Tashkent"
+  "code": "KR-A",
+  "name": "Kirygizistan Main Warehouse",
+  "country": "KR",
+  "city": "Osh"
 }
+
+
+### Deactivate warehose
+POST http://localhost:8080/api/v1/warehouses/0P1R64A0FY2KX/deactivate
+Content-Type: application/x-www-form-urlencoded
+
+
+### Activate warehose
+POST http://localhost:8080/api/v1/warehouses/0P1R64A0FY2KX/activate
+Content-Type: application/x-www-form-urlencoded
+
+
+
+### Get Active warehouse
+GET http://localhost:8080/api/v1/warehouses/active
+
+
+
+###
+PUT http://localhost:8080/api/v1/warehouses/{{id}}
+Content-Type: application/json
+
+###
+
+
+
+###
+GET http://localhost:8080/api/v1/warehouses/{{id}}
+
+
+###
+GET http://localhost:8080/api/v1/warehouses/code/{{code}}
+
 
 
