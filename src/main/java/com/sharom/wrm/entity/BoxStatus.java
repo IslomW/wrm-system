@@ -2,8 +2,8 @@ package com.sharom.wrm.entity;
 
 public enum BoxStatus {
 
-    CREATED, PACKED, IN_WAREHOUSE,
-    SHIPPED, DELIVERED, LOST
+    CREATED,
+    SEALED
 
 
 

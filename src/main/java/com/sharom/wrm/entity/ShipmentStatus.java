@@ -2,10 +2,11 @@ package com.sharom.wrm.entity;
 
 public enum ShipmentStatus {
 
-    CREATED,
-    DISPATCHED,
-    ARRIVED,
-    CLOSED
+    DRAFT,
+    READY_FOR_LOADING,
+    IN_TRANSIT,         // хотя бы одна коробка загружена
+    COMPLETED,          // все коробки дошли
+    CANCELLED
 
 //    CREATED,
 //    BOOKED,

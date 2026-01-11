@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -21,7 +24,7 @@ public class Box extends AuditEntity {
 
 
     @Enumerated(EnumType.STRING)
-    private BoxStatus status;        // CREATED, SEALED, SCANNED
+    private BoxStatus status;        // CREATED, SEALED
 
     // группа, к которой относится коробка
     @ManyToOne(optional = false)
@@ -32,12 +35,5 @@ public class Box extends AuditEntity {
     @ManyToOne
     private Warehouse currentWarehouse;
 
-//    @OneToMany(mappedBy = "box", cascade = CascadeType.ALL)
-//    private List<BoxStatusHistory> statusHistory;
-//
-//
-//
-//    @OneToMany(mappedBy = "box", cascade = CascadeType.ALL)
-//    private List<BoxLocationHistory> locationHistory;
 
 }

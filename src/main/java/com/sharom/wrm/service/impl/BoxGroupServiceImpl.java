@@ -2,9 +2,9 @@ package com.sharom.wrm.service.impl;
 
 import com.sharom.wrm.entity.*;
 import com.sharom.wrm.mapper.BoxMapper;
-import com.sharom.wrm.payload.BoxDTO;
-import com.sharom.wrm.payload.BoxGroupDTO;
-import com.sharom.wrm.payload.BoxGroupResponseDTO;
+import com.sharom.wrm.payload.box.BoxDTO;
+import com.sharom.wrm.payload.box.BoxGroupDTO;
+import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.repo.BoxGroupRepo;
 import com.sharom.wrm.repo.BoxRepo;
 import com.sharom.wrm.repo.OrderRepo;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.sharom.wrm.entity.BoxStatus.CREATED;

@@ -1,4 +1,4 @@
-package com.sharom.wrm.payload;
+package com.sharom.wrm.payload.box;
 
 import java.util.List;
 

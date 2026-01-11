@@ -1,7 +1,7 @@
 package com.sharom.wrm.mapper;
 
 import com.sharom.wrm.entity.Box;
-import com.sharom.wrm.payload.BoxDTO;
+import com.sharom.wrm.payload.box.BoxDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;

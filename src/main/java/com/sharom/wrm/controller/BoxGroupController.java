@@ -1,10 +1,8 @@
 package com.sharom.wrm.controller;
 
-import com.sharom.wrm.entity.Box;
-import com.sharom.wrm.entity.BoxGroup;
-import com.sharom.wrm.payload.BoxDTO;
-import com.sharom.wrm.payload.BoxGroupDTO;
-import com.sharom.wrm.payload.BoxGroupResponseDTO;
+import com.sharom.wrm.payload.box.BoxDTO;
+import com.sharom.wrm.payload.box.BoxGroupDTO;
+import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.service.BoxGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

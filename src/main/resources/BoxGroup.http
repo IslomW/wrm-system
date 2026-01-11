@@ -3,13 +3,13 @@ POST http://localhost:8080/api/v1/box-groups/0P1RMD83N98FE
 Content-Type: application/json
 
 {
-  "description": "Electronics components",
+  "description": "Toys components",
   "boxType": "STANDARD",
-  "quantity": 10,
-  "weight": 12.5,
-  "length": 40.0,
-  "width": 30.0,
-  "height": 25.0
+  "quantity": 5,
+  "weight": 15.5,
+  "length": 70.0,
+  "width": 10.0,
+  "height": 40.0
 }
 
 ### Delete box by id
@@ -20,4 +20,4 @@ Content-Type: application/x-www-form-urlencoded
 DELETE http://localhost:8080/api/v1/box-groups/0P2N2ZM50MMQ0/boxes/0P2N2ZNVMMM7G
 
 ### Get all group boxes
-GET http://localhost:8080/api/v1/box-groups/0P2N2ZM50MMQ0/boxes
+GET http://localhost:8080/api/v1/box-groups/0P2PG8XBHRXNC/boxes

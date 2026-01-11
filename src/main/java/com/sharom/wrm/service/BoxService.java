@@ -2,7 +2,6 @@ package com.sharom.wrm.service;
 
 import com.sharom.wrm.entity.Box;
 import com.sharom.wrm.entity.BoxStatus;
-import com.sharom.wrm.entity.BoxStatusHistory;
 
 import java.util.List;
 
@@ -20,14 +19,8 @@ public interface BoxService {
 //
 //    void changeStatus(Long boxId, BoxStatus newStatus, User user);
 
-    void changeStatus(
-            String boxId,
-            BoxStatus newStatus,
-            String changedBy
-    );
 
     Box getById(String boxId);
 
-    List<BoxStatusHistory> getStatusHistory(String boxId);
 
 }

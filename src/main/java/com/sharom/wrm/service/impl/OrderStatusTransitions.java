@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 @NoArgsConstructor
-public final class OrderStatusTransitions {
+public final class  OrderStatusTransitions {
 
     private static final Map<OrderStatus, Set<OrderStatus>> ALLOWED = Map.of(
             OrderStatus.CREATED, Set.of(OrderStatus.CONFIRMED, OrderStatus.CANCELLED),
