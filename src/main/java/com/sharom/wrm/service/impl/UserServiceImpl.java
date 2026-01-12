@@ -5,7 +5,11 @@ import com.sharom.wrm.mapper.UserMapper;
 import com.sharom.wrm.payload.UserDTO;
 import com.sharom.wrm.repo.UserRepo;
 import com.sharom.wrm.service.UserService;
+import com.sharom.wrm.utils.Page2DTO;
+import com.sharom.wrm.utils.PageDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +38,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAll() {
         return userMapper.toDtoList(userRepo.findAll());
+    }
+
+    @Override
+    public PageDTO<UserDTO> getAll(Pageable pageable) {
+        Page<UserDTO> users = userRepo.findAll(pageable).map(userMapper::toDto);
+        return Page2DTO.tPageDTO(users);
     }
 
     @Override
