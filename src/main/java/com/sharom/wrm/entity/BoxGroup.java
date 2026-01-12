@@ -42,7 +42,13 @@ public class BoxGroup extends AuditEntity {
 
     private int quantity;
 
-    private String photoUrl;
+    @ElementCollection
+    @CollectionTable(
+            name = "box_group_photos",
+            joinColumns = @JoinColumn(name = "box_group_id")
+    )
+    @Column(name = "photo_url")
+    private List<String> photoUrls = new ArrayList<>();
 
     public void removeBox(Box box) {
         boxes.remove(box);      // обновляем коллекцию

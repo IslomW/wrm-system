@@ -18,10 +18,13 @@ import com.sharom.wrm.utils.TsidGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.sharom.wrm.entity.BoxStatus.CREATED;
 
@@ -39,7 +42,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 
     @Override
     @Transactional
-    public BoxGroupResponseDTO createGroup(String orderId, BoxGroupDTO dto) {
+    public BoxGroupResponseDTO createGroup(String orderId, BoxGroupDTO dto, List<MultipartFile> photos) {
 
         Order order = orderRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
@@ -61,6 +64,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         boxGroup.setHeight(dto.height());
         boxGroup.setBoxType(dto.boxType());
         boxGroup.setQuantity(dto.quantity());
+        boxGroup.setPhotoUrls(uploadPhotos(photos));
 
         String groupCode = BoxNumberGenerator.generateGroupCode(boxGroupRepo.countByOrderId(orderId) + 1);
 
@@ -107,7 +111,8 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                 savedGroup.getId(),
                 savedGroup.getDescription(),
                 savedGroup.getQuantity(),
-                mapper.toDtoList(savedGroup.getBoxes())
+                mapper.toDtoList(savedGroup.getBoxes()),
+                savedGroup.getPhotoUrls()
                 );
     }
 
@@ -159,5 +164,35 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 
         // Возвращаем копию списка, чтобы фронт не изменял оригинал
         return mapper.toDtoList(group.getBoxes());
+    }
+
+    private List<String> uploadPhotos(List<MultipartFile> files){
+        List<String> urls = new ArrayList<>();
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile photo : files) {
+
+                if (photo.isEmpty()) continue;
+
+                if (!photo.getContentType().startsWith("image/")) {
+                    throw new RuntimeException("Only images allowed");
+                }
+
+                try {
+                    String fileName = UUID.randomUUID() + "_" + photo.getOriginalFilename();
+
+                    String photoUrl = minioService.uploadPhoto(
+                            photo.getBytes(),
+                            fileName
+                    );
+
+                    urls.add(photoUrl);
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Error uploading photo", e);
+                }
+            }
+        }
+
+        return urls;
     }
 }

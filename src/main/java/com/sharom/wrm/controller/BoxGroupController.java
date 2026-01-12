@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,9 +23,10 @@ public class BoxGroupController {
     @PostMapping("/{orderId}")
     public ResponseEntity<BoxGroupResponseDTO> createGroup(
             @PathVariable String orderId,
-            @RequestBody BoxGroupDTO dto
+            @RequestBody BoxGroupDTO dto,
+            @RequestPart("photos") List<MultipartFile> photos
     ) {
-        BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto);
+        BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
