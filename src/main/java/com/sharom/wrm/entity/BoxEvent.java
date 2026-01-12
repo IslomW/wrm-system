@@ -1,16 +1,22 @@
 package com.sharom.wrm.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(
+        name = "box_event",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uq_box_event_once",
+                        columnNames = {"box_id", "shipment_id", "type"}
+                )
+        }
+)
 @Getter
 @Setter
 public class BoxEvent extends BaseEntity{

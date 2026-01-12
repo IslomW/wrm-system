@@ -1,6 +1,8 @@
 package com.sharom.wrm.service.impl;
 
 import com.sharom.wrm.entity.*;
+import com.sharom.wrm.mapper.BoxEventMapper;
+import com.sharom.wrm.payload.box.BoxEventDTO;
 import com.sharom.wrm.repo.BoxEventRepo;
 import com.sharom.wrm.repo.BoxRepo;
 import com.sharom.wrm.repo.ShipmentRepo;
@@ -25,6 +27,7 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     private final ShipmentRepo shipmentRepo;
     private final BoxRepo boxRepo;
     private final BoxEventRepo boxEventRepo;
+    private final BoxEventMapper boxEventMapper;
 
 
     @Override
@@ -109,13 +112,16 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     }
 
     @Override
-    public PageDTO<BoxEvent> getHistoryByShipment(String shipmentId, Pageable pageable) {
-        return Page2DTO.tPageDTO(boxEventRepo.findByShipmentIdOrderByEventTimeAsc(shipmentId, pageable));
+    public PageDTO<BoxEventDTO> getHistoryByShipment(String shipmentNumber, Pageable pageable) {
+
+        return Page2DTO.tPageDTO(boxEventRepo.findByShipment_ShipmentNumberOrderByEventTimeAsc(shipmentNumber, pageable)
+                .map(boxEventMapper::toDto));
     }
 
     @Override
-    public PageDTO<BoxEvent> getLastEventByShipment(String shipmentId, Pageable pageable) {
-        return Page2DTO.tPageDTO(boxEventRepo.findLastLoadedEventsByShipment(shipmentId, pageable));
+    public PageDTO<BoxEventDTO> getLastEventByShipment(String shipmentNumber, Pageable pageable) {
+        return Page2DTO.tPageDTO(boxEventRepo.findLastLoadedEventsByShipment(shipmentNumber, pageable)
+                .map(boxEventMapper::toDto));
     }
 
     /* ============================

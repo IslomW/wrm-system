@@ -1,6 +1,7 @@
 package com.sharom.wrm.service;
 
 import com.sharom.wrm.entity.BoxEvent;
+import com.sharom.wrm.payload.box.BoxEventDTO;
 import com.sharom.wrm.utils.PageDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +23,8 @@ public interface BoxMovementService {
 
     BoxEvent getLastEvent(String boxId);
 
-    PageDTO<BoxEvent> getHistoryByShipment(String shipmentId, Pageable pageable);
+    PageDTO<BoxEventDTO> getHistoryByShipment(String shipmentNumber, Pageable pageable);
 
-    PageDTO<BoxEvent> getLastEventByShipment(String shipmentId, Pageable pageable);
+    PageDTO<BoxEventDTO> getLastEventByShipment(String shipmentNumber, Pageable pageable);
 }
 

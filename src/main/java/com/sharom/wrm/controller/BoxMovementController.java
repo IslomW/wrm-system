@@ -1,6 +1,7 @@
 package com.sharom.wrm.controller;
 
 import com.sharom.wrm.entity.BoxEvent;
+import com.sharom.wrm.payload.box.BoxEventDTO;
 import com.sharom.wrm.service.BoxMovementService;
 import com.sharom.wrm.utils.PageDTO;
 import lombok.RequiredArgsConstructor;
@@ -67,19 +68,19 @@ public class BoxMovementController {
         return boxMovementService.getLastEvent(boxId);
     }
 
-    @GetMapping("/shipment/{shipmentId}/history")
-    public PageDTO<BoxEvent> getHistoryByShipment(
-            @PathVariable String shipmentId,
+    @GetMapping("/shipment/{shipmentNumber}/history")
+    public PageDTO<BoxEventDTO> getHistoryByShipment(
+            @PathVariable String shipmentNumber,
             Pageable pageable
     ) {
-        return boxMovementService.getHistoryByShipment(shipmentId, pageable);
+        return boxMovementService.getHistoryByShipment(shipmentNumber, pageable);
     }
 
     @GetMapping("/shipment/{shipmentId}/last-event")
-    public PageDTO<BoxEvent> getLastEventByShipment(
-            @PathVariable String shipmentId,
+    public PageDTO<BoxEventDTO> getLastEventByShipment(
+            @PathVariable String shipmentNumber,
             Pageable pageable
     ) {
-        return boxMovementService.getLastEventByShipment(shipmentId, pageable);
+        return boxMovementService.getLastEventByShipment(shipmentNumber, pageable);
     }
 }
