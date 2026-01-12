@@ -68,7 +68,7 @@ public class WarehouseController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<PageDTO<Warehouse>> getActiveWarehouses(
+    public ResponseEntity<PageDTO<WarehouseDTO>> getActiveWarehouses(
             Pageable pageable) {
 
         return ResponseEntity.ok(

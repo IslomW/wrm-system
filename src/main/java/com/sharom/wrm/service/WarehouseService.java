@@ -20,7 +20,7 @@ public interface WarehouseService {
 
     WarehouseDTO getByCode(String code);
 
-    PageDTO<Warehouse> getActiveWarehouses(Pageable pageable);
+    PageDTO<WarehouseDTO> getActiveWarehouses(Pageable pageable);
 
     void validateIsActive(String warehouseId);
 }

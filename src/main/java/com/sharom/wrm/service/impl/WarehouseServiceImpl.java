@@ -98,8 +98,8 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public PageDTO<Warehouse> getActiveWarehouses(Pageable pageable) {
-        return Page2DTO.tPageDTO(warehouseRepo.findAllByActiveTrue(pageable));
+    public PageDTO<WarehouseDTO> getActiveWarehouses(Pageable pageable) {
+        return Page2DTO.tPageDTO(warehouseRepo.findAllByActiveTrue(pageable).map(mapper::toDto));
     }
 
     @Override
