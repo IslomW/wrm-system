@@ -5,6 +5,8 @@ import com.sharom.wrm.mapper.WarehouseMapper;
 import com.sharom.wrm.payload.WarehouseDTO;
 import com.sharom.wrm.repo.WarehouseRepo;
 import com.sharom.wrm.service.WarehouseService;
+import com.sharom.wrm.utils.Page2DTO;
+import com.sharom.wrm.utils.PageDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -96,8 +98,8 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Page<Warehouse> getActiveWarehouses(Pageable pageable) {
-        return warehouseRepo.findAllByActiveTrue(pageable);
+    public PageDTO<Warehouse> getActiveWarehouses(Pageable pageable) {
+        return Page2DTO.tPageDTO(warehouseRepo.findAllByActiveTrue(pageable));
     }
 
     @Override

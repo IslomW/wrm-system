@@ -5,6 +5,8 @@ import com.sharom.wrm.repo.BoxEventRepo;
 import com.sharom.wrm.repo.BoxRepo;
 import com.sharom.wrm.repo.ShipmentRepo;
 import com.sharom.wrm.service.BoxMovementService;
+import com.sharom.wrm.utils.Page2DTO;
+import com.sharom.wrm.utils.PageDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -96,9 +98,9 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     }
 
     @Override
-    public Page<BoxEvent> getHistory(String boxId, int page, int size) {
+    public PageDTO<BoxEvent> getHistory(String boxId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return boxEventRepo.findByBoxIdOrderByEventTimeAsc(boxId, pageable);
+        return Page2DTO.tPageDTO(boxEventRepo.findByBoxIdOrderByEventTimeAsc(boxId, pageable));
     }
 
     @Override
@@ -108,15 +110,15 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     }
 
     @Override
-    public Page<BoxEvent> getHistoryByShipment(String shipmentId, int page, int size) {
+    public PageDTO<BoxEvent> getHistoryByShipment(String shipmentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return boxEventRepo.findByShipmentIdOrderByEventTimeAsc(shipmentId, pageable);
+        return Page2DTO.tPageDTO(boxEventRepo.findByShipmentIdOrderByEventTimeAsc(shipmentId, pageable));
     }
 
     @Override
-    public Page<BoxEvent> getLastEventByShipment(String shipmentId, int page, int size) {
+    public PageDTO<BoxEvent> getLastEventByShipment(String shipmentId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return boxEventRepo.findLastLoadedEventsByShipment(shipmentId, pageable);
+        return Page2DTO.tPageDTO(boxEventRepo.findLastLoadedEventsByShipment(shipmentId, pageable));
     }
 
     /* ============================

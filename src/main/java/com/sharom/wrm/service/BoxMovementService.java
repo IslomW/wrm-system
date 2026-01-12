@@ -1,6 +1,7 @@
 package com.sharom.wrm.service;
 
 import com.sharom.wrm.entity.BoxEvent;
+import com.sharom.wrm.utils.PageDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;
@@ -16,12 +17,12 @@ public interface BoxMovementService {
 
     void arrivedAtCustoms(String boxId, String shipmentNumber);
 
-    Page<BoxEvent> getHistory(String  boxId, int page, int size);
+    PageDTO<BoxEvent> getHistory(String  boxId, int page, int size);
 
     BoxEvent getLastEvent(String boxId);
 
-    Page<BoxEvent> getHistoryByShipment(String shipmentId, int page, int size);
+    PageDTO<BoxEvent> getHistoryByShipment(String shipmentId, int page, int size);
 
-    Page<BoxEvent> getLastEventByShipment(String shipmentId, int page, int size);
+    PageDTO<BoxEvent> getLastEventByShipment(String shipmentId, int page, int size);
 }
 

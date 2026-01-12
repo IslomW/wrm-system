@@ -3,6 +3,7 @@ package com.sharom.wrm.controller;
 import com.sharom.wrm.entity.Warehouse;
 import com.sharom.wrm.payload.WarehouseDTO;
 import com.sharom.wrm.service.WarehouseService;
+import com.sharom.wrm.utils.PageDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,7 +68,7 @@ public class WarehouseController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<Page<Warehouse>> getActiveWarehouses(
+    public ResponseEntity<PageDTO<Warehouse>> getActiveWarehouses(
             Pageable pageable) {
 
         return ResponseEntity.ok(
