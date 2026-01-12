@@ -98,8 +98,7 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     }
 
     @Override
-    public PageDTO<BoxEvent> getHistory(String boxId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PageDTO<BoxEvent> getHistory(String boxId, Pageable pageable) {
         return Page2DTO.tPageDTO(boxEventRepo.findByBoxIdOrderByEventTimeAsc(boxId, pageable));
     }
 
@@ -110,14 +109,12 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     }
 
     @Override
-    public PageDTO<BoxEvent> getHistoryByShipment(String shipmentId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PageDTO<BoxEvent> getHistoryByShipment(String shipmentId, Pageable pageable) {
         return Page2DTO.tPageDTO(boxEventRepo.findByShipmentIdOrderByEventTimeAsc(shipmentId, pageable));
     }
 
     @Override
-    public PageDTO<BoxEvent> getLastEventByShipment(String shipmentId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PageDTO<BoxEvent> getLastEventByShipment(String shipmentId, Pageable pageable) {
         return Page2DTO.tPageDTO(boxEventRepo.findLastLoadedEventsByShipment(shipmentId, pageable));
     }
 

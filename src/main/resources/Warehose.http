@@ -3,10 +3,10 @@ POST http://localhost:8080/api/v1/warehouses
 Content-Type: application/json
 
 {
-  "code": "ANDIJAN-ANDJ",
+  "code": "TASHKENT-TASH",
   "name": "Uzbekistan Warehouse",
-  "country": "ANDJ",
-  "city": "ANDIJAN"
+  "country": "TASHKENT",
+  "city": "TASH"
 }
 
 

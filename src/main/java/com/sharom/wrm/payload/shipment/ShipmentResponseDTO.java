@@ -5,7 +5,7 @@ import com.sharom.wrm.payload.box.BoxDTO;
 
 import java.util.List;
 
-public record ShipmentResponseDTO(String shipmentNumber,
-                                  ShipmentStatus status,
-                                  List<BoxDTO> boxes) {
+public record ShipmentResponseDTO(String id,
+                                  String shipmentNumber,
+                                  ShipmentStatus status) {
 }

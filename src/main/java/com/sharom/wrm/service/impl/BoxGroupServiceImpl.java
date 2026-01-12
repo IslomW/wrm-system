@@ -72,7 +72,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 
         BoxGroup savedGroup = boxGroupRepo.save(boxGroup);
 
-        Warehouse warehouse = warehouseRepo.findById("0P1R64A0FY2KX")
+        Warehouse warehouse = warehouseRepo.findById("0P58F5BXA90AV")
                 .orElseThrow(()-> new RuntimeException("Warehouse not found"));//ishchi ishlidigan ombor
 
         for (int i = 1; i <= dto.quantity(); i++) {

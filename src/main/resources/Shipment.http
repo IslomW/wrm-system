@@ -1,11 +1,21 @@
 ###Create Shipment
 POST http://localhost:8080/api/v1/shipments?
-    boxGroupIds=0P2PG8XBHRXNC,0P4KJNCE83T94
+    boxGroupIds=0P58H0PET6569,0P58N7HH4SBJ4
 
+### Get all Shipmnet
+GET http://localhost:8080/api/v1/shipments
 
 ### Get Shipment by Shimpment number
 GET http://localhost:8080/api/v1/shipments/SHP-2026-1768057035953
 
+###Set Ready
+POST http://localhost:8080/api/v1/shipments/SHP-2026-1768230316960/ready
+
+
+### Delete GropuBox in shipment
+DELETE http://localhost:8080/api/v1/shipments/group?
+    shipmentNumber=SHP-2026-1768230538359&
+    groupId=0P58H0PET6569
 
 ### Get Planned Shipment
-GET http://localhost:8080/api/v1/shipments/planned/SHP-2026-1768057035953
+GET http://localhost:8080/api/v1/shipments/planned/SHP-2026-1768230316960

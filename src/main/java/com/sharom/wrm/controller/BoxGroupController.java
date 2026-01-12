@@ -24,7 +24,7 @@ public class BoxGroupController {
     public ResponseEntity<BoxGroupResponseDTO> createGroup(
             @PathVariable String orderId,
             @RequestBody BoxGroupDTO dto,
-            @RequestPart("photos") List<MultipartFile> photos
+            @RequestPart(value = "photos", required = false) List<MultipartFile> photos
     ) {
         BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);

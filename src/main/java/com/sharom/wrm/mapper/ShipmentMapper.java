@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ShipmentMapper {
 
-    ShipmentResponseDTO shipmentResponseDTO(Shipment shipment);
+    ShipmentResponseDTO toShipmentResponseDTO(Shipment shipment);
 }

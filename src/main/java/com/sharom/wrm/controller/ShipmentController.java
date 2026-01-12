@@ -4,7 +4,9 @@ package com.sharom.wrm.controller;
 import com.sharom.wrm.payload.shipment.ShipmentPlanedDTO;
 import com.sharom.wrm.payload.shipment.ShipmentResponseDTO;
 import com.sharom.wrm.service.ShipmentService;
+import com.sharom.wrm.utils.PageDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,32 @@ public class ShipmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(shipmentService.createShipment(boxGroupIds));
     }
 
+    @PostMapping("/groups")
+    public ResponseEntity<Void> addGroupBoxToShipment(
+            @RequestParam String shipmentNumber,
+            @RequestParam String groupBoxId
+    ) {
+        shipmentService.addGroupBoxToShipment(shipmentNumber, groupBoxId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/group")
+    public ResponseEntity<Void> addGroupBoxesToShipment(
+            @RequestParam String shipmentNumber,
+            @RequestParam String groupId
+    ) {
+        shipmentService.addGroupBoxesToShipment(shipmentNumber, groupId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{shipmentNumber}/ready")
+    public ResponseEntity<Void> readyShipment(
+            @PathVariable String shipmentNumber
+    ) {
+        shipmentService.lockShipment(shipmentNumber);
+        return ResponseEntity.ok().build();
+    }
+
     // 2. Add box to shipment
     @PostMapping("box")
     public ResponseEntity<Void> addBoxToShipment(
@@ -36,14 +64,26 @@ public class ShipmentController {
         return ResponseEntity.ok().build();
     }
 
-    // 3. Remove box from shipment
-    @DeleteMapping("box")
-    public ResponseEntity<Void> removeBoxFromShipment(
-            @RequestParam String shipmentId,
-            @RequestParam String boxId
+
+    @GetMapping("/{shipmentNumber}")
+    public ResponseEntity<ShipmentResponseDTO> getShipmentById(
+            @PathVariable String shipmentNumber
     ) {
-        shipmentService.removeBoxFromShipment(shipmentId, boxId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(shipmentService.getByNumber(shipmentNumber));
+    }
+
+    @GetMapping
+    public ResponseEntity<PageDTO<ShipmentResponseDTO>> getAllShipments(
+            Pageable pageable
+    ){
+        return ResponseEntity.ok(shipmentService.getAllShipments(pageable));
+    }
+
+    @GetMapping("/planned/{shipmentNumber}")
+    public ResponseEntity<ShipmentPlanedDTO> getShipmentPlaned(
+            @PathVariable String shipmentNumber
+    ) {
+        return ResponseEntity.ok(shipmentService.getShipmentPlaned(shipmentNumber));
     }
 
     @DeleteMapping("group")
@@ -55,36 +95,5 @@ public class ShipmentController {
         return ResponseEntity.noContent().build();
     }
 
-    // 4. Dispatch shipment
-    @PostMapping("/{shipmentId}/dispatch")
-    public ResponseEntity<Void> dispatchShipment(
-            @PathVariable String shipmentId
-    ) {
-        shipmentService.dispatchShipment(shipmentId);
-        return ResponseEntity.ok().build();
-    }
 
-    // 5. Arrive shipment
-    @PostMapping("/{shipmentId}/arrive")
-    public ResponseEntity<Void> arriveShipment(
-            @PathVariable String shipmentId
-    ) {
-        shipmentService.arriveShipment(shipmentId);
-        return ResponseEntity.ok().build();
-    }
-
-    // 6. Get shipment by id
-    @GetMapping("/{shipmentNumber}")
-    public ResponseEntity<ShipmentResponseDTO> getShipmentById(
-            @PathVariable String shipmentNumber
-    ) {
-        return ResponseEntity.ok(shipmentService.getByNumber(shipmentNumber));
-    }
-
-    @GetMapping("/planned/{shipmentNumber}")
-    public ResponseEntity<ShipmentPlanedDTO> getShipmentPlaned(
-            @PathVariable String shipmentNumber
-    ) {
-        return ResponseEntity.ok(shipmentService.getShipmentPlaned(shipmentNumber));
-    }
 }

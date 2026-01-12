@@ -1,0 +1,4 @@
+### Load box
+POST http://localhost:8080/api/box-movements/load?
+    boxId=&
+    shipmentNumber=
