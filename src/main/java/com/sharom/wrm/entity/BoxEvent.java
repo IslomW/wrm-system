@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uq_box_event_once",
-                        columnNames = {"box_id", "shipment_id", "type"}
+                        columnNames = {"box_id", "shipment_number", "type"}
                 )
         }
 )
@@ -32,8 +32,8 @@ public class BoxEvent extends BaseEntity{
 
     private String locationId; // warehouseId / truckId / customsId
 
-    @ManyToOne
-    private Shipment shipment;
+    @Column(nullable = false)
+    private String shipmentNumber;
 
     private LocalDateTime eventTime;
 

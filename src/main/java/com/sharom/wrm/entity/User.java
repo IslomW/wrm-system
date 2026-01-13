@@ -15,11 +15,15 @@ import lombok.Setter;
 @Table(name = "users")
 public class User extends AuditEntity {
 
-    private String  name;
+    private String  userName;
     private String clientCode;
+
+    private String password;
     
     @Enumerated(EnumType.STRING)
     private UserType userType;
+
+    private String locationId;
 
     private int telegramId;
     private String email;

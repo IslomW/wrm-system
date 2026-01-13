@@ -21,19 +21,19 @@ public interface BoxEventRepo extends JpaRepository<BoxEvent, String> {
     Optional<BoxEvent> findTopByBoxIdOrderByEventTimeDesc(String boxId);
 
     // Все события для shipment
-    Page<BoxEvent> findByShipment_ShipmentNumberOrderByEventTimeAsc(String shipmentNumber, Pageable pageable);
+    Page<BoxEvent> findByShipmentNumberOrderByEventTimeAsc(String shipmentNumber, Pageable pageable);
 
-    // Последнее событие каждого бокса для shipment
-    @Query("""
-            SELECT e FROM BoxEvent e 
-            WHERE e.shipment.shipmentNumber = :shipmentNumber 
-            AND e.type = 'LOADED_TO_TRUCK'
-            ORDER BY e.eventTime DESC
-            """)
-    Page<BoxEvent> findLastLoadedEventsByShipment(
-            @Param("shipmentNumber") String shipmentNumber,
-            Pageable pageable
-    );
+//    // Последнее событие каждого бокса для shipment
+@Query("""
+    SELECT e FROM BoxEvent e
+    WHERE e.shipmentNumber = :shipmentNumber
+      AND e.type = com.sharom.wrm.entity.BoxEventType.LOADED_TO_TRUCK
+    ORDER BY e.eventTime DESC
+""")
+Page<BoxEvent> findLastLoadedEventsByShipment(
+        @Param("shipmentNumber") String shipmentNumber,
+        Pageable pageable
+);
 
 
 }

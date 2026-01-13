@@ -11,14 +11,10 @@ import com.sharom.wrm.utils.Page2DTO;
 import com.sharom.wrm.utils.PageDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -114,7 +110,7 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     @Override
     public PageDTO<BoxEventDTO> getHistoryByShipment(String shipmentNumber, Pageable pageable) {
 
-        return Page2DTO.tPageDTO(boxEventRepo.findByShipment_ShipmentNumberOrderByEventTimeAsc(shipmentNumber, pageable)
+        return Page2DTO.tPageDTO(boxEventRepo.findByBoxIdOrderByEventTimeAsc(shipmentNumber, pageable)
                 .map(boxEventMapper::toDto));
     }
 
@@ -181,7 +177,7 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     ) {
         BoxEvent event = new BoxEvent();
         event.setBox(box);
-        event.setShipment(shipment);
+        event.setShipmentNumber(shipment.getShipmentNumber());
         event.setType(type);
         event.setLocationType(locationType);
 //        event.setLocationId(locationId);   // warehouseId / truckId / customsId
