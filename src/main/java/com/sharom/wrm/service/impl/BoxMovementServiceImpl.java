@@ -1,5 +1,6 @@
 package com.sharom.wrm.service.impl;
 
+import com.sharom.wrm.config.CustomUserDetails;
 import com.sharom.wrm.entity.*;
 import com.sharom.wrm.mapper.BoxEventMapper;
 import com.sharom.wrm.payload.box.BoxEventDTO;
@@ -9,12 +10,15 @@ import com.sharom.wrm.repo.ShipmentRepo;
 import com.sharom.wrm.service.BoxMovementService;
 import com.sharom.wrm.utils.Page2DTO;
 import com.sharom.wrm.utils.PageDTO;
+import com.sharom.wrm.utils.SecurityUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 @Service
 @RequiredArgsConstructor
@@ -26,74 +30,17 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     private final BoxEventMapper boxEventMapper;
 
 
-    @Override
-    public void loadToTruck(String boxId, String shipmentNumber) {
-
-        Box box = getBoxById(boxId);
-
-        Shipment shipment = getShipmentByNumber(shipmentNumber);
-
-        validateShipmentReady(shipment);
-        validateBoxAllowed(box, shipment);
-
-        saveEvent(
-                box,
-                shipment,
-                BoxEventType.LOADED_TO_TRUCK,
-                LocationType.TRUCK
-        );
-
-    }
-
-    @Override
-    public void unload(String boxId, String shipmentNumber) {
-
-        Box box = getBoxById(boxId);
-
-        Shipment shipment = getShipmentByNumber(shipmentNumber);
-
-        validateCurrentLocation(box, LocationType.TRUCK);
-
-        saveEvent(
-                box,
-                shipment,
-                BoxEventType.UNLOADED,
-                LocationType.WAREHOUSE
-        );
-    }
+    private final Map<BoxAction, BiConsumer<String, String>> actions = Map.of(
+            BoxAction.LOAD, this::loadToTruck,
+            BoxAction.UNLOAD, this::unload,
+            BoxAction.RELOAD, this::reloadToAnotherTruck,
+            BoxAction.CUSTOMS, this::arrivedAtCustoms
+    );
 
 
     @Override
-    public void reloadToAnotherTruck(String boxId, String shipmentNumber) {
-        Box box = getBoxById(boxId);
-
-        Shipment shipment = getShipmentByNumber(shipmentNumber);
-
-        validateCurrentLocation(box, LocationType.WAREHOUSE);
-
-        saveEvent(
-                box,
-                shipment,
-                BoxEventType.RELOADED_TO_TRUCK,
-                LocationType.TRUCK
-        );
-    }
-
-    @Override
-    public void arrivedAtCustoms(String boxId, String shipmentNumber) {
-
-        Box box = getBoxById(boxId);
-
-        Shipment shipment = getShipmentByNumber(shipmentNumber);
-
-        validateCurrentLocation(box, LocationType.TRUCK);
-
-        saveEvent(
-                box,
-                shipment,
-                BoxEventType.ARRIVED_CUSTOMS,
-                LocationType.CUSTOMS
-        );
+    public void moveBox(String boxId, String shipmentNumber, BoxAction action) {
+        this.actions.get(action).accept(boxId, shipmentNumber);
     }
 
     @Override
@@ -119,6 +66,79 @@ public class BoxMovementServiceImpl implements BoxMovementService {
         return Page2DTO.tPageDTO(boxEventRepo.findLastLoadedEventsByShipment(shipmentNumber, pageable)
                 .map(boxEventMapper::toDto));
     }
+
+
+
+    private void loadToTruck(String boxId, String shipmentNumber) {
+
+        Box box = getBoxById(boxId);
+
+        Shipment shipment = getShipmentByNumber(shipmentNumber);
+
+        validateShipmentReady(shipment);
+        validateBoxAllowed(box, shipment);
+
+        saveEvent(
+                box,
+                shipment,
+                BoxEventType.LOADED_TO_TRUCK,
+                LocationType.TRUCK
+        );
+
+    }
+
+
+    private void unload(String boxId, String shipmentNumber) {
+
+        Box box = getBoxById(boxId);
+
+        Shipment shipment = getShipmentByNumber(shipmentNumber);
+
+        validateCurrentLocation(box, LocationType.TRUCK);
+
+        saveEvent(
+                box,
+                shipment,
+                BoxEventType.UNLOADED,
+                LocationType.WAREHOUSE
+        );
+    }
+
+
+
+    private void reloadToAnotherTruck(String boxId, String shipmentNumber) {
+        Box box = getBoxById(boxId);
+
+        Shipment shipment = getShipmentByNumber(shipmentNumber);
+
+        validateCurrentLocation(box, LocationType.WAREHOUSE);
+
+        saveEvent(
+                box,
+                shipment,
+                BoxEventType.RELOADED_TO_TRUCK,
+                LocationType.TRUCK
+        );
+    }
+
+
+    private void arrivedAtCustoms(String boxId, String shipmentNumber) {
+
+        Box box = getBoxById(boxId);
+
+        Shipment shipment = getShipmentByNumber(shipmentNumber);
+
+        validateCurrentLocation(box, LocationType.TRUCK);
+
+        saveEvent(
+                box,
+                shipment,
+                BoxEventType.ARRIVED_CUSTOMS,
+                LocationType.CUSTOMS
+        );
+    }
+
+
 
     /* ============================
        VALIDATIONS
@@ -175,14 +195,20 @@ public class BoxMovementServiceImpl implements BoxMovementService {
             LocationType locationType
 //            String locationId
     ) {
+
+        CustomUserDetails userDetails = SecurityUtils.currentUser();
+
         BoxEvent event = new BoxEvent();
         event.setBox(box);
         event.setShipmentNumber(shipment.getShipmentNumber());
         event.setType(type);
         event.setLocationType(locationType);
-//        event.setLocationId(locationId);   // warehouseId / truckId / customsId
+        event.setLocationId(userDetails.getLocationId());   // warehouseId / truckId / customsId
         event.setEventTime(LocalDateTime.now());
-//        event.setCreatedBy(operator.getId());
+        event.setOperatorId(userDetails.getId());
+
+        event.setFrom(userDetails.getLocationId());
+
 
         boxEventRepo.save(event);
     }

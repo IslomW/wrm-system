@@ -15,7 +15,7 @@ public class MinioService {
     public MinioService() {
         this.minioClient = MinioClient.builder()
                 .endpoint("http://localhost:9000")
-                .credentials("islomadmin", "sharom1234")
+                .credentials("minioadmin", "minioadmin")
                 .build();
     }
 

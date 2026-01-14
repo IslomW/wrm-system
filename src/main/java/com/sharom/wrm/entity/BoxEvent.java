@@ -32,10 +32,16 @@ public class BoxEvent extends BaseEntity{
 
     private String locationId; // warehouseId / truckId / customsId
 
+    private String operatorId;
+
     @Column(nullable = false)
     private String shipmentNumber;
 
     private LocalDateTime eventTime;
+
+    private String from;
+
+    private String to;
 
     private String comment;
 }

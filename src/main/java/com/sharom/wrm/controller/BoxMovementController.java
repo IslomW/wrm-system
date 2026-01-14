@@ -1,5 +1,6 @@
 package com.sharom.wrm.controller;
 
+import com.sharom.wrm.entity.BoxAction;
 import com.sharom.wrm.entity.BoxEvent;
 import com.sharom.wrm.payload.box.BoxEventDTO;
 import com.sharom.wrm.service.BoxMovementService;
@@ -17,41 +18,16 @@ public class BoxMovementController {
 
     private final BoxMovementService boxMovementService;
 
-    @PostMapping("/load")
+    @PostMapping("/move")
     public ResponseEntity<Void> loadToTruck(
             @RequestParam String boxId,
-            @RequestParam String shipmentNumber
+            @RequestParam String shipmentNumber,
+            @RequestParam BoxAction boxAction
     ) {
-        boxMovementService.loadToTruck(boxId, shipmentNumber);
+        boxMovementService.moveBox(boxId, shipmentNumber, boxAction);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/unload")
-    public ResponseEntity<Void> unload(
-            @RequestParam String boxId,
-            @RequestParam String shipmentNumber
-    ) {
-        boxMovementService.unload(boxId, shipmentNumber);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/reload")
-    public ResponseEntity<Void> reloadToAnotherTruck(
-            @RequestParam String boxId,
-            @RequestParam String shipmentNumber
-    ) {
-        boxMovementService.reloadToAnotherTruck(boxId, shipmentNumber);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/customs")
-    public ResponseEntity<Void> arrivedAtCustoms(
-            @RequestParam String boxId,
-            @RequestParam String shipmentNumber
-    ) {
-        boxMovementService.arrivedAtCustoms(boxId, shipmentNumber);
-        return ResponseEntity.ok().build();
-    }
 
     @GetMapping("/{boxId}/history")
     public PageDTO<BoxEvent> getHistory(

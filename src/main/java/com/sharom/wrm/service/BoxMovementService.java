@@ -1,23 +1,14 @@
 package com.sharom.wrm.service;
 
+import com.sharom.wrm.entity.BoxAction;
 import com.sharom.wrm.entity.BoxEvent;
 import com.sharom.wrm.payload.box.BoxEventDTO;
 import com.sharom.wrm.utils.PageDTO;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.Optional;
 
 public interface BoxMovementService {
 
-
-    void loadToTruck(String boxId, String shipmentNumber);
-
-    void unload(String boxId, String shipmentNumber);
-
-    void reloadToAnotherTruck(String boxId, String shipmentNumber);
-
-    void arrivedAtCustoms(String boxId, String shipmentNumber);
+    void moveBox(String boxId, String shipmentNumber, BoxAction action);
 
     PageDTO<BoxEvent> getHistory(String  boxId, Pageable pageable);
 

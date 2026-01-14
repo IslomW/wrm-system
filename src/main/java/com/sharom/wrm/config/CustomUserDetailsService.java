@@ -24,10 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepo.findByUserName(username)
                 .orElseThrow(BadRequestAlertException::userNotFound);
 
-        return new org.springframework.security.core.userdetails.User(
-                user.getUserName(),
-                user.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_" + user.getUserType().name()))
-        );
+        return new CustomUserDetails(user);
     }
 }
