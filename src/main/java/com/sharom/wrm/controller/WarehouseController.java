@@ -1,11 +1,9 @@
 package com.sharom.wrm.controller;
 
-import com.sharom.wrm.entity.Warehouse;
 import com.sharom.wrm.payload.WarehouseDTO;
 import com.sharom.wrm.service.WarehouseService;
 import com.sharom.wrm.utils.PageDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

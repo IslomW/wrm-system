@@ -1,10 +1,7 @@
 package com.sharom.wrm.entity;
 
 import com.sharom.wrm.audit.AuditEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +12,9 @@ import lombok.Setter;
 @Table(name = "users")
 public class User extends AuditEntity {
 
+    @Column(unique = true)
     private String  userName;
+    @Column(unique = true)
     private String clientCode;
 
     private String password;

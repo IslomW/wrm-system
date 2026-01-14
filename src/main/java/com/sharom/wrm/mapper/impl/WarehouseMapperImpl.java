@@ -30,6 +30,7 @@ public class WarehouseMapperImpl implements WarehouseMapper {
         }
 
         return new WarehouseDTO(
+                entity.getId(),
                 entity.getCode(),
                 entity.getName(),
                 entity.getCountry(),

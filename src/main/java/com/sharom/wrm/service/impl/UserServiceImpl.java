@@ -1,11 +1,15 @@
 package com.sharom.wrm.service.impl;
 
 import com.sharom.wrm.entity.User;
+import com.sharom.wrm.entity.UserType;
+import com.sharom.wrm.entity.Warehouse;
+import com.sharom.wrm.exception.BadRequestAlertException;
 import com.sharom.wrm.mapper.UserMapper;
 import com.sharom.wrm.payload.AuthResponse;
 import com.sharom.wrm.payload.RegisterRequest;
 import com.sharom.wrm.payload.UserDTO;
 import com.sharom.wrm.repo.UserRepo;
+import com.sharom.wrm.repo.WarehouseRepo;
 import com.sharom.wrm.service.RefreshTokenService;
 import com.sharom.wrm.service.UserService;
 import com.sharom.wrm.utils.JwtUtil;
@@ -25,6 +29,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
+    private final WarehouseRepo warehouseRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
@@ -33,14 +38,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
-        if (userRepo.existsById(request.username())) {
-            throw new RuntimeException("User already exists");
+        if (userRepo.existsUserByUserName(request.username())){
+            throw BadRequestAlertException.userAlreadyExists();
         }
 
         User user = new User();
         user.setUserName(request.username());
+        user.setEmail(request.email());
+        user.setPhone(request.phoneNumber());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setUserType(request.userType());
+        user.setUserType(UserType.CLIENT);
         user.setLocationId("none");
 
         userRepo.save(user);
@@ -55,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public AuthResponse refreshAccessToken(String refreshToken) {
         String username = refreshTokenService.validateRefreshToken(refreshToken);
         User user = userRepo.findById(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(BadRequestAlertException::userNotFound);
 
         String newAccessToken = jwtUtil.generateToken(user);
         String newRefreshToken = refreshTokenService.createRefreshToken(user.getUserName());
@@ -65,8 +72,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthResponse login(String username, String password) {
-        User user = userRepo.findById(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepo.findByUserName(username)
+                .orElseThrow(BadRequestAlertException::userNotFound);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid password");
@@ -80,14 +87,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO create(UserDTO client) {
-
         return userMapper.toDto(userRepo.save(userMapper.toEntity(client)));
     }
 
     @Override
     public UserDTO getById(String id) {
         return userMapper.toDto(userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client not found")));
+                .orElseThrow(BadRequestAlertException::userNotFound));
     }
 
     @Override
@@ -117,5 +123,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(String id) {
         userRepo.deleteById(id);
+    }
+
+
+    @Override
+    public UserDTO setUserLocation(String userId, String locationId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(BadRequestAlertException::userNotFound);
+        Warehouse warehouse = warehouseRepo.findById(locationId)
+                .orElseThrow();
+
+        user.setLocationId(warehouse.getId());
+        userRepo.save(user);
+        return userMapper.toDto(user);
     }
 }

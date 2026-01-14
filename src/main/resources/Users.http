@@ -9,3 +9,14 @@ Content-Type: application/json
   "email": "islom@gmail.com",
   "phone": "+998946292882"
 }
+
+### Register
+POST http://localhost:8080/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "username":"islom",
+  "email":"tawkenskiy000@gmail.com",
+  "password":"asdffdsa",
+  "phoneNumber": "901896996"
+}

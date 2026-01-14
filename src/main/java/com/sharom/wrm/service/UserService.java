@@ -17,7 +17,6 @@ public interface UserService {
 
     AuthResponse refreshAccessToken(String refreshToken);
 
-
     UserDTO create(UserDTO client);
 
     UserDTO getById(String id);
@@ -30,4 +29,5 @@ public interface UserService {
 
     void delete(String id);
 
+    UserDTO setUserLocation(String userId, String locationId);
 }

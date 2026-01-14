@@ -17,7 +17,7 @@ public class UserMapperImpl implements UserMapper {
         }
 
         return new UserDTO(
-                user.getName(),
+                user.getUserName(),
                 user.getClientCode(),
                 user.getTelegramId(),
                 user.getEmail(),
@@ -31,7 +31,7 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
         User user = new User();
-        user.setName(userDto.name());
+        user.setUserName(userDto.name());
         user.setClientCode(userDto.clientCode());
         user.setTelegramId(userDto.telegramId());
         user.setEmail(userDto.email());

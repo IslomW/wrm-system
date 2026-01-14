@@ -16,8 +16,6 @@ public class UserController {
     private final UserService userService;
 
 
-
-
     // CREATE
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
@@ -54,5 +52,11 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable String id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/location")
+    public ResponseEntity<UserDTO> setUserLocation(@RequestParam String id,
+                                                   @RequestParam String locationId) {
+        return ResponseEntity.ok(userService.setUserLocation(id, locationId));
     }
 }
