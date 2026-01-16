@@ -4,7 +4,9 @@ import com.sharom.wrm.payload.box.BoxDTO;
 import com.sharom.wrm.payload.box.BoxGroupDTO;
 import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.service.BoxGroupService;
+import com.sharom.wrm.utils.PageDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,11 @@ public class BoxGroupController {
     ) {
         BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<PageDTO<BoxGroupDTO>> getAllBoxGroup(Pageable pageable){
+        return ResponseEntity.ok(boxGroupService.getAllBoxGroup(pageable));
     }
 
     // Добавить коробку в группу

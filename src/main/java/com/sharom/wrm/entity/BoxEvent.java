@@ -39,9 +39,9 @@ public class BoxEvent extends BaseEntity{
 
     private LocalDateTime eventTime;
 
-    private String from;
+    private String from_location;
 
-    private String to;
+    private String to_location;
 
     private String comment;
 }

@@ -3,11 +3,16 @@ package com.sharom.wrm.service.impl;
 import com.sharom.wrm.config.CustomUserDetails;
 import com.sharom.wrm.entity.*;
 import com.sharom.wrm.mapper.BoxEventMapper;
+import com.sharom.wrm.payload.box.BoxDTO;
 import com.sharom.wrm.payload.box.BoxEventDTO;
+import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
+import com.sharom.wrm.payload.shipment.ShipmentPlanedDTO;
 import com.sharom.wrm.repo.BoxEventRepo;
+import com.sharom.wrm.repo.BoxGroupRepo;
 import com.sharom.wrm.repo.BoxRepo;
 import com.sharom.wrm.repo.ShipmentRepo;
 import com.sharom.wrm.service.BoxMovementService;
+import com.sharom.wrm.service.ShipmentService;
 import com.sharom.wrm.utils.Page2DTO;
 import com.sharom.wrm.utils.PageDTO;
 import com.sharom.wrm.utils.SecurityUtils;
@@ -17,8 +22,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +36,7 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     private final BoxRepo boxRepo;
     private final BoxEventRepo boxEventRepo;
     private final BoxEventMapper boxEventMapper;
+    private final ShipmentService shipmentService;
 
 
     private final Map<BoxAction, BiConsumer<String, String>> actions = Map.of(
@@ -67,7 +76,39 @@ public class BoxMovementServiceImpl implements BoxMovementService {
                 .map(boxEventMapper::toDto));
     }
 
+    @Override
+    public List<BoxGroupResponseDTO> getAllBoxByShipment(String shipmentNumber) {
 
+        ShipmentPlanedDTO planed = shipmentService.getShipmentPlaned(shipmentNumber);
+
+        List<BoxEvent> boxEvent = boxEventRepo.findAllByShipmentNumber(shipmentNumber);
+
+        Set<String> loadedBoxIds = boxEvent.stream()
+                .filter(event -> event.getType() == BoxEventType.LOADED_TO_TRUCK)
+                .map(event -> event.getBox().getId())
+                .collect(Collectors.toSet());
+
+        return planed.boxes().stream()
+                .map(group -> {
+
+                    // оставляем только НЕ загруженные box
+                    List<BoxDTO> notLoadedBoxes = group.box().stream()
+                            .filter(box -> !loadedBoxIds.contains(box.id()))
+                            .toList();
+
+                    // создаём новый DTO группы
+                    return new BoxGroupResponseDTO(
+                            group.id(),
+                            group.description(),
+                            notLoadedBoxes.size(), // quantity пересчитываем
+                            notLoadedBoxes,
+                            group.photos()
+                    );
+                })
+                // убираем группы без box
+                .filter(group -> !group.box().isEmpty())
+                .toList();
+    }
 
     private void loadToTruck(String boxId, String shipmentNumber) {
 
@@ -207,7 +248,7 @@ public class BoxMovementServiceImpl implements BoxMovementService {
         event.setEventTime(LocalDateTime.now());
         event.setOperatorId(userDetails.getId());
 
-        event.setFrom(userDetails.getLocationId());
+        event.setFrom_location(userDetails.getLocationId());
 
 
         boxEventRepo.save(event);

@@ -3,8 +3,11 @@ package com.sharom.wrm.service;
 import com.sharom.wrm.entity.BoxAction;
 import com.sharom.wrm.entity.BoxEvent;
 import com.sharom.wrm.payload.box.BoxEventDTO;
+import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.utils.PageDTO;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface BoxMovementService {
 
@@ -17,5 +20,7 @@ public interface BoxMovementService {
     PageDTO<BoxEventDTO> getHistoryByShipment(String shipmentNumber, Pageable pageable);
 
     PageDTO<BoxEventDTO> getLastEventByShipment(String shipmentNumber, Pageable pageable);
+
+    List<BoxGroupResponseDTO> getAllBoxByShipment(String shipmentNumber);
 }
 
