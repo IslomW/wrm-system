@@ -1,10 +1,12 @@
-package com.sharom.wrm.controller;
+package com.sharom.wrm.controller.mobile;
 
 import com.sharom.wrm.payload.box.BoxDTO;
 import com.sharom.wrm.payload.box.BoxGroupDTO;
 import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.service.BoxGroupService;
+import com.sharom.wrm.utils.PageDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1/box-groups")
+
+@RestController("dashboardBoxGroupController")
+@RequestMapping("/api/v1/dashboard/box-groups")
 @RequiredArgsConstructor
 public class BoxGroupController {
 

@@ -29,7 +29,6 @@ public class BoxMovementServiceImpl implements BoxMovementService {
     private final BoxEventRepo boxEventRepo;
     private final BoxEventMapper boxEventMapper;
 
-
     private final Map<BoxAction, BiConsumer<String, String>> actions = Map.of(
             BoxAction.LOAD, this::loadToTruck,
             BoxAction.UNLOAD, this::unload,
@@ -56,7 +55,6 @@ public class BoxMovementServiceImpl implements BoxMovementService {
 
     @Override
     public PageDTO<BoxEventDTO> getHistoryByShipment(String shipmentNumber, Pageable pageable) {
-
         return Page2DTO.tPageDTO(boxEventRepo.findByBoxIdOrderByEventTimeAsc(shipmentNumber, pageable)
                 .map(boxEventMapper::toDto));
     }

@@ -1,6 +1,8 @@
 package com.sharom.wrm.service.impl;
 
+import com.sharom.wrm.config.CustomUserDetails;
 import com.sharom.wrm.entity.*;
+import com.sharom.wrm.mapper.BoxGroupMapper;
 import com.sharom.wrm.mapper.BoxMapper;
 import com.sharom.wrm.payload.box.BoxDTO;
 import com.sharom.wrm.payload.box.BoxGroupDTO;
@@ -12,10 +14,10 @@ import com.sharom.wrm.repo.WarehouseRepo;
 import com.sharom.wrm.service.BoxGroupService;
 import com.sharom.wrm.service.MinioService;
 import com.sharom.wrm.service.QrCodeService;
-import com.sharom.wrm.utils.BoxNumberGenerator;
-import com.sharom.wrm.utils.QrCodeGenerator;
-import com.sharom.wrm.utils.TsidGenerator;
+import com.sharom.wrm.utils.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +40,8 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     private final WarehouseRepo warehouseRepo;
     private final QrCodeService qrCodeService;
     private final MinioService minioService;
-    private final BoxMapper mapper;
+    private final BoxGroupMapper boxGroupMapper;
+    private final BoxMapper boxMapper;
 
     @Override
     @Transactional
@@ -111,7 +114,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                 savedGroup.getId(),
                 savedGroup.getDescription(),
                 savedGroup.getQuantity(),
-                mapper.toDtoList(savedGroup.getBoxes()),
+                boxMapper.toDtoList(savedGroup.getBoxes()),
                 savedGroup.getPhotoUrls()
                 );
     }
@@ -163,7 +166,18 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                 .orElseThrow(() -> new RuntimeException("BoxGroup not found"));
 
         // Возвращаем копию списка, чтобы фронт не изменял оригинал
-        return mapper.toDtoList(group.getBoxes());
+        return boxMapper.toDtoList(group.getBoxes());
+    }
+
+    @Override
+    public PageDTO<BoxGroupDTO> getGroupBox(Pageable pageable) {
+
+        CustomUserDetails userDetails = SecurityUtils.currentUser();
+        if (userDetails.getLocationId().isEmpty()){
+            throw new RuntimeException("User not logged in");
+        }
+
+        return Page2DTO.tPageDTO(boxGroupRepo.findByWarehouseId(userDetails.getLocationId(), pageable).map(boxGroupMapper::boxGroupToDTO));
     }
 
     private List<String> uploadPhotos(List<MultipartFile> files){
