@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface BoxGroupService {
 
-    BoxGroupResponseDTO createGroup(
+    BoxGroupDTO createGroup(
             String orderId,
             BoxGroupDTO dto,
             List<MultipartFile> photos

@@ -12,10 +12,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class QrCodeGenerator {
 
-    public static void generateBoxQrPng(Box box, String filePath) throws WriterException, IOException {
+    public static void generateBoxQrPng(Box box, OutputStream os) throws WriterException, IOException {
         int qrSize = 150; // размер QR
         int width = 400;  // ширина финальной картинки
         int height = 200; // высота финальной картинки
@@ -50,6 +51,6 @@ public class QrCodeGenerator {
         g.dispose();
 
         // сохраняем PNG
-        ImageIO.write(combined, "PNG", new File(filePath));
+        ImageIO.write(combined, "PNG", os);
     }
 }

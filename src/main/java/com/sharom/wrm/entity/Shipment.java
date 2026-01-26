@@ -19,6 +19,9 @@ public class Shipment extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ShipmentStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "warehouse_id", nullable = false)
+    private Warehouse warehouse;
 
     // ПЛАН — группы, которые разрешено грузить
     @ManyToMany

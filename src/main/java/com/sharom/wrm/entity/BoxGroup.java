@@ -42,6 +42,10 @@ public class BoxGroup extends AuditEntity {
 
     private int quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "warehouse_id", nullable = false)
+    private Warehouse warehouse;
+
     @ElementCollection
     @CollectionTable(
             name = "box_group_photos",

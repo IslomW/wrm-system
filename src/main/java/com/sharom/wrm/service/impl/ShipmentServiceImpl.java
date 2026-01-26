@@ -149,6 +149,7 @@ public class ShipmentServiceImpl implements ShipmentService {
                         .map(boxGroup -> new BoxGroupResponseDTO(
                                 boxGroup.getId(),
                                 boxGroup.getDescription(),
+                                boxGroup.getBoxGroupCode(),
                                 boxGroup.getQuantity(),
                                 boxMapper.toDtoList(boxGroup.getBoxes()),
                                 boxGroup.getPhotoUrls()

@@ -19,8 +19,11 @@ public class Box extends AuditEntity {
     private String description;
 
 
-    @Column(name = "qr_code", nullable = false, unique = true)
+    @Column(name = "qr_code", unique = true)
     private String qrCode;
+
+    @Enumerated(EnumType.STRING)
+    private QrStatus qrStatus = QrStatus.PENDING;;
 
 
     @Enumerated(EnumType.STRING)

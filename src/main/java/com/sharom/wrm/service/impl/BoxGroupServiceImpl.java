@@ -16,6 +16,9 @@ import com.sharom.wrm.service.MinioService;
 import com.sharom.wrm.service.QrCodeService;
 import com.sharom.wrm.utils.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
+import org.hibernate.Transaction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,17 +41,24 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     private final BoxRepo boxRepo;
     private final OrderRepo orderRepo;
     private final WarehouseRepo warehouseRepo;
-    private final QrCodeService qrCodeService;
+    private final QrService qrService;
     private final MinioService minioService;
     private final BoxGroupMapper boxGroupMapper;
     private final BoxMapper boxMapper;
 
+    private final SessionFactory sessionFactory;
+
     @Override
     @Transactional
-    public BoxGroupResponseDTO createGroup(String orderId, BoxGroupDTO dto, List<MultipartFile> photos) {
+    public BoxGroupDTO createGroup(String orderId, BoxGroupDTO dto, List<MultipartFile> photos) {
 
         Order order = orderRepo.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        CustomUserDetails userDetails = SecurityUtils.currentUser();
+
+        Warehouse warehouse = warehouseRepo.findById(userDetails.getLocationId())
+                .orElseThrow(()-> new RuntimeException("Warehouse not found"));
 
 //        if (dto.quantity() <= 0) {
 //            throw new IllegalArgumentException("Quantity must be greater than 0");
@@ -58,8 +68,8 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 //                .orElseThrow(() -> new RuntimeException("Warehouse not found"));
 
         BoxGroup boxGroup = new BoxGroup();
-
         boxGroup.setOrder(order);
+        boxGroup.setWarehouse(warehouse);
         boxGroup.setDescription(dto.description());
         boxGroup.setWeight(dto.weight());
         boxGroup.setLength(dto.length());
@@ -70,14 +80,11 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         boxGroup.setPhotoUrls(uploadPhotos(photos));
 
         String groupCode = BoxNumberGenerator.generateGroupCode(boxGroupRepo.countByOrderId(orderId) + 1);
-
         boxGroup.setBoxGroupCode(groupCode);
 
         BoxGroup savedGroup = boxGroupRepo.save(boxGroup);
 
-        Warehouse warehouse = warehouseRepo.findById("0P5GV7096XPNV")
-                .orElseThrow(()-> new RuntimeException("Warehouse not found"));//ishchi ishlidigan ombor
-
+        List<Box> boxes = new ArrayList<>();
         for (int i = 1; i <= dto.quantity(); i++) {
             Box box = new Box();
             box.setId(TsidGenerator.next());
@@ -86,37 +93,19 @@ public class BoxGroupServiceImpl implements BoxGroupService {
             box.setStatus(CREATED);
             box.setBoxNumber(BoxNumberGenerator.generateBoxNumber(groupCode, i));
 
-            try {
-                // Генерируем уникальный путь для PNG
-                String tempFilePath = "/tmp/box_" + box.getBoxNumber() + ".png";
-
-                // Генерируем PNG с QR + текстом
-                QrCodeGenerator.generateBoxQrPng(box, tempFilePath);
-
-                // Загружаем PNG в MinIO и получаем URL
-                File qrFile = new File(tempFilePath);
-                String qrUrl = minioService.uploadQrCode(Files.readAllBytes(qrFile.toPath()), box.getId() + ".png");
-
-                // Сохраняем URL в коробке
-                box.setQrCode(qrUrl);
-
-                // Можно удалить временный файл после загрузки
-                qrFile.delete();
-            } catch (Exception e) {
-                throw new RuntimeException("Ошибка генерации или загрузки QR-кода", e);
-            }
-
-            boxRepo.save(box);
-            savedGroup.getBoxes().add(box);
+            boxes.add(box);
         }
 
-        return new BoxGroupResponseDTO(
-                savedGroup.getId(),
-                savedGroup.getDescription(),
-                savedGroup.getQuantity(),
-                boxMapper.toDtoList(savedGroup.getBoxes()),
-                savedGroup.getPhotoUrls()
-                );
+        saveBoxesStateless(boxes);
+
+        savedGroup.setBoxes(boxes);
+
+        for (Box box : boxes) {
+            qrService.generateAndUploadQr(box); // @Async метод, вернёт управление сразу
+        }
+
+
+        return boxGroupMapper.boxGroupToDTO(boxGroup);
     }
 
     @Override
@@ -208,5 +197,17 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         }
 
         return urls;
+    }
+
+    private void saveBoxesStateless(List<Box> boxes) {
+        StatelessSession session = sessionFactory.openStatelessSession();
+        Transaction tx = session.beginTransaction();
+
+        for (Box box : boxes) {
+            session.insert(box); // insert напрямую без кеша
+        }
+
+        tx.commit();
+        session.close();
     }
 }

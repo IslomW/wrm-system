@@ -24,12 +24,12 @@ public class BoxGroupController {
 
     // Создать новую группу коробок
     @PostMapping("/{orderId}")
-    public ResponseEntity<BoxGroupResponseDTO> createGroup(
+    public ResponseEntity<BoxGroupDTO> createGroup(
             @PathVariable String orderId,
             @RequestBody BoxGroupDTO dto,
             @RequestPart(value = "photos", required = false) List<MultipartFile> photos
     ) {
-        BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
+        BoxGroupDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
