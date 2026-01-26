@@ -16,6 +16,7 @@ public interface BoxEventRepo extends JpaRepository<BoxEvent, String> {
 
     Page<BoxEvent> findByBoxIdOrderByEventTimeAsc(String boxId, Pageable pageable);
 
+    List<BoxEvent> findAllByShipmentNumber(String shipmentNumber);
 
     // Последнее событие бокса
     Optional<BoxEvent> findTopByBoxIdOrderByEventTimeDesc(String boxId);

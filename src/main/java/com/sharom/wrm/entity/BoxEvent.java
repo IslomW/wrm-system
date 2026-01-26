@@ -27,8 +27,6 @@ public class BoxEvent extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private BoxEventType type;
 
-    private String truckNumber;
-
     @Enumerated(EnumType.STRING)
     private LocationType locationType;
 
@@ -41,9 +39,9 @@ public class BoxEvent extends BaseEntity{
 
     private LocalDateTime eventTime;
 
-    private String fromLocation;
+    private String from_location;
 
-    private String toLocation;
+    private String to_location;
 
     private String comment;
 }

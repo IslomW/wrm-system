@@ -3,12 +3,15 @@ package com.sharom.wrm.controller;
 import com.sharom.wrm.entity.BoxAction;
 import com.sharom.wrm.entity.BoxEvent;
 import com.sharom.wrm.payload.box.BoxEventDTO;
+import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.service.BoxMovementService;
 import com.sharom.wrm.utils.PageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/box-movements")
@@ -58,5 +61,10 @@ public class BoxMovementController {
             Pageable pageable
     ) {
         return boxMovementService.getLastEventByShipment(shipmentNumber, pageable);
+    }
+
+    @GetMapping("/{shipmentNumber}")
+    public List<BoxGroupResponseDTO> getAllBox(@PathVariable String shipmentNumber){
+        return boxMovementService.getAllBoxByShipment(shipmentNumber);
     }
 }

@@ -30,8 +30,6 @@ public class BoxGroupController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    // To do add create with List<BoxGroupDTO> groupDtos
-
     // Добавить коробку в группу
     @PostMapping("/{groupId}/boxes/{boxId}")
     public ResponseEntity<Void> addBoxToGroup(

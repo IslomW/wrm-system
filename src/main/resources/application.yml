@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/wrm-system
-    username: islom
-    password: tashkent
+    url: jdbc:postgresql://localhost:5432/wms-service
+    username: postgres
+    password: 1234
     driver-class-name: org.postgresql.Driver
 
   jpa:
