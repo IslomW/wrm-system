@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface UserService {
 
+    UserDTO getCurrentUser();
+
     AuthResponse register(RegisterRequest request);
 
     AuthResponse login(String username, String password);

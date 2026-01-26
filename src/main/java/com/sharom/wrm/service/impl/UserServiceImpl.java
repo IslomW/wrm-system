@@ -1,5 +1,6 @@
 package com.sharom.wrm.service.impl;
 
+import com.sharom.wrm.config.CustomUserDetails;
 import com.sharom.wrm.entity.User;
 import com.sharom.wrm.entity.UserType;
 import com.sharom.wrm.entity.Warehouse;
@@ -15,6 +16,7 @@ import com.sharom.wrm.service.UserService;
 import com.sharom.wrm.utils.JwtUtil;
 import com.sharom.wrm.utils.Page2DTO;
 import com.sharom.wrm.utils.PageDTO;
+import com.sharom.wrm.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +37,14 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
 
+
+    @Override
+    public UserDTO getCurrentUser() {
+        CustomUserDetails userDetails = SecurityUtils.currentUser();
+        User user = userRepo.findById(userDetails.getId())
+                .orElseThrow(BadRequestAlertException::userNotFound);
+        return userMapper.toDto(user);
+    }
 
     @Override
     public AuthResponse register(RegisterRequest request) {

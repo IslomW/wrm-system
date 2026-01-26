@@ -16,6 +16,11 @@ public class UserController {
     private final UserService userService;
 
 
+    @GetMapping("/whoami")
+    public ResponseEntity<UserDTO> getCurrentUser(){
+        return ResponseEntity.ok(userService.getCurrentUser());
+    }
+
     // CREATE
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
