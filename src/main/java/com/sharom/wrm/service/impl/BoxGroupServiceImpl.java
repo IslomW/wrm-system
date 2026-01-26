@@ -1,6 +1,11 @@
 package com.sharom.wrm.service.impl;
 
-import com.sharom.wrm.entity.*;
+import com.sharom.wrm.config.CustomUserDetails;
+import com.sharom.wrm.entity.Box;
+import com.sharom.wrm.entity.BoxGroup;
+import com.sharom.wrm.entity.Order;
+import com.sharom.wrm.entity.Warehouse;
+import com.sharom.wrm.mapper.BoxGroupMapper;
 import com.sharom.wrm.mapper.BoxMapper;
 import com.sharom.wrm.payload.box.BoxDTO;
 import com.sharom.wrm.payload.box.BoxGroupDTO;
@@ -12,10 +17,10 @@ import com.sharom.wrm.repo.WarehouseRepo;
 import com.sharom.wrm.service.BoxGroupService;
 import com.sharom.wrm.service.MinioService;
 import com.sharom.wrm.service.QrCodeService;
-import com.sharom.wrm.utils.BoxNumberGenerator;
-import com.sharom.wrm.utils.QrCodeGenerator;
-import com.sharom.wrm.utils.TsidGenerator;
+import com.sharom.wrm.utils.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +41,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     private final BoxRepo boxRepo;
     private final OrderRepo orderRepo;
     private final WarehouseRepo warehouseRepo;
+    private final BoxGroupMapper boxGroupMapper;
     private final QrCodeService qrCodeService;
     private final MinioService minioService;
     private final BoxMapper mapper;
@@ -53,6 +59,9 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 //
 //        Warehouse warehouse = warehouseRepo.findById(dto.warehouseId())
 //                .orElseThrow(() -> new RuntimeException("Warehouse not found"));
+
+        CustomUserDetails userDetails = SecurityUtils.currentUser();
+
 
         BoxGroup boxGroup = new BoxGroup();
 
@@ -72,7 +81,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 
         BoxGroup savedGroup = boxGroupRepo.save(boxGroup);
 
-        Warehouse warehouse = warehouseRepo.findById("0P5GV7096XPNV")
+        Warehouse warehouse = warehouseRepo.findById(userDetails.getLocationId())
                 .orElseThrow(()-> new RuntimeException("Warehouse not found"));//ishchi ishlidigan ombor
 
         for (int i = 1; i <= dto.quantity(); i++) {
@@ -114,6 +123,11 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                 mapper.toDtoList(savedGroup.getBoxes()),
                 savedGroup.getPhotoUrls()
                 );
+    }
+
+    @Override
+    public PageDTO<BoxGroupDTO> getAllBoxGroup(Pageable pageable) {
+        return Page2DTO.tPageDTO(boxGroupRepo.findAll(pageable).map(boxGroupMapper::toDto));
     }
 
     @Override

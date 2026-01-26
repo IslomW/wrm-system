@@ -42,6 +42,8 @@ public class BoxGroup extends AuditEntity {
 
     private int quantity;
 
+    private BigDecimal extraExpenses = BigDecimal.ZERO;
+
     @ElementCollection
     @CollectionTable(
             name = "box_group_photos",

@@ -207,7 +207,7 @@ public class BoxMovementServiceImpl implements BoxMovementService {
         event.setEventTime(LocalDateTime.now());
         event.setOperatorId(userDetails.getId());
 
-        event.setFrom(userDetails.getLocationId());
+        event.setFromLocation(userDetails.getLocationId());
 
 
         boxEventRepo.save(event);

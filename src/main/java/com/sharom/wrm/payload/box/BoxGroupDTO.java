@@ -3,6 +3,7 @@ package com.sharom.wrm.payload.box;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record BoxGroupDTO(String id,
@@ -13,5 +14,5 @@ public record BoxGroupDTO(String id,
                           BigDecimal length,
                           BigDecimal width,
                           BigDecimal height,
-                          String photoUrl) {
+                          List<String> photoUrls) {
 }
