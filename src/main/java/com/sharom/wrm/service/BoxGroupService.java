@@ -2,7 +2,6 @@ package com.sharom.wrm.service;
 
 import com.sharom.wrm.payload.box.BoxDTO;
 import com.sharom.wrm.payload.box.BoxGroupDTO;
-import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.utils.PageDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +15,8 @@ public interface BoxGroupService {
             BoxGroupDTO dto,
             List<MultipartFile> photos
     );
+
+    byte[] getQrcode(String boxGroupId);
 
     void addBoxToGroup(String groupId, String boxId);
 

@@ -4,6 +4,7 @@ import com.sharom.wrm.config.CustomUserDetails;
 import com.sharom.wrm.entity.*;
 import com.sharom.wrm.mapper.BoxGroupMapper;
 import com.sharom.wrm.mapper.BoxMapper;
+import com.sharom.wrm.payload.BoxLabelDto;
 import com.sharom.wrm.payload.box.BoxDTO;
 import com.sharom.wrm.payload.box.BoxGroupDTO;
 import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
@@ -24,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -46,7 +49,10 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     private final BoxGroupMapper boxGroupMapper;
     private final BoxMapper boxMapper;
 
-    private final SessionFactory sessionFactory;
+
+    private final QrCodeGenerator qrCodeGenerator;
+    private final PdfRenderer pdfRenderer;
+    private final SpringTemplateEngine templateEngine;
 
     @Override
     @Transactional
@@ -96,16 +102,32 @@ public class BoxGroupServiceImpl implements BoxGroupService {
             boxes.add(box);
         }
 
-        saveBoxesStateless(boxes);
-
         savedGroup.setBoxes(boxes);
 
-        for (Box box : boxes) {
-            qrService.generateAndUploadQr(box); // @Async метод, вернёт управление сразу
-        }
-
-
         return boxGroupMapper.boxGroupToDTO(boxGroup);
+    }
+
+
+    @Override
+    public byte[] getQrcode(String boxGroupId) {
+        BoxGroup boxGroup = boxGroupRepo.findById(boxGroupId)
+                .orElseThrow(() -> new RuntimeException("BoxGroup not found"));
+
+        List<Box> boxes = boxGroup.getBoxes();
+
+        List<BoxLabelDto> labels = boxes.stream()
+                .map(this::toDto)
+                .toList();
+
+        Context context = new Context();
+        context.setVariable("labels", labels);
+
+        String html = templateEngine.process(
+                "labels-a4-100x50",
+                context
+        );
+
+        return pdfRenderer.render(html);
     }
 
     @Override
@@ -199,15 +221,22 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         return urls;
     }
 
-    private void saveBoxesStateless(List<Box> boxes) {
-        StatelessSession session = sessionFactory.openStatelessSession();
-        Transaction tx = session.beginTransaction();
 
-        for (Box box : boxes) {
-            session.insert(box); // insert напрямую без кеша
-        }
+    private BoxLabelDto toDto(Box box) {
+        BoxLabelDto dto = new BoxLabelDto();
 
-        tx.commit();
-        session.close();
+        dto.setClientCode(box.getBoxGroup().getOrder().getClient().getClientCode());
+        dto.setBoxGroupCode(box.getBoxGroup().getBoxGroupCode());
+        dto.setDescription(box.getBoxGroup().getDescription());
+        dto.setL(String.valueOf(box.getBoxGroup().getLength()));
+        dto.setW(String.valueOf(box.getBoxGroup().getWidth()));
+        dto.setH(String.valueOf(box.getBoxGroup().getHeight()));
+        dto.setWeight(String.valueOf(box.getBoxGroup().getWeight()));
+
+        dto.setQrSvg(
+                qrCodeGenerator.generateSvg(box.getId(), 200)
+        );
+
+        return dto;
     }
 }

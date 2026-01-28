@@ -35,9 +35,6 @@ public class QrService {
 
             // Загрузка в MinIO
             String qrUrl = minioService.uploadQrCode(qrBytes, box.getId() + ".png");
-            box.setQrCode(qrUrl);
-
-            box.setQrStatus(QrStatus.CREATED);
 
             boxRepo.save(box); // отдельная транзакция сохраняет Box
         } catch (Exception e) {

@@ -19,13 +19,6 @@ public class Box extends AuditEntity {
     private String description;
 
 
-    @Column(name = "qr_code", unique = true)
-    private String qrCode;
-
-    @Enumerated(EnumType.STRING)
-    private QrStatus qrStatus = QrStatus.PENDING;;
-
-
     @Enumerated(EnumType.STRING)
     private BoxStatus status;        // CREATED, SEALED
 

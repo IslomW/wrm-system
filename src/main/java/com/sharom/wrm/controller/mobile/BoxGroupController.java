@@ -7,6 +7,7 @@ import com.sharom.wrm.service.BoxGroupService;
 import com.sharom.wrm.utils.PageDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,16 @@ public class BoxGroupController {
     ) {
         BoxGroupDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    @PostMapping("/boxes/qr/{bogGroupId}")
+    public ResponseEntity<byte[]> generateQrcode(@PathVariable String bogGroupId) {
+        byte[] pdf = boxGroupService.getQrcode(bogGroupId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=box-labels-a4.pdf")
+                .body(pdf);
     }
 
     // Добавить коробку в группу

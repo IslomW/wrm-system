@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        @page {
+            size: A4;
+            margin: 5mm;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .sheet {
+            display: grid;
+            grid-template-columns: repeat(2, 100mm);
+            grid-template-rows: repeat(5, 50mm);
+            gap: 2mm;
+        }
+
+        .label {
+            border: 1px solid black;
+            padding: 3mm;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .left {
+            font-size: 11pt;
+            line-height: 1.4;
+        }
+
+        .qr {
+            width: 30mm;
+            height: 30mm;
+        }
+
+        .qr svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sheet">
+    <div class="label" th:each="label : ${labels}">
+        <div class="left">
+            <div><b th:text="${label.clientCode}"></b></div>
+            <div th:text="${label.boxGroupCode}"></div>
+            <div th:text="${label.description}"></div>
+            <div>
+                LWH:
+                <span th:text="${label.l}"></span> /
+                <span th:text="${label.w}"></span> /
+                <span th:text="${label.h}"></span>
+                W:
+                <span th:text="${label.weight}"></span>
+            </div>
+        </div>
+
+        <!-- ВАЖНО: utext для SVG -->
+        <div class="qr" th:utext="${label.qrSvg}"></div>
+    </div>
+</div>
+
+</body>
+</html>
