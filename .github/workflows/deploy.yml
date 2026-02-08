@@ -51,7 +51,7 @@ jobs:
           username: ${{ secrets.SSH_USER }} # Это islom
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           # Магия для прохода через туннель:
-          proxy_command: cloudflared access ssh --hostname ${{ secrets.SSH_HOST }}
+          proxy_command: /usr/local/bin/cloudflared access ssh --hostname ${{ secrets.SSH_HOST }}
           script: |
             cd /home/islom/IdeaProjects/wrm-system
             # Обновляем только сервис приложения
