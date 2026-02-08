@@ -50,4 +50,10 @@ public class AuthController {
                 authService.refreshAccessToken(refreshToken);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping
+    public ResponseEntity<String > register(String str){
+        String hello = "Hello "+ str +" World";
+        return ResponseEntity.ok(hello);
+    }
 }
