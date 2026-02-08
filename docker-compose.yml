@@ -1,0 +1,58 @@
+services:
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: tawkenskiy
+      POSTGRES_DB: wms-service
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - mynet
+
+  app:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    container_name: spring_app
+    expose:
+      - "8080"
+    networks:
+      - mynet
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    depends_on:
+      - app
+    networks:
+      - mynet
+
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    user: root  # Это решит проблему с правами доступа к cert.pem
+    dns:
+      - 8.8.8.8
+    volumes:
+      - ./cloudflared:/etc/cloudflared:Z
+    command: tunnel --config /etc/cloudflared/config.yml run 48787a17-303e-4276-8743-0a60acd74dc9
+    environment:
+      - TUNNEL_ORIGIN_CERT=/etc/cloudflared/cert.pem
+      - GODEBUG=netdns=go
+    depends_on:
+      - nginx
+    networks:
+      - mynet
+
+volumes:
+  postgres_data:
+
+networks:
+  mynet:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1400

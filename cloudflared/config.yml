@@ -1,0 +1,11 @@
+tunnel: 48787a17-303e-4276-8743-0a60acd74dc9
+credentials-file: /etc/cloudflared/48787a17-303e-4276-8743-0a60acd74dc9.json
+
+ingress:
+  - hostname: islom.online
+    service: http://nginx:80
+
+  - hostname: ssh.islom.online
+    service: ssh://localhost:22
+
+  - service: http_status:404

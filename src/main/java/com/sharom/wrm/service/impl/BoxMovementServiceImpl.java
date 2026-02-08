@@ -4,6 +4,7 @@ import com.sharom.wrm.config.CustomUserDetails;
 import com.sharom.wrm.entity.*;
 import com.sharom.wrm.mapper.BoxEventMapper;
 import com.sharom.wrm.payload.box.BoxEventDTO;
+import com.sharom.wrm.payload.box.BoxGroupResponseDTO;
 import com.sharom.wrm.repo.BoxEventRepo;
 import com.sharom.wrm.repo.BoxRepo;
 import com.sharom.wrm.repo.ShipmentRepo;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -193,7 +195,6 @@ public class BoxMovementServiceImpl implements BoxMovementService {
             Shipment shipment,
             BoxEventType type,
             LocationType locationType
-//            String locationId
     ) {
 
         CustomUserDetails userDetails = SecurityUtils.currentUser();
@@ -207,11 +208,15 @@ public class BoxMovementServiceImpl implements BoxMovementService {
         event.setEventTime(LocalDateTime.now());
         event.setOperatorId(userDetails.getId());
 
-        event.setFrom(userDetails.getLocationId());
+        event.setFromLocation(userDetails.getLocationId());
+        event.setToLocation("userDetails.getToLocationId()");
 
 
         boxEventRepo.save(event);
     }
 
-
+    @Override
+    public List<BoxGroupResponseDTO> getAllBoxByShipment(String shipmentNumber) {
+        return List.of();
+    }
 }

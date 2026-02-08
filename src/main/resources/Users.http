@@ -1,5 +1,5 @@
 ### Crate user
-POST http://localhost:8080/api/v1/users
+POST http://islom.online/api/v1/users
 Content-Type: application/json
 
 {
