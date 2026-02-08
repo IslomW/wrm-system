@@ -50,26 +50,24 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
-          # Создаем папку для ключей
           mkdir -p ~/.ssh
-          
-          # Записываем ключ в файл
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           
-          # Настраиваем конфиг SSH для использования туннеля
-          cat <<EOF > ~/.ssh/config
-          Host $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/id_ed25519
-            StrictHostKeyChecking no
-            ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h
-          EOF
+          # Добавляем принудительный IPv4 и фиксируем путь к cloudflared
+               cat <<EOF > ~/.ssh/config
+               Host $SSH_HOST
+               User $SSH_USER
+               IdentityFile ~/.ssh/id_ed25519
+               StrictHostKeyChecking no
+               AddressFamily inet
+               ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h
+               EOF
           
-          # Подключаемся и выполняем деплой
-          ssh $SSH_HOST << 'ENDSSH'
-            cd /home/islom/IdeaProjects/wrm-system
-            docker compose pull app
-            docker compose up -d app
-            docker image prune -f
-          ENDSSH
+          # Добавляем флаг -T для отключения требования псевдо-терминала
+               ssh -T $SSH_HOST << 'ENDSSH'
+               cd /home/islom/IdeaProjects/wrm-system
+               docker compose pull app
+               docker compose up -d app
+               docker image prune -f
+               ENDSSH
