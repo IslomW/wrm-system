@@ -13,10 +13,10 @@ services:
       - mynet
 
   app:
-    build:
-      context: .
-      dockerfile: ./app/Dockerfile
+    image: islomw/wms-service:latest
     container_name: spring_app
+    restart: always
+
     expose:
       - "8080"
     networks:
