@@ -7,10 +7,7 @@ import com.sharom.wrm.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -51,9 +48,9 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
-    public ResponseEntity<String > register(String str){
-        String hello = "Hello "+ str +" World";
-        return ResponseEntity.ok(hello);
+    @GetMapping("/hello/{name}") // Поменяли на GET и дали понятное имя переменной
+    public ResponseEntity<String> sayHello(@PathVariable String name) {
+        String message = String.format("Hello %s World", name); // Более чистый способ форматирования
+        return ResponseEntity.ok(message);
     }
 }
