@@ -2,7 +2,7 @@ name: Deploy WRM System
 
 on:
   push:
-    branches: [ "main" ] # Сценарий сработает при каждом push в main
+    branches: [ "master" ] # Сценарий сработает при каждом push в main
 
 jobs:
   build-and-push:
