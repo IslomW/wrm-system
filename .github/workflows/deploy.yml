@@ -61,8 +61,7 @@ jobs:
             User $SSH_USER
             IdentityFile ~/.ssh/id_ed25519
             StrictHostKeyChecking no
-            AddressFamily inet
-            ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h --edge-ip-version 4
+            ProxyCommand cloudflared access ssh --hostname %h --id $CF_ID --secret $CF_SECRET
           EOF
           
           ssh -T $SSH_HOST << 'ENDSSH'
