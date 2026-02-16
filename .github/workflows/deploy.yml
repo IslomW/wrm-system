@@ -61,7 +61,7 @@ jobs:
             User $SSH_USER
             IdentityFile ~/.ssh/id_ed25519
             StrictHostKeyChecking no
-            ProxyCommand cloudflared access ssh --hostname %h --id $CF_ID --secret $CF_SECRET
+            ProxyCommand cloudflared access ssh -v --hostname %h --id $CF_ID --secret $CF_SECRET
           EOF
           
           ssh $SSH_HOST "cd /home/islom/IdeaProjects/wrm-system && docker compose pull app && docker compose up -d app && docker image prune -f"
