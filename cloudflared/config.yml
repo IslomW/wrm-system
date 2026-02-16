@@ -6,6 +6,6 @@ ingress:
     service: http://nginx:80
 
   - hostname: ssh.islom.online
-    service: ssh://localhost:22
+    service: ssh://172.17.0.1:22
 
   - service: http_status:404
