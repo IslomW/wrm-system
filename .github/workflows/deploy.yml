@@ -46,11 +46,20 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Debug SSH setup
+        run: |
+         echo "HOME=$HOME"
+           whoami
+           pwd
+           mkdir -p ~/.ssh
+
+
+
       - name: Deploy Docker Compose
         run: |
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
-                    cd ~/IdeaProjects/wrm-system &&
-                    docker compose pull &&
-                    docker compose up -d wrm-system-nginx &&
-                    docker image prune -f
-                  "
+             cd ~/IdeaProjects/wrm-system &&
+             docker compose pull &&
+             docker compose up -d wrm-system-nginx &&
+             docker image prune -f
+            "
