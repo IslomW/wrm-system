@@ -1,6 +1,6 @@
 package com.sharom.wrm.common.exception;
 
-import com.sharom.wrm.common.util.Code;
+import com.sharom.wrm.common.constant.Code;
 import lombok.Getter;
 
 import static com.sharom.wrm.common.constant.MessageKey.*;
@@ -22,19 +22,19 @@ public class BadRequestAlertException extends RuntimeException{
 
 
     public static BadRequestAlertException userNotFound(){
-        return of(USER_NOT_FOUND, DATA_NOT_FOUND);
+        return of(USER_NOT_FOUND, Code.DATA_NOT_FOUND);
     }
 
     public static BadRequestAlertException userAlreadyExists() {
-        return of(USER_ALREADY_EXISTS, ALREADY_EXISTS);
+        return of(USER_ALREADY_EXISTS, Code.ALREADY_EXISTS);
     }
 
     public static BadRequestAlertException userDisabled() {
-        return of(USER_DISABLED, FORBIDDEN);
+        return of(USER_DISABLED, Code.FORBIDDEN);
     }
 
     public static BadRequestAlertException userNotActive() {
-        return of(USER_NOT_ACTIVE, FORBIDDEN);
+        return of(USER_NOT_ACTIVE, Code.FORBIDDEN);
     }
 
 

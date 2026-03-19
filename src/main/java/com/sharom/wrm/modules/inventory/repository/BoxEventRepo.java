@@ -28,13 +28,12 @@ public interface BoxEventRepo extends JpaRepository<BoxEvent, String> {
 @Query("""
     SELECT e FROM BoxEvent e
     WHERE e.shipmentNumber = :shipmentNumber
-      AND e.type = com.sharom.wrm.entity.BoxEventType.LOADED_TO_TRUCK
+      AND e.type = com.sharom.wrm.modules.inventory.model.entity.BoxEventType.LOADED_TO_TRUCK
     ORDER BY e.eventTime DESC
 """)
 Page<BoxEvent> findLastLoadedEventsByShipment(
         @Param("shipmentNumber") String shipmentNumber,
         Pageable pageable
 );
-
 
 }

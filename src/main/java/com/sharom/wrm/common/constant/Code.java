@@ -1,4 +1,4 @@
-package com.sharom.wrm.common.util;
+package com.sharom.wrm.common.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
