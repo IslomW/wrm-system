@@ -29,6 +29,14 @@ public class BadRequestAlertException extends RuntimeException{
         return of(USER_ALREADY_EXISTS, Code.ALREADY_EXISTS);
     }
 
+    public static BadRequestAlertException userAlreadyExistsByThisPhoneNumber() {
+        return of(USERNAME_ALREADY_EXISTS_BY_PHONE, Code.ALREADY_EXISTS);
+    }
+
+    public static BadRequestAlertException usernameAlreadyExists() {
+        return of(USERNAME_ALREADY_EXISTS, Code.ALREADY_EXISTS);
+    }
+
     public static BadRequestAlertException userDisabled() {
         return of(USER_DISABLED, Code.FORBIDDEN);
     }

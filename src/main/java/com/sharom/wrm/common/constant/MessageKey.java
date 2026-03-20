@@ -11,6 +11,8 @@ public final class MessageKey {
     /* === User === */
     public static final String USER_NOT_FOUND = "user.not.found";
     public static final String USER_ALREADY_EXISTS = "user.already.exists";
+    public static final String USERNAME_ALREADY_EXISTS = "user.already.exists";
+    public static final String USERNAME_ALREADY_EXISTS_BY_PHONE = "user.already.exists.by.phone";
     public static final String USER_DISABLED = "user.disabled";
     public static final String USER_DELETED = "user.deleted";
     public static final String USER_NOT_ACTIVE = "user.not.active";

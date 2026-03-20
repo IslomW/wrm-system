@@ -46,8 +46,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
-        if (userRepo.existsUserByUserName(request.username())){
-            throw BadRequestAlertException.userAlreadyExists();
+        if (userRepo.existsByUserNameIgnoreCase(request.username())){
+            throw BadRequestAlertException.usernameAlreadyExists();
+        }
+
+        if (userRepo.existsUserByPhone(request.phoneNumber())){
+            throw BadRequestAlertException.userAlreadyExistsByThisPhoneNumber();
         }
 
         User user = new User();

@@ -26,5 +26,7 @@ public class User extends AuditEntity {
 
     private int telegramId;
     private String email;
+
+    @Column(unique = true)
     private String phone;
 }
