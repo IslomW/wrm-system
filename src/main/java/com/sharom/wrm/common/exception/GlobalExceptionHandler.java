@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,17 +44,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-
     @ExceptionHandler(BadRequestAlertException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestAlertException(BadRequestAlertException ex) {
 
         log.warn("Bad request exception: message = {}", ex.getMessage(), ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
-                .build();
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        ErrorResponse.ErrorResponseBuilder builder = ErrorResponse.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        if (ex.getErrors() != null && !ex.getErrors().isEmpty()) {
+            builder
+                    .message("Validation failed")
+                    .errors(ex.getErrors());
+        } else {
+            builder
+                    .message(ex.getMessage());
+        }
+
+        return new ResponseEntity<>(builder.build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundException.class)
