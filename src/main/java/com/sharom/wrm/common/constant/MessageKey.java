@@ -19,10 +19,21 @@ public final class MessageKey {
 
     /* === Registration === */
     public static final String REGISTRATION_FAILED = "registration.failed";
-    public static final String PASSWORD_TOO_SHORT = "registration.password.too.short";
-    public static final String USERNAME_REQUIRED = "registration.username.required";
-    public static final String PASSWORD_REQUIRED = "registration.password.required";
-    public static final String USER_TYPE_REQUIRED = "registration.user.type.required";
+    public static final String PASSWORD_TOO_SHORT = "password.too.short";
+    public static final String PASSWORD_NO_DIGIT = "password.no.digit";
+    public static final String PASSWORD_NO_UPPERCASE = "password.no.uppercase";
+    public static final String PASSWORD_NO_LOWERCASE = "password.no.uppercase";
+    public static final String PASSWORD_NO_SPECIAL_CHARACTER = "password.no.special.character";
+    public static final String USERNAME_NOT_BLANK = "username.not.blank";
+    public static final String USERNAME_SIZE = "username.size.error";
+    public static final String USER_TYPE_REQUIRED = "user.type.required";
+    public static final String PASSWORD_INVALID = "password.invalid";
+    public static final String PASSWORD_NOT_BLANK = "password.not.blank";
+    public static final String PASSWORD_EMPTY = "password.empty";
+    public static final String PHONE_NOT_BLANK = "phone.not.blank";
+    public static final String PHONE_INVALID = "phone.invalid";
+    public static final String EMAIL_NOT_BLANK = "email.not.blank";
+    public static final String EMAIL_INVALID = "email.invalid";
 
 
 
