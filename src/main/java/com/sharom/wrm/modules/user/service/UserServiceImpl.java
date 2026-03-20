@@ -1,21 +1,22 @@
 package com.sharom.wrm.modules.user.service;
 
+import com.sharom.wrm.common.constant.MessageKey;
+import com.sharom.wrm.common.exception.BadRequestAlertException;
+import com.sharom.wrm.common.util.Page2DTO;
+import com.sharom.wrm.common.util.PageDTO;
 import com.sharom.wrm.common.util.ValidationService;
 import com.sharom.wrm.config.security.CustomUserDetails;
-import com.sharom.wrm.modules.user.model.entity.User;
-import com.sharom.wrm.modules.user.model.entity.UserType;
-import com.sharom.wrm.modules.warehouse.model.entity.Warehouse;
-import com.sharom.wrm.common.exception.BadRequestAlertException;
+import com.sharom.wrm.config.security.JwtUtil;
+import com.sharom.wrm.config.security.SecurityUtils;
 import com.sharom.wrm.modules.user.mapper.UserMapper;
 import com.sharom.wrm.modules.user.model.dto.AuthResponse;
 import com.sharom.wrm.modules.user.model.dto.RegisterRequest;
 import com.sharom.wrm.modules.user.model.dto.UserDTO;
+import com.sharom.wrm.modules.user.model.entity.User;
+import com.sharom.wrm.modules.user.model.entity.UserType;
 import com.sharom.wrm.modules.user.repository.UserRepo;
+import com.sharom.wrm.modules.warehouse.model.entity.Warehouse;
 import com.sharom.wrm.modules.warehouse.repository.WarehouseRepo;
-import com.sharom.wrm.config.security.JwtUtil;
-import com.sharom.wrm.common.util.Page2DTO;
-import com.sharom.wrm.common.util.PageDTO;
-import com.sharom.wrm.config.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthResponse register(RegisterRequest request) {
 
-        validateRegisterRequest(request);
+        validationService.validate(request);
 
         User user = new User();
         user.setUserName(request.username());
@@ -85,7 +86,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(BadRequestAlertException::userNotFound);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new RuntimeException(MessageKey.PASSWORD_INVALID);
         }
 
         String accessToken = jwtUtil.generateToken(user);
@@ -145,21 +146,5 @@ public class UserServiceImpl implements UserService {
         user.setLocationId(warehouse.getId());
         userRepo.save(user);
         return userMapper.toDto(user);
-    }
-
-    private void validateRegisterRequest(RegisterRequest request) {
-
-        if (userRepo.existsByUserNameIgnoreCase(request.username())) {
-            throw BadRequestAlertException.usernameAlreadyExists();
-        }
-
-        if (userRepo.existsUserByPhone(request.phoneNumber())) {
-            throw BadRequestAlertException.userAlreadyExistsByThisPhoneNumber();
-        }
-
-        validationService.validateUsername(request.username());
-        validationService.validatePassword(request.password());
-        validationService.validatePhone(request.phoneNumber());
-        validationService.validateEmail(request.email());
     }
 }

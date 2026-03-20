@@ -21,21 +21,28 @@ public final class MessageKey {
 
     /* === Registration === */
     public static final String REGISTRATION_FAILED = "registration.failed";
-    public static final String PASSWORD_TOO_SHORT = "registration.password.too.short";
-    public static final String USERNAME_REQUIRED = "registration.username.required";
-    public static final String PASSWORD_REQUIRED = "registration.password.required";
-    public static final String USER_TYPE_REQUIRED = "registration.user.type.required";
-    public static final String INVALID_PASSWORD = "registration.invalid.password";
-    public static final String USERNAME_INVALID_FORMAT = "registration.username.invalid.format";
-    public static final String USERNAME_TOO_SHORT = "registration.username.must.be.at.least.3.characters";
-    public static final String PASSWORD_NO_LOWER = "registration.password.no.lowercase";
-    public static final String PASSWORD_NO_UPPER = "registration.password.no.uppercase";
-    public static final String PASSWORD_NO_DIGIT = "registration.password.no.digit";
-    public static final String PASSWORD_NO_SPECIAL = "registration.password.no.special";
-    public static final String PHONE_EMPTY = "registration.phone.required";
-    public static final String PHONE_INVALID = "registration.phone.invalid.format.Expected:+998901234567";
-    public static final String EMAIL_REQUIRED = "registration.email.must.not.be.empty";
-    public static final String EMAIL_INVALID = "registration.email.invalid.format";
+    public static final String PASSWORD_TOO_SHORT = "password.too.short";
+    public static final String PASSWORD_NO_DIGIT = "password.no.digit";
+    public static final String PASSWORD_NO_UPPERCASE = "password.no.uppercase";
+    public static final String PASSWORD_NO_LOWERCASE = "password.no.uppercase";
+    public static final String PASSWORD_NO_SPECIAL_CHARACTER = "password.no.special.character";
+    public static final String USERNAME_NOT_BLANK = "username.not.blank";
+    public static final String USERNAME_SIZE = "username.size.error";
+    public static final String USER_TYPE_REQUIRED = "user.type.required";
+    public static final String PASSWORD_INVALID = "password.invalid";
+    public static final String PASSWORD_NOT_BLANK = "password.not.blank";
+    public static final String PASSWORD_EMPTY = "password.empty";
+    public static final String PHONE_NOT_BLANK = "phone.not.blank";
+    public static final String PHONE_INVALID = "phone.invalid";
+    public static final String EMAIL_NOT_BLANK = "email.not.blank";
+    public static final String EMAIL_INVALID = "email.invalid";
+
+    public static final String USERNAME_REQUIRED = "username.required";
+    public static final String PASSWORD_REQUIRED = "password.required";
+    public static final String USERNAME_TOO_SHORT = "username.must.be.at.least.3.characters";
+    public static final String PHONE_EMPTY = "phone.required";
+    public static final String EMAIL_REQUIRED = "email.must.not.be.empty";
+
 
 
     /* === Validation === */
