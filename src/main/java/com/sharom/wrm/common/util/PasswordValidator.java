@@ -5,13 +5,13 @@ import com.sharom.wrm.common.exception.ValidationException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PasswordValidator {
+public class PasswordValidator implements Validator<String> {
 
     private static final String PASSWORD_PATTERN =
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{}|;:'\",.<>?/]).{8,}$";
 
 
-
+    @Override
     public void validate(String password) {
         if (password == null || password.isBlank()) {
             throw new ValidationException(MessageKey.PASSWORD_EMPTY);
@@ -37,7 +37,7 @@ public class PasswordValidator {
         }
 
         if (!containsDigit(password)) {
-            throw new ValidationException(MessageKey.PASSWORD_NO_DIGIT  );
+            throw new ValidationException(MessageKey.PASSWORD_NO_DIGIT);
         }
 
         if (!containsSpecialChar(password)) {

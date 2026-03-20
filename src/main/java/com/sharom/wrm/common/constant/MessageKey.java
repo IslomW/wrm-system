@@ -11,6 +11,8 @@ public final class MessageKey {
     /* === User === */
     public static final String USER_NOT_FOUND = "user.not.found";
     public static final String USER_ALREADY_EXISTS = "user.already.exists";
+    public static final String USERNAME_ALREADY_EXISTS = "username.already.exists";
+    public static final String USERNAME_ALREADY_EXISTS_BY_PHONE = "user.already.exists.by.phone";
     public static final String USER_DISABLED = "user.disabled";
     public static final String USER_DELETED = "user.deleted";
     public static final String USER_NOT_ACTIVE = "user.not.active";
@@ -34,6 +36,12 @@ public final class MessageKey {
     public static final String PHONE_INVALID = "phone.invalid";
     public static final String EMAIL_NOT_BLANK = "email.not.blank";
     public static final String EMAIL_INVALID = "email.invalid";
+
+    public static final String USERNAME_REQUIRED = "username.required";
+    public static final String PASSWORD_REQUIRED = "password.required";
+    public static final String USERNAME_TOO_SHORT = "username.must.be.at.least.3.characters";
+    public static final String PHONE_EMPTY = "phone.required";
+    public static final String EMAIL_REQUIRED = "email.must.not.be.empty";
 
 
 

@@ -5,9 +5,10 @@ import com.sharom.wrm.common.exception.ValidationException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PhoneValidator {
+public class PhoneValidator implements Validator<String>{
 
 
+    @Override
     public void validate(String phone) {
         if (phone == null) {
             throw new ValidationException(MessageKey.PHONE_INVALID);

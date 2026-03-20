@@ -4,8 +4,7 @@ import com.sharom.wrm.common.constant.MessageKey;
 import com.sharom.wrm.common.exception.BadRequestAlertException;
 import com.sharom.wrm.common.util.Page2DTO;
 import com.sharom.wrm.common.util.PageDTO;
-import com.sharom.wrm.common.util.PasswordValidator;
-import com.sharom.wrm.common.util.PhoneValidator;
+import com.sharom.wrm.common.util.ValidationService;
 import com.sharom.wrm.config.security.CustomUserDetails;
 import com.sharom.wrm.config.security.JwtUtil;
 import com.sharom.wrm.config.security.SecurityUtils;
@@ -37,8 +36,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
-    private final PasswordValidator passwordValidator;
-    private final PhoneValidator phoneValidator;
+    private final ValidationService validationService;
 
 
     @Override
@@ -51,12 +49,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
-        if (userRepo.existsUserByUserName(request.username())){
-            throw BadRequestAlertException.userAlreadyExists();
-        }
 
-        passwordValidator.validate(request.password());
-        phoneValidator.validate(request.phoneNumber());
+        validationService.validate(request);
 
         User user = new User();
         user.setUserName(request.username());
