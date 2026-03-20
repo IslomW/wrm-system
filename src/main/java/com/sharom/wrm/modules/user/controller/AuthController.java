@@ -4,6 +4,7 @@ import com.sharom.wrm.modules.user.model.dto.AuthResponse;
 import com.sharom.wrm.modules.user.model.dto.LoginRequest;
 import com.sharom.wrm.modules.user.model.dto.RegisterRequest;
 import com.sharom.wrm.modules.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
-            @RequestBody RegisterRequest request
+            @RequestBody @Valid RegisterRequest request
     ) {
         AuthResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

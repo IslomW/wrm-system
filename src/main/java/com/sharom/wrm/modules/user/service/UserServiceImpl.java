@@ -1,5 +1,6 @@
 package com.sharom.wrm.modules.user.service;
 
+import com.sharom.wrm.common.util.ValidationService;
 import com.sharom.wrm.config.security.CustomUserDetails;
 import com.sharom.wrm.modules.user.model.entity.User;
 import com.sharom.wrm.modules.user.model.entity.UserType;
@@ -34,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
+    private final ValidationService validationService;
 
 
     @Override
@@ -46,9 +48,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
-        if (userRepo.existsUserByUserName(request.username())){
-            throw BadRequestAlertException.userAlreadyExists();
-        }
+
+        validateRegisterRequest(request);
 
         User user = new User();
         user.setUserName(request.username());
@@ -144,5 +145,21 @@ public class UserServiceImpl implements UserService {
         user.setLocationId(warehouse.getId());
         userRepo.save(user);
         return userMapper.toDto(user);
+    }
+
+    private void validateRegisterRequest(RegisterRequest request) {
+
+        if (userRepo.existsByUserNameIgnoreCase(request.username())) {
+            throw BadRequestAlertException.usernameAlreadyExists();
+        }
+
+        if (userRepo.existsUserByPhone(request.phoneNumber())) {
+            throw BadRequestAlertException.userAlreadyExistsByThisPhoneNumber();
+        }
+
+        validationService.validateUsername(request.username());
+        validationService.validatePassword(request.password());
+        validationService.validatePhone(request.phoneNumber());
+        validationService.validateEmail(request.email());
     }
 }
