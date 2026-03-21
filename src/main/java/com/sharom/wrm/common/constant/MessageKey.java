@@ -44,6 +44,8 @@ public final class MessageKey {
     public static final String EMAIL_REQUIRED = "email.must.not.be.empty";
 
 
+    public static final String BOX_GROUP_NOT_FOUND = "box.group.not.found";
+    public static final String BOX_NOT_FOUND = "box.not.found";
 
     /* === Validation === */
     public static final String VALIDATION_ERROR = "validation.error";

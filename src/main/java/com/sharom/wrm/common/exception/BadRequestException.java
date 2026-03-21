@@ -6,6 +6,13 @@ import static com.sharom.wrm.common.constant.MessageKey.*;
 
 public class BadRequestException extends ApiException{
 
+    private static final String LOG_MESSAGE = "Bad Request";
+
+    @Override
+    public String getLogMessage() {
+        return LOG_MESSAGE;
+    }
+
     public BadRequestException(String message, String code) {
         super(message, code, HttpStatus.BAD_REQUEST);
     }

@@ -42,29 +42,19 @@ public class GlobalExceptionHandler {
         );
     }
 
-//    @ExceptionHandler(BadRequestException.class)
-//    public ResponseEntity<ErrorResponse> handleBadRequest(
-//            BadRequestException ex,
-//            HttpServletRequest request) {
-//
-//        log.warn("Bad request: path={}, message={}", request.getRequestURI(), ex.getMessage());
-//
-//        return buildResponse(
-//                HttpStatus.BAD_REQUEST,
-//                ex.getMessage(),
-//                request.getRequestURI()
-//        );
-//    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(
-            ResourceNotFoundException ex,
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ErrorResponse> handleApiException(
+            ApiException ex,
             HttpServletRequest request) {
 
-        log.error("Not found: path={}, message={}", request.getRequestURI(), ex.getMessage());
+        log.warn("{}: path={}, message={}, code={}",
+                ex.getLogMessage(),
+                request.getRequestURI(),
+                ex.getMessage(),
+                ex.getCode());
 
         return buildResponse(
-                HttpStatus.NOT_FOUND,
+                ex.getStatus(),
                 ex.getMessage(),
                 null,
                 request.getRequestURI()
@@ -96,7 +86,7 @@ public class GlobalExceptionHandler {
         ErrorResponse response = ErrorResponse.builder()
                 .status(status.value())
                 .message(message)
-                .errors((List<FieldErrorResponse>) errors)
+                .errors(errors == null ? List.of() : (List<FieldErrorResponse>) errors)
                 .timestamp(System.currentTimeMillis())
                 .path(path)
                 .build();
