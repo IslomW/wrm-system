@@ -30,6 +30,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -168,7 +169,20 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        codeRepo.deleteByUserId(user.getId());
+//        Optional<VerificationCode> existingCode = codeRepo.findByUserId(user.getId());
+//
+//        if (existingCode.isPresent()) {
+//
+//            VerificationCode codeEntity = existingCode.get();
+//
+//            if (codeEntity.getCreatedAt().plusMinutes(1).isAfter(LocalDateTime.now())) {
+//                throw BadRequestException.tooManyRequest();
+//            }
+//
+//        }
+
+
+//        codeRepo.deleteByUserId(user.getId());
 
         VerificationCode c = VerificationCode.builder()
                 .userId(user.getId())
@@ -193,9 +207,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(BadRequestException::invalidVerificationCode);
 
 
-        if (!code.getCode().equals(req.code()) || code.getExpiredAt().isBefore(LocalDateTime.now())) {
+        if (!code.getCode().equals(req.code())) {
             throw BadRequestException.invalidVerificationCode();
         }
+
+        if (code.getExpiredAt().isBefore(LocalDateTime.now())) {
+            throw BadRequestException.expiredCode();
+        }
+
+//        codeRepo.deleteVerificationCodeByUserId(user.getId());
 
         user.setResetPasswordAllowed(true);
         userRepo.save(user);

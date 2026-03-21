@@ -36,4 +36,6 @@ public interface CodeRepo extends JpaRepository<VerificationCode, String> {
         WHERE c.userId = :userId
         """)
     void deleteByUserId(@Param("userId") String userId);
+
+    void deleteVerificationCodeByUserId(String userId);
 }
