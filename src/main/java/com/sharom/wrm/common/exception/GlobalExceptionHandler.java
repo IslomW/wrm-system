@@ -1,90 +1,123 @@
 package com.sharom.wrm.common.exception;
 
-import com.google.zxing.NotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
-        String errors = ex.getBindingResult().getFieldErrors()
-                .stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
+        List<FieldErrorResponse> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(this::mapToFieldError)
+                .toList();
 
-        log.warn("Resieved bad request: message = {}", ex.getMessage(), ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(errors)
-                .build();
+        log.warn("Validation failed: path={}, errors={}", request.getRequestURI(), errors);
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                "Validation failed",
+                errors,
+                request.getRequestURI()
+        );
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
+//    @ExceptionHandler(BadRequestException.class)
+//    public ResponseEntity<ErrorResponse> handleBadRequest(
+//            BadRequestException ex,
+//            HttpServletRequest request) {
+//
+//        log.warn("Bad request: path={}, message={}", request.getRequestURI(), ex.getMessage());
+//
+//        return buildResponse(
+//                HttpStatus.BAD_REQUEST,
+//                ex.getMessage(),
+//                request.getRequestURI()
+//        );
+//    }
 
-        log.warn("Bad request exception: message = {}", ex.getMessage(), ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
-                .build();
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFound(
+            ResourceNotFoundException ex,
+            HttpServletRequest request) {
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+        log.error("Not found: path={}, message={}", request.getRequestURI(), ex.getMessage());
 
-    @ExceptionHandler(BadRequestAlertException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequestAlertException(BadRequestAlertException ex) {
-
-        log.warn("Bad request exception: message = {}", ex.getMessage(), ex);
-
-        ErrorResponse.ErrorResponseBuilder builder = ErrorResponse.builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value());
-
-        if (ex.getErrors() != null && !ex.getErrors().isEmpty()) {
-            builder
-                    .message("Validation failed")
-                    .errors(ex.getErrors());
-        } else {
-            builder
-                    .message(ex.getMessage());
-        }
-
-        return new ResponseEntity<>(builder.build(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-
-        log.error("Not found exception: message = {}", ex.getMessage(), ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .statusCode(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                null,
+                request.getRequestURI()
+        );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGeneral(
+            Exception ex,
+            HttpServletRequest request) {
 
-        log.error("Unexpected exception occurred: message = {}", ex.getMessage(), ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("Unknown error")
+        log.error("Unexpected error: path={}", request.getRequestURI(), ex);
+
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error",
+                null,
+                request.getRequestURI()
+        );
+    }
+
+
+    private ResponseEntity<ErrorResponse> buildResponse(
+            HttpStatus status,
+            String message,
+            List<?> errors,
+            String path) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .status(status.value())
+                .message(message)
+                .errors((List<FieldErrorResponse>) errors)
+                .timestamp(System.currentTimeMillis())
+                .path(path)
                 .build();
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity.status(status).body(response);
+    }
+
+
+    private FieldErrorResponse mapToFieldError(FieldError error) {
+
+        String localizedMessage = messageSource.getMessage(
+                error.getDefaultMessage(),
+                null,
+                error.getDefaultMessage(),
+                LocaleContextHolder.getLocale()
+        );
+
+        return FieldErrorResponse.builder()
+                .field(error.getField())
+                .code(error.getDefaultMessage())
+                .message(localizedMessage)
+                .build();
     }
 }

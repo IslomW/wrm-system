@@ -1,7 +1,7 @@
 package com.sharom.wrm.config.security;
 
+import com.sharom.wrm.common.exception.NotFoundException;
 import com.sharom.wrm.modules.user.model.entity.User;
-import com.sharom.wrm.common.exception.BadRequestAlertException;
 import com.sharom.wrm.modules.user.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
         User user = userRepo.findByUserName(username)
-                .orElseThrow(BadRequestAlertException::userNotFound);
+                .orElseThrow(NotFoundException::userNotFound);
 
         return new CustomUserDetails(user);
     }
