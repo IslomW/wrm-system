@@ -5,6 +5,14 @@ import org.springframework.http.HttpStatus;
 import static com.sharom.wrm.common.constant.MessageKey.*;
 
 public class ConflictException extends ApiException {
+
+    private static final String LOG_MESSAGE = "Conflict";
+
+    @Override
+    public String getLogMessage() {
+        return LOG_MESSAGE;
+    }
+
     public ConflictException(String message, String code) {
         super(message, code, HttpStatus.CONFLICT);
     }

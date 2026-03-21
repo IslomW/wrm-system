@@ -7,6 +7,13 @@ import static com.sharom.wrm.common.constant.MessageKey.USER_NOT_ACTIVE;
 
 public class ForbiddenException extends ApiException {
 
+    private static final String LOG_MESSAGE = "Forbidden";
+
+    @Override
+    public String getLogMessage() {
+        return LOG_MESSAGE;
+    }
+
     public ForbiddenException(String message, String code) {
         super(message, code, HttpStatus.FORBIDDEN);
     }

@@ -3,6 +3,7 @@ package com.sharom.wrm.modules.user.service;
 import com.sharom.wrm.common.constant.MessageKey;
 import com.sharom.wrm.common.exception.BadRequestException;
 import com.sharom.wrm.common.exception.NotFoundException;
+import com.sharom.wrm.common.exception.UnauthorizedException;
 import com.sharom.wrm.common.util.Page2DTO;
 import com.sharom.wrm.common.util.PageDTO;
 import com.sharom.wrm.config.security.CustomUserDetails;
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(NotFoundException::userNotFound);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException(MessageKey.PASSWORD_INVALID);
+            throw UnauthorizedException.invalidCredentials();
         }
 
         String accessToken = jwtUtil.generateToken(user);
