@@ -1,10 +1,9 @@
 package com.sharom.wrm.modules.user.service;
 
 import com.sharom.wrm.common.constant.MessageKey;
-import com.sharom.wrm.common.exception.BadRequestAlertException;
+import com.sharom.wrm.common.exception.NotFoundException;
 import com.sharom.wrm.common.util.Page2DTO;
 import com.sharom.wrm.common.util.PageDTO;
-import com.sharom.wrm.common.util.ValidationService;
 import com.sharom.wrm.config.security.CustomUserDetails;
 import com.sharom.wrm.config.security.JwtUtil;
 import com.sharom.wrm.config.security.SecurityUtils;
@@ -36,21 +35,18 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
-    private final ValidationService validationService;
 
 
     @Override
     public UserDTO getCurrentUser() {
         CustomUserDetails userDetails = SecurityUtils.currentUser();
         User user = userRepo.findById(userDetails.getId())
-                .orElseThrow(BadRequestAlertException::userNotFound);
+                .orElseThrow(NotFoundException::userNotFound);
         return userMapper.toDto(user);
     }
 
     @Override
     public AuthResponse register(RegisterRequest request) {
-
-        validationService.validate(request);
 
         User user = new User();
         user.setUserName(request.username());
@@ -72,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public AuthResponse refreshAccessToken(String refreshToken) {
         String username = refreshTokenService.validateRefreshToken(refreshToken);
         User user = userRepo.findById(username)
-                .orElseThrow(BadRequestAlertException::userNotFound);
+                .orElseThrow(NotFoundException::userNotFound);
 
         String newAccessToken = jwtUtil.generateToken(user);
         String newRefreshToken = refreshTokenService.createRefreshToken(user.getUserName());
@@ -83,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthResponse login(String username, String password) {
         User user = userRepo.findByUserName(username)
-                .orElseThrow(BadRequestAlertException::userNotFound);
+                .orElseThrow(NotFoundException::userNotFound);
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException(MessageKey.PASSWORD_INVALID);
@@ -103,7 +99,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getById(String id) {
         return userMapper.toDto(userRepo.findById(id)
-                .orElseThrow(BadRequestAlertException::userNotFound));
+                .orElseThrow(NotFoundException::userNotFound));
     }
 
     @Override
@@ -139,7 +135,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO setUserLocation(String userId, String locationId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(BadRequestAlertException::userNotFound);
+                .orElseThrow(NotFoundException::userNotFound);
         Warehouse warehouse = warehouseRepo.findById(locationId)
                 .orElseThrow();
 
