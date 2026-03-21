@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import static com.sharom.wrm.common.constant.MessageKey.*;
 
-public class BadRequestException extends ApiException{
+public class BadRequestException extends ApiException {
 
     public BadRequestException(String message, String code) {
         super(message, code, HttpStatus.BAD_REQUEST);
@@ -45,5 +45,13 @@ public class BadRequestException extends ApiException{
 
     public static BadRequestException resetPasswordNotAllowed() {
         return new BadRequestException(RESET_PASSWORD_NOT_ALLOWED, RESET_PASSWORD_NOT_ALLOWED);
+    }
+
+    public static BadRequestException tooManyRequest() {
+        return new BadRequestException(TOO_MANY_REQUESTS, TOO_MANY_REQUESTS);
+    }
+
+    public static BadRequestException expiredCode() {
+        return new BadRequestException(EXPIRED_CODE, EXPIRED_CODE);
     }
 }
