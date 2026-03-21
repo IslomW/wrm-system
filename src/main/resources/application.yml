@@ -5,6 +5,14 @@ spring:
     password: 1234
     driver-class-name: org.postgresql.Driver
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: asqarovdanater@gmail.com
+    password: kpdz vbti hkyc iawb
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -12,6 +20,7 @@ spring:
     show-sql: true
     properties:
       hibernate:
+        default_schema: public
         format_sql: true
 
   sql:
