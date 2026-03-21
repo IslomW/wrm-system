@@ -1,6 +1,9 @@
 package com.sharom.wrm.modules.user.controller;
 
 import com.sharom.wrm.modules.user.model.dto.AuthResponse;
+import com.sharom.wrm.modules.user.model.dto.ForgotPasswordRequest;
+import com.sharom.wrm.modules.user.model.dto.VerifyForgotPasswordRequest;
+import com.sharom.wrm.modules.user.model.dto.ResetPasswordRequest;
 import com.sharom.wrm.modules.user.model.dto.LoginRequest;
 import com.sharom.wrm.modules.user.model.dto.RegisterRequest;
 import com.sharom.wrm.modules.user.service.UserService;
@@ -53,5 +56,21 @@ public class AuthController {
     public ResponseEntity<String> sayHello(@PathVariable String name) {
         String message = String.format("Hello %s World", name); // Более чистый способ форматирования
         return ResponseEntity.ok(message);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest req) {
+        return authService.forgotPassword(req);
+    }
+
+    @PostMapping("/verify-forgot-password")
+    public ResponseEntity<?> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
+        return authService.verifyForgotPassword(req);
+    }
+
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
+        return authService.resetPassword(req);
     }
 }

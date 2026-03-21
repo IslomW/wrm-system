@@ -39,5 +39,11 @@ public class BadRequestException extends ApiException{
         return new BadRequestException(EMAIL_INVALID, EMAIL_INVALID);
     }
 
+    public static BadRequestException invalidVerificationCode() {
+        return new BadRequestException(VERIFICATION_CODE_INVALID, VERIFICATION_CODE_INVALID);
+    }
 
+    public static BadRequestException resetPasswordNotAllowed() {
+        return new BadRequestException(RESET_PASSWORD_NOT_ALLOWED, RESET_PASSWORD_NOT_ALLOWED);
+    }
 }
