@@ -18,6 +18,11 @@ public final class MessageKey {
     public static final String USER_NOT_ACTIVE = "user.not.active";
 
 
+    public static final String VERIFICATION_CODE_INVALID ="invalid.verification.code";
+    public static final String TOO_MANY_REQUESTS ="please.wait.before.requesting.a.new.code";
+    public static final String RESET_PASSWORD_NOT_ALLOWED ="reset.password.not.allowed";
+    public static final String EXPIRED_CODE ="expired.code";
+
 
     /* === Registration === */
     public static final String REGISTRATION_FAILED = "registration.failed";
@@ -55,5 +60,6 @@ public final class MessageKey {
     /* === System === */
     public static final String INTERNAL_ERROR = "system.internal.error";
     public static final String ACCESS_DENIED = "system.access.denied";
-}
+
+    public static final String ERROR_SEND_CODE_TO_EMAIL = "error.sent.code.to.email";}
 

@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import static com.sharom.wrm.common.constant.MessageKey.*;
 
-public class BadRequestException extends ApiException{
+public class BadRequestException extends ApiException {
 
     private static final String LOG_MESSAGE = "Bad Request";
 
@@ -18,33 +18,19 @@ public class BadRequestException extends ApiException{
     }
 
 
-    public static BadRequestException usernameEmpty() {
-        return new BadRequestException(USERNAME_REQUIRED, USERNAME_REQUIRED);
+    public static BadRequestException invalidVerificationCode() {
+        return new BadRequestException(VERIFICATION_CODE_INVALID, VERIFICATION_CODE_INVALID);
     }
 
-    public static BadRequestException usernameTooShort() {
-        return new BadRequestException(USERNAME_TOO_SHORT, USERNAME_TOO_SHORT);
+    public static BadRequestException resetPasswordNotAllowed() {
+        return new BadRequestException(RESET_PASSWORD_NOT_ALLOWED, RESET_PASSWORD_NOT_ALLOWED);
     }
 
-    public static BadRequestException emptyPassword() {
-        return new BadRequestException(PASSWORD_REQUIRED, PASSWORD_REQUIRED);
+    public static BadRequestException tooManyRequest() {
+        return new BadRequestException(TOO_MANY_REQUESTS, TOO_MANY_REQUESTS);
     }
 
-    public static BadRequestException emptyPhone() {
-        return new BadRequestException(PHONE_EMPTY, PHONE_EMPTY);
+    public static BadRequestException expiredCode() {
+        return new BadRequestException(EXPIRED_CODE, EXPIRED_CODE);
     }
-
-    public static BadRequestException invalidPhone() {
-        return new BadRequestException(PHONE_INVALID, PHONE_INVALID);
-    }
-
-    public static BadRequestException emptyEmail() {
-        return new BadRequestException(EMAIL_REQUIRED, EMAIL_REQUIRED);
-    }
-
-    public static BadRequestException invalidEmail() {
-        return new BadRequestException(EMAIL_INVALID, EMAIL_INVALID);
-    }
-
-
 }

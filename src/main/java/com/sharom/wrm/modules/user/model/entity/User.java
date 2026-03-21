@@ -27,6 +27,9 @@ public class User extends AuditEntity {
     private int telegramId;
     private String email;
 
+    @Column(name = "reset_password_allowed", columnDefinition = "boolean default false")
+    private Boolean resetPasswordAllowed = false;
+
     @Column(unique = true)
     private String phone;
 }

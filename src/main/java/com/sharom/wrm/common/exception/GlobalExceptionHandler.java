@@ -76,7 +76,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-
     private ResponseEntity<ErrorResponse> buildResponse(
             HttpStatus status,
             String message,
