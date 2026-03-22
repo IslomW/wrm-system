@@ -30,6 +30,8 @@ public class NotFoundException extends ApiException {
         return new NotFoundException(BOX_GROUP_NOT_FOUND, BOX_GROUP_NOT_FOUND);
     }
 
+    public static NotFoundException warehouseNotFound() {return new NotFoundException(WAREHOUSE_NOT_FOUND, WAREHOUSE_NOT_FOUND);}
+
     public static NotFoundException boxNotFound() {
         return new NotFoundException(BOX_NOT_FOUND, BOX_NOT_FOUND);
     }

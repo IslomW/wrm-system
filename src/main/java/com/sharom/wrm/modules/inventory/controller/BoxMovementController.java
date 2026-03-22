@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.inventory.controller;
 
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.inventory.model.entity.BoxAction;
 import com.sharom.wrm.modules.inventory.model.entity.BoxEvent;
 import com.sharom.wrm.modules.inventory.model.dto.BoxEventDTO;
@@ -41,10 +43,10 @@ public class BoxMovementController {
     }
 
     @GetMapping("/{boxId}/last-event")
-    public BoxEvent getLastEvent(
+    public ResponseEntity<ApiResponse<BoxEvent>> getLastEvent(
             @PathVariable String boxId
     ) {
-        return boxMovementService.getLastEvent(boxId);
+        return ResponseFactory.ok(boxMovementService.getLastEvent(boxId));
     }
 
     @GetMapping("/shipment/{shipmentNumber}/history")
@@ -64,7 +66,7 @@ public class BoxMovementController {
     }
 
     @GetMapping("/{shipmentNumber}")
-    public List<BoxGroupResponseDTO> getAllBox(@PathVariable String shipmentNumber){
-        return boxMovementService.getAllBoxByShipment(shipmentNumber);
+    public ResponseEntity<ApiResponse<List<BoxGroupResponseDTO>>> getAllBox(@PathVariable String shipmentNumber) {
+        return ResponseFactory.ok(boxMovementService.getAllBoxByShipment(shipmentNumber));
     }
 }

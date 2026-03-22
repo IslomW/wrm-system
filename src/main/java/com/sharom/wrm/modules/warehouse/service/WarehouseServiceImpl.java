@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.warehouse.service;
 
+import com.sharom.wrm.common.exception.ForbiddenException;
+import com.sharom.wrm.common.exception.NotFoundException;
 import com.sharom.wrm.modules.warehouse.model.entity.Warehouse;
 import com.sharom.wrm.modules.warehouse.mapper.WarehouseMapper;
 import com.sharom.wrm.modules.warehouse.model.dto.WarehouseDTO;
@@ -34,8 +36,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     public WarehouseDTO update(String warehouseId, WarehouseDTO warehouseDTO) {
 
         Warehouse warehouse = warehouseRepo.findById(warehouseId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Warehouse not found: id=" + warehouseId));
+                .orElseThrow(NotFoundException::warehouseNotFound);
 
         validateIsActive(warehouseId);
 
@@ -49,8 +50,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     public void deactivate(String warehouseId) {
 
         Warehouse warehouse = warehouseRepo.findById(warehouseId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Warehouse not found: id=" + warehouseId));
+                .orElseThrow(NotFoundException::warehouseNotFound);
 
         if (!warehouse.isActive()) {
             return;
@@ -65,8 +65,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     public void activate(String warehouseId) {
 
         Warehouse warehouse = warehouseRepo.findById(warehouseId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Warehouse not found: id=" + warehouseId));
+                .orElseThrow(NotFoundException::warehouseNotFound);
 
         if (warehouse.isActive()) {
             return;
@@ -80,8 +79,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public WarehouseDTO getById(String warehouseId) {
         Warehouse warehouse = warehouseRepo.findById(warehouseId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Warehouse not found: id=" + warehouseId));
+                .orElseThrow(NotFoundException::warehouseNotFound);
 
         return mapper.toDto(warehouse);
     }
@@ -89,8 +87,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public WarehouseDTO getByCode(String code) {
         Warehouse warehouse = warehouseRepo.findByCode(code)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Warehouse not found: code=" + code));
+                .orElseThrow(NotFoundException::warehouseNotFound);
 
         return mapper.toDto(warehouse);
     }
@@ -102,15 +99,11 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void validateIsActive(String warehouseId) {
-
-
         Warehouse warehouse = warehouseRepo.findById(warehouseId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Warehouse not found: id=" + warehouseId));
+                .orElseThrow(NotFoundException::warehouseNotFound);
 
         if (!warehouse.isActive()) {
-            throw new IllegalStateException(
-                    "Warehouse is inactive: id=" + warehouseId);
+            throw ForbiddenException.warehouseNotActive();
         }
 
     }

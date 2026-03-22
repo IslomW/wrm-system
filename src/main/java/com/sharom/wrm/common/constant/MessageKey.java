@@ -56,6 +56,9 @@ public final class MessageKey {
     public static final String BOX_GROUP_NOT_FOUND = "box.group.not.found";
     public static final String BOX_NOT_FOUND = "box.not.found";
 
+    public static final String WAREHOUSE_INACTIVE = "warehouse.inactive";
+    public static final String WAREHOUSE_NOT_FOUND = "warehouse.already.exists";
+
     /* === Validation === */
     public static final String VALIDATION_ERROR = "validation.error";
     public static final String FIELD_REQUIRED = "validation.field.required";

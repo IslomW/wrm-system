@@ -1,6 +1,8 @@
 package com.sharom.wrm.modules.user.controller;
 
 import com.sharom.wrm.common.constant.MessageKey;
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.user.model.dto.AuthResponse;
 import com.sharom.wrm.modules.user.model.dto.ForgotPasswordRequest;
 import com.sharom.wrm.modules.user.model.dto.VerifyForgotPasswordRequest;
@@ -45,12 +47,12 @@ public class AuthController {
     /* ================= REFRESH TOKEN ================= */
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refresh(
+    public ResponseEntity<ApiResponse<AuthResponse>> refresh(
             @RequestBody String refreshToken
     ) {
         AuthResponse response =
                 authService.refreshAccessToken(refreshToken);
-        return ResponseEntity.ok(response);
+        return ResponseFactory.ok(response);
     }
 
     @GetMapping("/hello/{name}") // Поменяли на GET и дали понятное имя переменной
@@ -76,8 +78,6 @@ public class AuthController {
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
-        authService.resetPassword(req);
-        return ResponseEntity.ok(MessageKey.PASSWORD_RESET_SUCCESSFULLY);
-
+        return authService.resetPassword(req);
     }
 }

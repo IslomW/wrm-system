@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.order.controller;
 
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.order.model.entity.Order;
 import com.sharom.wrm.modules.order.model.entity.OrderStatus;
 import com.sharom.wrm.modules.order.service.OrderService;
@@ -17,30 +19,24 @@ public class OrderController {
 
     private final OrderService orderService;
 
-
-
-    // Создать заказ
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestParam String clientId) {
+    public ResponseEntity<ApiResponse<Order>> createOrder(@RequestParam String clientId) {
         Order order = orderService.createOrder(clientId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(order);
+        return ResponseFactory.created(order);
     }
 
-    // Получить заказ по ID
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<Order>> getOrderById(@PathVariable String id) {
         Order order = orderService.getById(id);
-        return ResponseEntity.ok(order);
+        return ResponseFactory.ok(order);
     }
 
-    // Получить все заказы
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<ApiResponse<List<Order>>> getAllOrders() {
         List<Order> orders = orderService.getAll();
-        return ResponseEntity.ok(orders);
+        return ResponseFactory.ok(orders);
     }
 
-    // Изменить статус заказа
     @PatchMapping("/{id}/status")
     public ResponseEntity<Void> changeStatus(
             @PathVariable String id,
@@ -50,18 +46,16 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
-    // Удалить заказ
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable String id) {
         orderService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Получить заказы по clientId
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<Order>> getOrdersByClientId(@PathVariable String clientId) {
+    public ResponseEntity<ApiResponse<List<Order>>> getOrdersByClientId(@PathVariable String clientId) {
         List<Order> orders = orderService.getByClientId(clientId);
-        return ResponseEntity.ok(orders);
+        return ResponseFactory.ok(orders);
     }
 
 }
