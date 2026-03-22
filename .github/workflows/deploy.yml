@@ -17,5 +17,6 @@ jobs:
       # 2. Выполняем команды Docker напрямую (SSH больше не нужен)
       - name: Deploy on server
         run: |
+          docker-compose down
           docker-compose pull
-          docker-compose up -d --build --force-recreate --remove-orphans
+          docker-compose up -d --build
