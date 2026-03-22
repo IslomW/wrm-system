@@ -2,8 +2,7 @@ package com.sharom.wrm.common.exception;
 
 import org.springframework.http.HttpStatus;
 
-import static com.sharom.wrm.common.constant.MessageKey.USER_DISABLED;
-import static com.sharom.wrm.common.constant.MessageKey.USER_NOT_ACTIVE;
+import static com.sharom.wrm.common.constant.MessageKey.*;
 
 public class ForbiddenException extends ApiException {
 
@@ -24,5 +23,9 @@ public class ForbiddenException extends ApiException {
 
     public static ForbiddenException userNotActive() {
         return new ForbiddenException(USER_NOT_ACTIVE, USER_NOT_ACTIVE);
+    }
+
+    public static ForbiddenException warehouseNotActive() {
+        return new ForbiddenException(WAREHOUSE_INACTIVE,  WAREHOUSE_INACTIVE);
     }
 }
