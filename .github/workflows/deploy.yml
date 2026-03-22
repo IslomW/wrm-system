@@ -29,5 +29,5 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd ~/project
-            docker compose pull
-            docker compose up -d --build
+            docker-compose pull
+            docker-compose up -d --build
