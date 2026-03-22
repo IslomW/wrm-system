@@ -1,5 +1,9 @@
 FROM eclipse-temurin:21-jdk-jammy
 WORKDIR /app
+
 COPY target/wrm-0.0.1-SNAPSHOT.jar app.jar
+
+COPY src/main/resources/application.yml ./application.yml
+
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
