@@ -23,28 +23,24 @@ public class UserController {
         return ResponseFactory.ok(userService.getCurrentUser());
     }
 
-    // CREATE
     @PostMapping
     public ResponseEntity<ApiResponse<UserDTO>> create(@RequestBody UserDTO userDTO) {
         UserDTO createdUser = userService.create(userDTO);
         return ResponseFactory.created(createdUser);
     }
 
-    // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<UserDTO>> getById(@PathVariable String id) {
         UserDTO user = userService.getById(id);
         return ResponseFactory.ok(user);
     }
 
-    // GET ALL
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAll() {
+    public ResponseEntity<ApiResponse<List<UserDTO>>> getAll() {
         List<UserDTO> users = userService.getAll();
-        return ResponseEntity.ok(users);
+        return ResponseFactory.ok(users);
     }
 
-    // UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<UserDTO>> update(
             @PathVariable String id,
@@ -54,7 +50,6 @@ public class UserController {
         return ResponseFactory.ok(updatedUser);
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         userService.delete(id);

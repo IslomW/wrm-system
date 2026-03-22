@@ -35,11 +35,11 @@ public class BoxMovementController {
 
 
     @GetMapping("/{boxId}/history")
-    public PageDTO<BoxEvent> getHistory(
+    public ResponseEntity<ApiResponse<PageDTO<BoxEvent>>> getHistory(
             @PathVariable String boxId,
             Pageable pageable
     ) {
-        return boxMovementService.getHistory(boxId, pageable);
+        return ResponseFactory.ok(boxMovementService.getHistory(boxId, pageable));
     }
 
     @GetMapping("/{boxId}/last-event")
@@ -50,19 +50,19 @@ public class BoxMovementController {
     }
 
     @GetMapping("/shipment/{shipmentNumber}/history")
-    public PageDTO<BoxEventDTO> getHistoryByShipment(
+    public ResponseEntity<ApiResponse<PageDTO<BoxEventDTO>>> getHistoryByShipment(
             @PathVariable String shipmentNumber,
             Pageable pageable
     ) {
-        return boxMovementService.getHistoryByShipment(shipmentNumber, pageable);
+        return ResponseFactory.ok(boxMovementService.getHistoryByShipment(shipmentNumber, pageable));
     }
 
     @GetMapping("/shipment/{shipmentId}/last-event")
-    public PageDTO<BoxEventDTO> getLastEventByShipment(
+    public ResponseEntity<ApiResponse<PageDTO<BoxEventDTO>>> getLastEventByShipment(
             @PathVariable String shipmentNumber,
             Pageable pageable
     ) {
-        return boxMovementService.getLastEventByShipment(shipmentNumber, pageable);
+        return ResponseFactory.ok(boxMovementService.getLastEventByShipment(shipmentNumber, pageable));
     }
 
     @GetMapping("/{shipmentNumber}")

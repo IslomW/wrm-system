@@ -75,10 +75,10 @@ public class ShipmentController {
     }
 
     @GetMapping
-    public ResponseEntity<PageDTO<ShipmentResponseDTO>> getAllShipments(
+    public ResponseEntity<ApiResponse<PageDTO<ShipmentResponseDTO>>> getAllShipments(
             Pageable pageable
     ){
-        return ResponseEntity.ok(shipmentService.getAllShipments(pageable));
+        return ResponseFactory.ok(shipmentService.getAllShipments(pageable));
     }
 
     @GetMapping("/planned/{shipmentNumber}")
