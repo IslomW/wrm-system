@@ -185,11 +185,7 @@ public class UserServiceImpl implements UserService {
             emailTemplateService.sendVerificationCode(request.email(), code);
         } catch (Exception e) {
             log.error("Failed to send code to email {}", request.email(), e);
-            throw new ApiException(
-                    MessageKey.ERROR_SEND_CODE_TO_EMAIL,
-                    MessageKey.ERROR_SEND_CODE_TO_EMAIL,
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+            throw InternalServerException.errorSentCode();
         }
 
         codeRepo.deleteByUserId(user.getId());

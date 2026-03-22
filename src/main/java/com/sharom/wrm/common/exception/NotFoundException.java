@@ -1,6 +1,5 @@
 package com.sharom.wrm.common.exception;
 
-import com.sharom.wrm.common.constant.Code;
 import org.springframework.http.HttpStatus;
 
 import static com.sharom.wrm.common.constant.MessageKey.*;

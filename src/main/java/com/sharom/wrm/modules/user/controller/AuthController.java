@@ -65,6 +65,9 @@ public class AuthController {
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest req) {
         authService.forgotPassword(req);
 
+        String message = MessageKey.RESET_CODE_SENT_SUCCESSFULLY;
+
+
         return ResponseEntity.ok(MessageKey.RESET_CODE_SENT_SUCCESSFULLY);
     }
 
@@ -72,12 +75,19 @@ public class AuthController {
     public ResponseEntity<?> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
         authService.verifyForgotPassword(req);
 
-        return ResponseEntity.ok(MessageKey.CODE_VERIFIED);
+        String message = MessageKey.CODE_VERIFIED;
+
+        return ResponseEntity.ok(message);
     }
 
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
-        return authService.resetPassword(req);
+        authService.resetPassword(req);
+
+        String message = MessageKey.PASSWORD_RESET_SUCCESSFULLY;
+
+
+        return ResponseEntity.ok(message);
     }
 }
