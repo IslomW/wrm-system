@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.warehouse.controller;
 
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.warehouse.model.dto.WarehouseDTO;
 import com.sharom.wrm.modules.warehouse.service.WarehouseService;
 import com.sharom.wrm.common.util.PageDTO;
@@ -18,21 +20,21 @@ public class WarehouseController {
 
 
     @PostMapping
-    public ResponseEntity<WarehouseDTO> create(
+    public ResponseEntity<ApiResponse<WarehouseDTO>> create(
             @RequestBody WarehouseDTO warehouseDTO) {
 
         WarehouseDTO created = warehouseService.create(warehouseDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseFactory.created(created);
     }
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<WarehouseDTO> update(
+    public ResponseEntity<ApiResponse<WarehouseDTO>> update(
             @PathVariable String id,
             @RequestBody WarehouseDTO warehouseDTO) {
 
         WarehouseDTO updated = warehouseService.update(id, warehouseDTO);
-        return ResponseEntity.ok(updated);
+        return ResponseFactory.ok(updated);
     }
 
 
@@ -53,23 +55,23 @@ public class WarehouseController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<WarehouseDTO> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<WarehouseDTO>> getById(@PathVariable String id) {
 
-        return ResponseEntity.ok(warehouseService.getById(id));
+        return ResponseFactory.ok(warehouseService.getById(id));
     }
 
 
     @GetMapping("/code/{code}")
-    public ResponseEntity<WarehouseDTO> getByCode(@PathVariable String code) {
+    public ResponseEntity<ApiResponse<WarehouseDTO>> getByCode(@PathVariable String code) {
 
-        return ResponseEntity.ok(warehouseService.getByCode(code));
+        return ResponseFactory.ok(warehouseService.getByCode(code));
     }
 
     @GetMapping("/active")
-    public ResponseEntity<PageDTO<WarehouseDTO>> getActiveWarehouses(
+    public ResponseEntity<ApiResponse<PageDTO<WarehouseDTO>>> getActiveWarehouses(
             Pageable pageable) {
 
-        return ResponseEntity.ok(
+        return ResponseFactory.ok(
                 warehouseService.getActiveWarehouses(pageable)
         );
     }

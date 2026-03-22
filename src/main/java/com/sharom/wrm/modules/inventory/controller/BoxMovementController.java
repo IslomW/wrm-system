@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.inventory.controller;
 
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.inventory.model.entity.BoxAction;
 import com.sharom.wrm.modules.inventory.model.entity.BoxEvent;
 import com.sharom.wrm.modules.inventory.model.dto.BoxEventDTO;
@@ -33,38 +35,38 @@ public class BoxMovementController {
 
 
     @GetMapping("/{boxId}/history")
-    public PageDTO<BoxEvent> getHistory(
+    public ResponseEntity<ApiResponse<PageDTO<BoxEvent>>> getHistory(
             @PathVariable String boxId,
             Pageable pageable
     ) {
-        return boxMovementService.getHistory(boxId, pageable);
+        return ResponseFactory.ok(boxMovementService.getHistory(boxId, pageable));
     }
 
     @GetMapping("/{boxId}/last-event")
-    public BoxEvent getLastEvent(
+    public ResponseEntity<ApiResponse<BoxEvent>> getLastEvent(
             @PathVariable String boxId
     ) {
-        return boxMovementService.getLastEvent(boxId);
+        return ResponseFactory.ok(boxMovementService.getLastEvent(boxId));
     }
 
     @GetMapping("/shipment/{shipmentNumber}/history")
-    public PageDTO<BoxEventDTO> getHistoryByShipment(
+    public ResponseEntity<ApiResponse<PageDTO<BoxEventDTO>>> getHistoryByShipment(
             @PathVariable String shipmentNumber,
             Pageable pageable
     ) {
-        return boxMovementService.getHistoryByShipment(shipmentNumber, pageable);
+        return ResponseFactory.ok(boxMovementService.getHistoryByShipment(shipmentNumber, pageable));
     }
 
     @GetMapping("/shipment/{shipmentId}/last-event")
-    public PageDTO<BoxEventDTO> getLastEventByShipment(
+    public ResponseEntity<ApiResponse<PageDTO<BoxEventDTO>>> getLastEventByShipment(
             @PathVariable String shipmentNumber,
             Pageable pageable
     ) {
-        return boxMovementService.getLastEventByShipment(shipmentNumber, pageable);
+        return ResponseFactory.ok(boxMovementService.getLastEventByShipment(shipmentNumber, pageable));
     }
 
     @GetMapping("/{shipmentNumber}")
-    public List<BoxGroupResponseDTO> getAllBox(@PathVariable String shipmentNumber){
-        return boxMovementService.getAllBoxByShipment(shipmentNumber);
+    public ResponseEntity<ApiResponse<List<BoxGroupResponseDTO>>> getAllBox(@PathVariable String shipmentNumber) {
+        return ResponseFactory.ok(boxMovementService.getAllBoxByShipment(shipmentNumber));
     }
 }

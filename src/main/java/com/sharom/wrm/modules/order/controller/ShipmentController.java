@@ -1,6 +1,8 @@
 package com.sharom.wrm.modules.order.controller;
 
 
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.order.model.dto.ShipmentPlanedDTO;
 import com.sharom.wrm.modules.order.model.dto.ShipmentResponseDTO;
 import com.sharom.wrm.modules.order.service.ShipmentService;
@@ -22,10 +24,10 @@ public class ShipmentController {
 
     // 1. Create shipment
     @PostMapping
-    public ResponseEntity<ShipmentResponseDTO> createShipment(
+    public ResponseEntity<ApiResponse<ShipmentResponseDTO>> createShipment(
             @RequestParam List<String> boxGroupIds
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(shipmentService.createShipment(boxGroupIds));
+        return ResponseFactory.created(shipmentService.createShipment(boxGroupIds));
     }
 
     @PostMapping("/groups")
@@ -66,24 +68,24 @@ public class ShipmentController {
 
 
     @GetMapping("/{shipmentNumber}")
-    public ResponseEntity<ShipmentResponseDTO> getShipmentById(
+    public ResponseEntity<ApiResponse<ShipmentResponseDTO>> getShipmentById(
             @PathVariable String shipmentNumber
     ) {
-        return ResponseEntity.ok(shipmentService.getByNumber(shipmentNumber));
+        return ResponseFactory.ok(shipmentService.getByNumber(shipmentNumber));
     }
 
     @GetMapping
-    public ResponseEntity<PageDTO<ShipmentResponseDTO>> getAllShipments(
+    public ResponseEntity<ApiResponse<PageDTO<ShipmentResponseDTO>>> getAllShipments(
             Pageable pageable
     ){
-        return ResponseEntity.ok(shipmentService.getAllShipments(pageable));
+        return ResponseFactory.ok(shipmentService.getAllShipments(pageable));
     }
 
     @GetMapping("/planned/{shipmentNumber}")
-    public ResponseEntity<ShipmentPlanedDTO> getShipmentPlaned(
+    public ResponseEntity<ApiResponse<ShipmentPlanedDTO>> getShipmentPlaned(
             @PathVariable String shipmentNumber
     ) {
-        return ResponseEntity.ok(shipmentService.getShipmentPlaned(shipmentNumber));
+        return ResponseFactory.ok(shipmentService.getShipmentPlaned(shipmentNumber));
     }
 
     @DeleteMapping("group")

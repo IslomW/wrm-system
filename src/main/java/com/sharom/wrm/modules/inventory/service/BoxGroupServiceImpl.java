@@ -1,5 +1,6 @@
 package com.sharom.wrm.modules.inventory.service;
 
+import com.sharom.wrm.common.exception.NotFoundException;
 import com.sharom.wrm.modules.inventory.mapper.BoxMapper;
 import com.sharom.wrm.modules.inventory.model.entity.Box;
 import com.sharom.wrm.modules.inventory.model.entity.BoxGroup;
@@ -75,7 +76,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         BoxGroup savedGroup = boxGroupRepo.save(boxGroup);
 
         Warehouse warehouse = warehouseRepo.findById("0P5GV7096XPNV")
-                .orElseThrow(()-> new RuntimeException("Warehouse not found"));//ishchi ishlidigan ombor
+                .orElseThrow(NotFoundException::warehouseNotFound);//ishchi ishlidigan ombor
 
         for (int i = 1; i <= dto.quantity(); i++) {
             Box box = new Box();
@@ -122,21 +123,18 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     @Transactional
     public void addBoxToGroup(String groupId, String boxId) {
         BoxGroup group = boxGroupRepo.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("BoxGroup not found"));
+                .orElseThrow(NotFoundException::groupNotFound);
 
         Box box = boxRepo.findById(boxId)
-                .orElseThrow(() -> new RuntimeException("Box not found"));
+                .orElseThrow(NotFoundException::boxNotFound);
 
-        // Если коробка уже в другой группе
         if (box.getBoxGroup() != null && !box.getBoxGroup().getId().equals(groupId)) {
             throw new RuntimeException("Box already belongs to another group");
         }
 
-        // Связываем
         box.setBoxGroup(group);
         boxRepo.save(box);
 
-        // Обновляем список коробок в группе (опционально, если есть mappedBy)
         group.getBoxes().add(box);
         boxGroupRepo.save(group);
     }
@@ -146,10 +144,10 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     public void removeBoxFromGroup(String groupId, String boxId) {
 
         BoxGroup group = boxGroupRepo.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("BoxGroup not found"));
+                .orElseThrow(NotFoundException::groupNotFound);
 
         Box box = boxRepo.findById(boxId)
-                .orElseThrow(() -> new RuntimeException("Box not found"));
+                .orElseThrow(NotFoundException::boxNotFound);
 
         if (!group.equals(box.getBoxGroup())) {
             throw new RuntimeException("Box does not belong to this group");
@@ -162,9 +160,8 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     @Transactional(readOnly = true)
     public List<BoxDTO> getBoxes(String groupId) {
         BoxGroup group = boxGroupRepo.findById(groupId)
-                .orElseThrow(() -> new RuntimeException("BoxGroup not found"));
+                .orElseThrow(NotFoundException::groupNotFound);
 
-        // Возвращаем копию списка, чтобы фронт не изменял оригинал
         return mapper.toDtoList(group.getBoxes());
     }
 

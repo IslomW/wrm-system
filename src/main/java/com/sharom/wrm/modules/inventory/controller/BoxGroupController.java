@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.inventory.controller;
 
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.inventory.model.dto.BoxDTO;
 import com.sharom.wrm.modules.inventory.model.dto.BoxGroupDTO;
 import com.sharom.wrm.modules.inventory.model.dto.BoxGroupResponseDTO;
@@ -19,18 +21,16 @@ public class BoxGroupController {
 
     private final BoxGroupService boxGroupService;
 
-    // Создать новую группу коробок
     @PostMapping("/{orderId}")
-    public ResponseEntity<BoxGroupResponseDTO> createGroup(
+    public ResponseEntity<ApiResponse<BoxGroupResponseDTO>> createGroup(
             @PathVariable String orderId,
             @RequestBody BoxGroupDTO dto,
             @RequestPart(value = "photos", required = false) List<MultipartFile> photos
     ) {
         BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+        return ResponseFactory.created(responseDTO);
     }
 
-    // Добавить коробку в группу
     @PostMapping("/{groupId}/boxes/{boxId}")
     public ResponseEntity<Void> addBoxToGroup(
             @PathVariable String groupId,
@@ -40,7 +40,6 @@ public class BoxGroupController {
         return ResponseEntity.noContent().build();
     }
 
-    // Удалить коробку из группы
     @DeleteMapping("/{groupId}/boxes/{boxId}")
     public ResponseEntity<Void> removeBoxFromGroup(
             @PathVariable String groupId,
@@ -50,12 +49,11 @@ public class BoxGroupController {
         return ResponseEntity.noContent().build();
     }
 
-    // Получить список коробок в группе
     @GetMapping("/{groupId}/boxes")
-    public ResponseEntity<List<BoxDTO>> getBoxes(
+    public ResponseEntity<ApiResponse<List<BoxDTO>>> getBoxes(
             @PathVariable String groupId
     ) {
         List<BoxDTO> boxes = boxGroupService.getBoxes(groupId);
-        return ResponseEntity.ok(boxes);
+        return ResponseFactory.ok(boxes);
     }
 }

@@ -1,5 +1,6 @@
 package com.sharom.wrm.modules.inventory.service;
 
+import com.sharom.wrm.common.exception.NotFoundException;
 import com.sharom.wrm.modules.inventory.model.entity.Box;
 import com.sharom.wrm.modules.inventory.repository.BoxRepo;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class BoxServiceImpl implements BoxService {
     @Transactional(readOnly = true)
     public Box getById(String boxId) {
         return boxRepository.findById(boxId)
-                .orElseThrow(() -> new RuntimeException("Box not found"));
+                .orElseThrow(NotFoundException::boxNotFound);
     }
 
 }

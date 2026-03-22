@@ -2,9 +2,13 @@ package com.sharom.wrm.modules.user.service;
 
 import com.sharom.wrm.modules.user.model.dto.AuthResponse;
 import com.sharom.wrm.modules.user.model.dto.RegisterRequest;
+import com.sharom.wrm.modules.user.model.dto.ForgotPasswordRequest;
+import com.sharom.wrm.modules.user.model.dto.VerifyForgotPasswordRequest;
+import com.sharom.wrm.modules.user.model.dto.ResetPasswordRequest;
 import com.sharom.wrm.modules.user.model.dto.UserDTO;
 import com.sharom.wrm.common.util.PageDTO;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;
@@ -32,4 +36,10 @@ public interface UserService {
     void delete(String id);
 
     UserDTO setUserLocation(String userId, String locationId);
+
+    ResponseEntity<?> forgotPassword(ForgotPasswordRequest request);
+
+    ResponseEntity<?> verifyForgotPassword(VerifyForgotPasswordRequest req);
+
+    ResponseEntity<?> resetPassword(ResetPasswordRequest req);
 }
