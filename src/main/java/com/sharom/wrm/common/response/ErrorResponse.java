@@ -1,4 +1,4 @@
-package com.sharom.wrm.common.exception;
+package com.sharom.wrm.common.response;
 
 import lombok.Builder;
 

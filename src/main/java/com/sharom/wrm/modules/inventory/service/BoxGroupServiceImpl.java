@@ -76,7 +76,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         BoxGroup savedGroup = boxGroupRepo.save(boxGroup);
 
         Warehouse warehouse = warehouseRepo.findById("0P5GV7096XPNV")
-                .orElseThrow(()-> new RuntimeException("Warehouse not found"));//ishchi ishlidigan ombor
+                .orElseThrow(NotFoundException::warehouseNotFound);//ishchi ishlidigan ombor
 
         for (int i = 1; i <= dto.quantity(); i++) {
             Box box = new Box();

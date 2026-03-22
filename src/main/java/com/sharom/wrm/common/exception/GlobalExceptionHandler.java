@@ -1,5 +1,7 @@
 package com.sharom.wrm.common.exception;
 
+import com.sharom.wrm.common.response.ErrorResponse;
+import com.sharom.wrm.common.response.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;

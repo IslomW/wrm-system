@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.user.controller;
 
+import com.sharom.wrm.common.response.ApiResponse;
+import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.user.model.dto.UserDTO;
 import com.sharom.wrm.modules.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,22 +19,22 @@ public class UserController {
 
 
     @GetMapping("/whoami")
-    public ResponseEntity<UserDTO> getCurrentUser(){
-        return ResponseEntity.ok(userService.getCurrentUser());
+    public ResponseEntity<ApiResponse<UserDTO>> getCurrentUser(){
+        return ResponseFactory.ok(userService.getCurrentUser());
     }
 
     // CREATE
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<ApiResponse<UserDTO>> create(@RequestBody UserDTO userDTO) {
         UserDTO createdUser = userService.create(userDTO);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        return ResponseFactory.created(createdUser);
     }
 
     // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<UserDTO>> getById(@PathVariable String id) {
         UserDTO user = userService.getById(id);
-        return ResponseEntity.ok(user);
+        return ResponseFactory.ok(user);
     }
 
     // GET ALL
@@ -44,12 +46,12 @@ public class UserController {
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(
+    public ResponseEntity<ApiResponse<UserDTO>> update(
             @PathVariable String id,
             @RequestBody UserDTO userDTO
     ) {
         UserDTO updatedUser = userService.update(id, userDTO);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseFactory.ok(updatedUser);
     }
 
     // DELETE
@@ -60,8 +62,8 @@ public class UserController {
     }
 
     @PostMapping("/location")
-    public ResponseEntity<UserDTO> setUserLocation(@RequestParam String id,
+    public ResponseEntity<ApiResponse<UserDTO>> setUserLocation(@RequestParam String id,
                                                    @RequestParam String locationId) {
-        return ResponseEntity.ok(userService.setUserLocation(id, locationId));
+        return ResponseFactory.ok(userService.setUserLocation(id, locationId));
     }
 }
