@@ -1,5 +1,6 @@
-services:
+version: "3.8"
 
+services:
   db:
     image: postgres:15
     container_name: postgres_db
@@ -16,11 +17,12 @@ services:
     image: islomw/wms-service:latest
     container_name: spring_app
     restart: always
-
     expose:
       - "8080"
     networks:
       - mynet
+    depends_on:
+      - db
 
   nginx:
     build: ./nginx
@@ -29,24 +31,9 @@ services:
       - app
     networks:
       - mynet
-
-
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: cloudflared
-    user: root  # Это решит проблему с правами доступа к cert.pem
-    dns:
-      - 8.8.8.8
-    volumes:
-      - ./cloudflared:/etc/cloudflared:Z
-    command: tunnel --config /etc/cloudflared/config.yml run 48787a17-303e-4276-8743-0a60acd74dc9
-    environment:
-      - TUNNEL_ORIGIN_CERT=/etc/cloudflared/cert.pem
-      - GODEBUG=netdns=go
-    depends_on:
-      - nginx
-    networks:
-      - mynet
+    ports:
+      - "80:80"
+      - "443:443"
 
 volumes:
   postgres_data:
