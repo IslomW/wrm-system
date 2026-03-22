@@ -17,6 +17,7 @@ jobs:
       # 2. Выполняем команды Docker напрямую (SSH больше не нужен)
       - name: Deploy on server
         run: |
+          docker stop spring_app || true
+          docker rm spring_app || true
           docker-compose pull app nginx
           docker-compose up -d --no-deps --build app nginx
-          docker-compose ps
