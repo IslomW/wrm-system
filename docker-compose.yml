@@ -1,18 +1,6 @@
 version: "3.8"
 
 services:
-  db:
-    image: postgres:15
-    container_name: postgres_db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: tawkenskiy
-      POSTGRES_DB: wms-service
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - mynet
-
   app:
     image: islomw/wms-service:latest
     container_name: spring_app
