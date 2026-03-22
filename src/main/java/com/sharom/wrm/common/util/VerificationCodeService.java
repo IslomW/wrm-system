@@ -1,11 +1,11 @@
-package com.sharom.wrm.modules.code.service;
+package com.sharom.wrm.common.util;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class VerificationCodeService {
     public String getCode() {

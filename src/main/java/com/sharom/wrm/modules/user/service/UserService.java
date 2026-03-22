@@ -8,7 +8,6 @@ import com.sharom.wrm.modules.user.model.dto.ResetPasswordRequest;
 import com.sharom.wrm.modules.user.model.dto.UserDTO;
 import com.sharom.wrm.common.util.PageDTO;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;
@@ -28,6 +27,7 @@ public interface UserService {
     UserDTO getById(String id);
 
     List<UserDTO> getAll();
+
     // Dashboard
     PageDTO<UserDTO> getAll(Pageable pageable);
 
@@ -37,9 +37,9 @@ public interface UserService {
 
     UserDTO setUserLocation(String userId, String locationId);
 
-    ResponseEntity<?> forgotPassword(ForgotPasswordRequest request);
+    void forgotPassword(ForgotPasswordRequest request);
 
-    ResponseEntity<?> verifyForgotPassword(VerifyForgotPasswordRequest req);
+    void verifyForgotPassword(VerifyForgotPasswordRequest req);
 
-    ResponseEntity<?> resetPassword(ResetPasswordRequest req);
+    void resetPassword(ResetPasswordRequest req);
 }

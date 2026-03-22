@@ -1,18 +1,15 @@
 package com.sharom.wrm.modules.user.service;
 
 import com.sharom.wrm.common.constant.MessageKey;
-import com.sharom.wrm.common.exception.BadRequestException;
-import com.sharom.wrm.common.exception.NotFoundException;
-import com.sharom.wrm.common.exception.UnauthorizedException;
+import com.sharom.wrm.common.exception.*;
 import com.sharom.wrm.common.util.Page2DTO;
 import com.sharom.wrm.common.util.PageDTO;
 import com.sharom.wrm.config.security.CustomUserDetails;
 import com.sharom.wrm.config.security.JwtUtil;
 import com.sharom.wrm.config.security.SecurityUtils;
-import com.sharom.wrm.modules.code.model.VerificationCode;
-import com.sharom.wrm.modules.code.repository.CodeRepo;
-import com.sharom.wrm.modules.code.service.VerificationCodeApiService;
-import com.sharom.wrm.modules.code.service.VerificationCodeService;
+import com.sharom.wrm.modules.user.model.entity.VerificationCode;
+import com.sharom.wrm.modules.user.repository.CodeRepo;
+import com.sharom.wrm.common.util.VerificationCodeService;
 import com.sharom.wrm.modules.user.mapper.UserMapper;
 import com.sharom.wrm.modules.user.model.dto.*;
 import com.sharom.wrm.modules.user.model.entity.User;
@@ -21,21 +18,22 @@ import com.sharom.wrm.modules.user.repository.UserRepo;
 import com.sharom.wrm.modules.warehouse.model.entity.Warehouse;
 import com.sharom.wrm.modules.warehouse.repository.WarehouseRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
@@ -45,7 +43,7 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
     private final VerificationCodeService verificationCodeService;
-    private final VerificationCodeApiService verificationCodeApiService;
+    private final EmailTemplateService emailTemplateService;
     private final CodeRepo codeRepo;
 
 
@@ -58,7 +56,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public AuthResponse register(RegisterRequest request) {
+
+
+        if (userRepo.existsUserByUserNameIgnoreCase(request.username())) {
+            throw ConflictException.usernameAlreadyExists();
+        }
+
+        if (userRepo.existsUserByPhone(request.phoneNumber())) {
+            throw ConflictException.userAlreadyExistsByThisPhoneNumber();
+        }
+
+        if (userRepo.existsUserByEmail(request.email())) {
+            throw ConflictException.emailAlreadyExists();
+        }
 
         User user = new User();
         user.setUserName(request.username());
@@ -69,6 +81,12 @@ public class UserServiceImpl implements UserService {
         user.setLocationId("none");
 
         userRepo.save(user);
+
+        try {
+            emailTemplateService.sendWelcomeEmail(user.getEmail(), user.getUserName());
+        } catch (Exception e) {
+            log.error("User registered but failed to send welcome email. email={}", user.getEmail(), e);
+        }
 
         String accessToken = jwtUtil.generateToken(user);
         String refreshToken = refreshTokenService.createRefreshToken(user.getUserName());
@@ -157,33 +175,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> forgotPassword(ForgotPasswordRequest request) throws ResponseStatusException {
+    public void forgotPassword(ForgotPasswordRequest request) throws ResponseStatusException {
         User user = userRepo.
-                findUserByEmail(request.email()).orElseThrow(NotFoundException::userNotFound);
+                findUserByEmail(request.email()).orElseThrow(NotFoundException::emailNotFound);
 
         String code = verificationCodeService.getCode();
 
-        if (!verificationCodeApiService.sendCodeToEmail(request.email(), code)) {
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    MessageKey.ERROR_SEND_CODE_TO_EMAIL
+        try {
+            emailTemplateService.sendVerificationCode(request.email(), code);
+        } catch (Exception e) {
+            log.error("Failed to send code to email {}", request.email(), e);
+            throw new ApiException(
+                    MessageKey.ERROR_SEND_CODE_TO_EMAIL,
+                    MessageKey.ERROR_SEND_CODE_TO_EMAIL,
+                    HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
 
-//        Optional<VerificationCode> existingCode = codeRepo.findByUserId(user.getId());
-//
-//        if (existingCode.isPresent()) {
-//
-//            VerificationCode codeEntity = existingCode.get();
-//
-//            if (codeEntity.getCreatedAt().plusMinutes(1).isAfter(LocalDateTime.now())) {
-//                throw BadRequestException.tooManyRequest();
-//            }
-//
-//        }
-
-
-//        codeRepo.deleteByUserId(user.getId());
+        codeRepo.deleteByUserId(user.getId());
+        codeRepo.flush();
 
         VerificationCode c = VerificationCode.builder()
                 .userId(user.getId())
@@ -193,13 +203,10 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         codeRepo.save(c);
-
-        return ResponseEntity.ok("RESET CODE SENT SUCCESSFULLY");
-
     }
 
     @Override
-    public ResponseEntity<?> verifyForgotPassword(VerifyForgotPasswordRequest req) {
+    public void verifyForgotPassword(VerifyForgotPasswordRequest req) {
         User user = userRepo.
                 findUserByEmail(req.email()).orElseThrow(NotFoundException::userNotFound);
 
@@ -216,16 +223,14 @@ public class UserServiceImpl implements UserService {
             throw BadRequestException.expiredCode();
         }
 
-//        codeRepo.deleteVerificationCodeByUserId(user.getId());
 
         user.setResetPasswordAllowed(true);
         userRepo.save(user);
 
-        return ResponseEntity.ok("CODE VERIFIED. YOU CAN NOW RESET PASSWORD.");
     }
 
     @Override
-    public ResponseEntity<?> resetPassword(ResetPasswordRequest req) {
+    public void resetPassword(ResetPasswordRequest req) {
         User user = userRepo.findUserByEmail(req.email())
                 .orElseThrow(NotFoundException::userNotFound);
 
@@ -236,6 +241,5 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(req.newPassword()));
         user.setResetPasswordAllowed(false);
         userRepo.save(user);
-
-        return ResponseEntity.ok("PASSWORD RESET SUCCESSFULLY");    }
+    }
 }

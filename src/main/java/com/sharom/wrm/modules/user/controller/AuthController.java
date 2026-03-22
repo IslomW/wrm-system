@@ -1,5 +1,6 @@
 package com.sharom.wrm.modules.user.controller;
 
+import com.sharom.wrm.common.constant.MessageKey;
 import com.sharom.wrm.modules.user.model.dto.AuthResponse;
 import com.sharom.wrm.modules.user.model.dto.ForgotPasswordRequest;
 import com.sharom.wrm.modules.user.model.dto.VerifyForgotPasswordRequest;
@@ -60,17 +61,23 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest req) {
-        return authService.forgotPassword(req);
+        authService.forgotPassword(req);
+
+        return ResponseEntity.ok(MessageKey.RESET_CODE_SENT_SUCCESSFULLY);
     }
 
     @PostMapping("/verify-forgot-password")
     public ResponseEntity<?> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
-        return authService.verifyForgotPassword(req);
+        authService.verifyForgotPassword(req);
+
+        return ResponseEntity.ok(MessageKey.CODE_VERIFIED);
     }
 
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
-        return authService.resetPassword(req);
+        authService.resetPassword(req);
+        return ResponseEntity.ok(MessageKey.PASSWORD_RESET_SUCCESSFULLY);
+
     }
 }

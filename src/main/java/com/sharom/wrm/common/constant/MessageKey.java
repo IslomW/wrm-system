@@ -10,16 +10,20 @@ public final class MessageKey {
 
     /* === User === */
     public static final String USER_NOT_FOUND = "user.not.found";
+    public static final String EMAIL_NOT_FOUND = "email.not.found";
     public static final String USER_ALREADY_EXISTS = "user.already.exists";
     public static final String USERNAME_ALREADY_EXISTS = "username.already.exists";
+    public static final String EMAIL_ALREADY_EXISTS = "email.already.exists";
     public static final String USERNAME_ALREADY_EXISTS_BY_PHONE = "user.already.exists.by.phone";
     public static final String USER_DISABLED = "user.disabled";
     public static final String USER_DELETED = "user.deleted";
     public static final String USER_NOT_ACTIVE = "user.not.active";
+    public static final String RESET_CODE_SENT_SUCCESSFULLY = "reset.code.sent.seccessfully";
+    public static final String CODE_VERIFIED = "code.verified.you.can.now.reset.password";
+    public static final String PASSWORD_RESET_SUCCESSFULLY = "password.reset.seccessfully";
 
 
     public static final String VERIFICATION_CODE_INVALID ="invalid.verification.code";
-    public static final String TOO_MANY_REQUESTS ="please.wait.before.requesting.a.new.code";
     public static final String RESET_PASSWORD_NOT_ALLOWED ="reset.password.not.allowed";
     public static final String EXPIRED_CODE ="expired.code";
 

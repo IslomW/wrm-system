@@ -22,6 +22,10 @@ public class NotFoundException extends ApiException {
         return new NotFoundException(USER_NOT_FOUND, USER_NOT_FOUND);
     }
 
+    public static NotFoundException emailNotFound() {
+        return new NotFoundException(EMAIL_NOT_FOUND, EMAIL_NOT_FOUND);
+    }
+
     public static NotFoundException groupNotFound() {
         return new NotFoundException(BOX_GROUP_NOT_FOUND, BOX_GROUP_NOT_FOUND);
     }
