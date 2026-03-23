@@ -20,8 +20,5 @@ jobs:
           docker stop spring_app || true
           docker rm spring_app || true
           
-          docker stop nginx || true
-          docker rm nginx || true
-          
           docker-compose pull app nginx
           docker-compose up -d --no-deps --build app nginx
