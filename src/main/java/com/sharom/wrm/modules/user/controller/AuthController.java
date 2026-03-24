@@ -10,9 +10,9 @@ import com.sharom.wrm.modules.user.model.dto.ResetPasswordRequest;
 import com.sharom.wrm.modules.user.model.dto.LoginRequest;
 import com.sharom.wrm.modules.user.model.dto.RegisterRequest;
 import com.sharom.wrm.modules.user.service.UserService;
+import com.sharom.wrm.service.MessageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,26 +22,27 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService authService;
+    private final MessageService messageService;
 
     /* ================= REGISTER ================= */
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
+    public ResponseEntity<ApiResponse<AuthResponse>> register(
             @RequestBody @Valid RegisterRequest request
     ) {
         AuthResponse response = authService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseFactory.created(response);
     }
 
     /* ================= LOGIN ================= */
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
+    public ResponseEntity<ApiResponse<AuthResponse>> login(
             @RequestBody LoginRequest request
     ) {
         AuthResponse response =
                 authService.login(request.username(), request.password());
-        return ResponseEntity.ok(response);
+        return ResponseFactory.ok(response);
     }
 
     /* ================= REFRESH TOKEN ================= */
@@ -62,32 +63,32 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest req) {
+    public ResponseEntity<ApiResponse<Object>> forgotPassword(@RequestBody ForgotPasswordRequest req) {
         authService.forgotPassword(req);
 
-        String message = MessageKey.RESET_CODE_SENT_SUCCESSFULLY;
+        String message = messageService.get(MessageKey.RESET_CODE_SENT_SUCCESSFULLY);
 
 
-        return ResponseEntity.ok(MessageKey.RESET_CODE_SENT_SUCCESSFULLY);
+        return ResponseFactory.ok(message);
     }
 
     @PostMapping("/verify-forgot-password")
-    public ResponseEntity<?> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
+    public ResponseEntity<ApiResponse<Object>> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
         authService.verifyForgotPassword(req);
 
         String message = MessageKey.CODE_VERIFIED;
 
-        return ResponseEntity.ok(message);
+        return ResponseFactory.ok(message);
     }
 
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
+    public ResponseEntity<ApiResponse<Object>> resetPassword(@RequestBody ResetPasswordRequest req) {
         authService.resetPassword(req);
 
         String message = MessageKey.PASSWORD_RESET_SUCCESSFULLY;
 
 
-        return ResponseEntity.ok(message);
+        return ResponseFactory.ok(message);
     }
 }

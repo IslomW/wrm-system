@@ -18,9 +18,9 @@ public final class MessageKey {
     public static final String USER_DISABLED = "user.disabled";
     public static final String USER_DELETED = "user.deleted";
     public static final String USER_NOT_ACTIVE = "user.not.active";
-    public static final String RESET_CODE_SENT_SUCCESSFULLY = "reset.code.sent.seccessfully";
+    public static final String RESET_CODE_SENT_SUCCESSFULLY = "reset.code.sent.successfully";
     public static final String CODE_VERIFIED = "code.verified.you.can.now.reset.password";
-    public static final String PASSWORD_RESET_SUCCESSFULLY = "password.reset.seccessfully";
+    public static final String PASSWORD_RESET_SUCCESSFULLY = "password.reset.successfully";
 
 
     public static final String VERIFICATION_CODE_INVALID ="invalid.verification.code";
@@ -33,7 +33,7 @@ public final class MessageKey {
     public static final String PASSWORD_TOO_SHORT = "password.too.short";
     public static final String PASSWORD_NO_DIGIT = "password.no.digit";
     public static final String PASSWORD_NO_UPPERCASE = "password.no.uppercase";
-    public static final String PASSWORD_NO_LOWERCASE = "password.no.uppercase";
+    public static final String PASSWORD_NO_LOWERCASE = "password.no.lowercase";
     public static final String PASSWORD_NO_SPECIAL_CHARACTER = "password.no.special.character";
     public static final String USERNAME_NOT_BLANK = "username.not.blank";
     public static final String USERNAME_SIZE = "username.size.error";
