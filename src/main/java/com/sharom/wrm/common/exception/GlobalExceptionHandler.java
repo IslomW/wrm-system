@@ -65,9 +65,9 @@ public class GlobalExceptionHandler {
                 ex.getCode());
 
         String localizedMessage = messageSource.getMessage(
-                ex.getMessage(), // bu key
+                ex.getMessage(),
                 null,
-                ex.getMessage(), // fallback
+                ex.getMessage(),
                 LocaleContextHolder.getLocale()
         );
 
@@ -121,15 +121,24 @@ public class GlobalExceptionHandler {
 
     private FieldErrorResponse mapToFieldError(FieldError error) {
 
+        String fieldKey = "field." + error.getField();
+
+        String localizedField = messageSource.getMessage(
+                fieldKey,
+                null,
+                error.getField(), // fallback
+                LocaleContextHolder.getLocale()
+        );
+
         String localizedMessage = messageSource.getMessage(
-                error.getDefaultMessage(), // key
+                error.getDefaultMessage(),
                 null,
                 error.getDefaultMessage(),
                 LocaleContextHolder.getLocale()
         );
 
         return FieldErrorResponse.builder()
-                .field(error.getField())
+                .field(localizedField) // 🔥 endi translated
                 .code(error.getDefaultMessage())
                 .message(localizedMessage)
                 .build();
