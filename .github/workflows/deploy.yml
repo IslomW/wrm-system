@@ -6,28 +6,22 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # МЕНЯЕМ ОБЛАКО GITHUB НА ТВОЙ СЕРВЕР
+    runs-on: self-hosted
 
     steps:
+      # 1. GitHub Runner скачивает код напрямую в свою папку на сервере
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Copy project to server
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          source: "."
-          target: "~/project"
-
+      # 2. Выполняем команды Docker напрямую (SSH больше не нужен)
       - name: Deploy on server
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd ~/project
-            docker-compose pull
-            docker-compose up -d --build
+        run: |
+          
+          docker-compose up -d db
+          
+          docker stop spring_app || true
+          docker rm spring_app || true
+          
+          docker-compose pull app nginx
+          docker-compose up -d --no-deps --build app nginx

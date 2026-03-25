@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import static java.util.Objects.requireNonNullElse;
+
 @Component
 public class UserInterceptor implements HandlerInterceptor {
 
@@ -19,6 +21,7 @@ public class UserInterceptor implements HandlerInterceptor {
         if (lang == null || lang.isBlank()) {
             lang = "en"; // default
         }
+        String lang = requireNonNullElse( request.getHeader("X-Lang"), "en");
 
         LangContext.setLang(lang);
 
