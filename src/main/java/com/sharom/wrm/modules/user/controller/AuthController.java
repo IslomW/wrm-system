@@ -76,7 +76,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Object>> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
         authService.verifyForgotPassword(req);
 
-        String message = MessageKey.CODE_VERIFIED;
+        String message = messageService.get(MessageKey.CODE_VERIFIED);
 
         return ResponseFactory.ok(message);
     }
@@ -86,7 +86,7 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Object>> resetPassword(@RequestBody ResetPasswordRequest req) {
         authService.resetPassword(req);
 
-        String message = MessageKey.PASSWORD_RESET_SUCCESSFULLY;
+        String message = messageService.get(MessageKey.PASSWORD_RESET_SUCCESSFULLY);
 
 
         return ResponseFactory.ok(message);
