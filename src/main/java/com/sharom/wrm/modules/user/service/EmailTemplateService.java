@@ -1,39 +1,34 @@
 package com.sharom.wrm.modules.user.service;
 
+import com.sharom.wrm.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailTemplateService  {
+public class EmailTemplateService {
+
     private final EmailService emailService;
+    private final MessageService messageService;
 
     public void sendVerificationCode(String to, String code) {
 
-        String subject = "Tasdiqlash kodi";
+        String subject = messageService.get("email.verification.subject");
 
-        String text = """
-                Sizning tasdiqlash kodingiz: %s
-                
-                Kod 1 daqiqa amal qiladi.
-                Uni hech kimga bermang!
-                """.formatted(code);
+        String bodyTemplate = messageService.get("email.verification.body");
+
+        String text = bodyTemplate.formatted(code);
 
         emailService.sendEmail(to, subject, text);
     }
 
     public void sendWelcomeEmail(String to, String username) {
 
-        String subject = "Xush kelibsiz!";
+        String subject = messageService.get("email.welcome.subject");
 
-        String text = """
-                Assalomu alaykum, %s!
-                
-                Sizni bizning ilovamizdan ro‘yxatdan o‘tganingiz bilan tabriklaymiz 🎉
-                
-                Hurmat bilan,
-                Bizning jamoa
-                """.formatted(username);
+        String bodyTemplate = messageService.get("email.welcome.body");
+
+        String text = bodyTemplate.formatted(username);
 
         emailService.sendEmail(to, subject, text);
     }
