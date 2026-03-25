@@ -1,5 +1,6 @@
 package com.sharom.wrm.modules.user.controller;
 
+import com.sharom.wrm.common.constant.MessageKey;
 import com.sharom.wrm.common.response.ApiResponse;
 import com.sharom.wrm.common.response.ResponseFactory;
 import com.sharom.wrm.modules.user.model.dto.AuthResponse;
@@ -9,6 +10,7 @@ import com.sharom.wrm.modules.user.model.dto.ResetPasswordRequest;
 import com.sharom.wrm.modules.user.model.dto.LoginRequest;
 import com.sharom.wrm.modules.user.model.dto.RegisterRequest;
 import com.sharom.wrm.modules.user.service.UserService;
+import com.sharom.wrm.service.MessageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService authService;
+    private final MessageService messageService;
 
     /* ================= REGISTER ================= */
 
@@ -60,18 +63,21 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest req) {
-        return authService.forgotPassword(req);
+    public ResponseEntity<ApiResponse<Object>> forgotPassword(@RequestBody ForgotPasswordRequest req) {
+        authService.forgotPassword(req);
+        return ResponseFactory.ok(messageService.get(MessageKey.RESET_CODE_SENT_SUCCESSFULLY));
     }
 
     @PostMapping("/verify-forgot-password")
-    public ResponseEntity<?> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
-        return authService.verifyForgotPassword(req);
+    public ResponseEntity<ApiResponse<Object>> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
+        authService.verifyForgotPassword(req);
+        return ResponseFactory.ok(MessageKey.CODE_VERIFIED);
     }
 
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest req) {
-        return authService.resetPassword(req);
+    public ResponseEntity<ApiResponse<Object>> resetPassword(@RequestBody ResetPasswordRequest req) {
+        authService.resetPassword(req);
+        return ResponseFactory.ok(MessageKey.PASSWORD_RESET_SUCCESSFULLY);
     }
 }

@@ -1,8 +1,9 @@
-package com.sharom.wrm.modules.code.repository;
+package com.sharom.wrm.modules.user.repository;
 
-import com.sharom.wrm.modules.code.model.VerificationCode;
-import org.aspectj.weaver.ast.Var;
+import com.sharom.wrm.modules.user.model.entity.VerificationCode;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -30,12 +31,8 @@ public interface CodeRepo extends JpaRepository<VerificationCode, String> {
         """)
     Optional<VerificationCode> findByUserId(@Param("userId") String userId);
 
-
-    @Query("""
-        SELECT c FROM VerificationCode c
-        WHERE c.userId = :userId
-        """)
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM VerificationCode c WHERE c.userId = :userId")
     void deleteByUserId(@Param("userId") String userId);
-
-    void deleteVerificationCodeByUserId(String userId);
 }
