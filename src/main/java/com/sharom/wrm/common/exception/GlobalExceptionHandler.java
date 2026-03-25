@@ -2,10 +2,9 @@ package com.sharom.wrm.common.exception;
 
 import com.sharom.wrm.common.response.ErrorResponse;
 import com.sharom.wrm.common.response.FieldErrorResponse;
+import com.sharom.wrm.service.MessageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -19,14 +18,16 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final MessageSource messageSource;
+    private final MessageService messageService;
 
-    public GlobalExceptionHandler(MessageSource messageSource) {
-        this.messageSource = messageSource;
+    public GlobalExceptionHandler(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleValidation(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
 
         List<FieldErrorResponse> errors = ex.getBindingResult()
                 .getFieldErrors()
@@ -34,11 +35,13 @@ public class GlobalExceptionHandler {
                 .map(this::mapToFieldError)
                 .toList();
 
+        String message = messageService.get("validation.error");
+
         log.warn("Validation failed: path={}, errors={}", request.getRequestURI(), errors);
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
-                "Validation failed",
+                message,
                 errors,
                 request.getRequestURI()
         );
@@ -55,9 +58,11 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 ex.getCode());
 
+        String localizedMessage = messageService.get(ex.getMessage());
+
         return buildResponse(
                 ex.getStatus(),
-                ex.getMessage(),
+                localizedMessage,
                 null,
                 request.getRequestURI()
         );
@@ -70,9 +75,11 @@ public class GlobalExceptionHandler {
 
         log.error("Unexpected error: path={}", request.getRequestURI(), ex);
 
+        String message = messageService.get("system.internal.error");
+
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Internal server error",
+                message,
                 null,
                 request.getRequestURI()
         );
@@ -81,13 +88,13 @@ public class GlobalExceptionHandler {
     private ResponseEntity<ErrorResponse> buildResponse(
             HttpStatus status,
             String message,
-            List<?> errors,
+            List<FieldErrorResponse> errors,
             String path) {
 
         ErrorResponse response = ErrorResponse.builder()
                 .status(status.value())
                 .message(message)
-                .errors(errors == null ? List.of() : (List<FieldErrorResponse>) errors)
+                .errors(errors == null ? List.of() : errors)
                 .timestamp(System.currentTimeMillis())
                 .path(path)
                 .build();
@@ -95,18 +102,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(response);
     }
 
-
     private FieldErrorResponse mapToFieldError(FieldError error) {
 
-        String localizedMessage = messageSource.getMessage(
-                error.getDefaultMessage(),
-                null,
-                error.getDefaultMessage(),
-                LocaleContextHolder.getLocale()
-        );
+        String fieldKey = "field." + error.getField();
+
+        String localizedField = messageService.get(fieldKey);
+        String localizedMessage = messageService.get(error.getDefaultMessage());
 
         return FieldErrorResponse.builder()
-                .field(error.getField())
+                .field(localizedField)
                 .code(error.getDefaultMessage())
                 .message(localizedMessage)
                 .build();

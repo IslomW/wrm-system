@@ -1,4 +1,4 @@
-package com.sharom.wrm.modules.code.model;
+package com.sharom.wrm.modules.user.model.entity;
 
 import com.sharom.wrm.common.entity.BaseEntity;
 import jakarta.persistence.Entity;

@@ -1,6 +1,5 @@
 package com.sharom.wrm.common.exception;
 
-import com.sharom.wrm.common.constant.Code;
 import org.springframework.http.HttpStatus;
 
 import static com.sharom.wrm.common.constant.MessageKey.*;
@@ -20,6 +19,10 @@ public class NotFoundException extends ApiException {
 
     public static NotFoundException userNotFound() {
         return new NotFoundException(USER_NOT_FOUND, USER_NOT_FOUND);
+    }
+
+    public static NotFoundException emailNotFound() {
+        return new NotFoundException(EMAIL_NOT_FOUND, EMAIL_NOT_FOUND);
     }
 
     public static NotFoundException groupNotFound() {

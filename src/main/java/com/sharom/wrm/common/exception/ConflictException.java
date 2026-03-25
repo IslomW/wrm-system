@@ -30,5 +30,9 @@ public class ConflictException extends ApiException {
         return new ConflictException(USERNAME_ALREADY_EXISTS, USERNAME_ALREADY_EXISTS);
     }
 
+    public static ConflictException emailAlreadyExists() {
+        return new ConflictException(EMAIL_ALREADY_EXISTS, EMAIL_ALREADY_EXISTS);
+    }
+
 
 }

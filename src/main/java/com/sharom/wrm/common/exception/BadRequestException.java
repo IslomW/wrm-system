@@ -26,10 +26,6 @@ public class BadRequestException extends ApiException {
         return new BadRequestException(RESET_PASSWORD_NOT_ALLOWED, RESET_PASSWORD_NOT_ALLOWED);
     }
 
-    public static BadRequestException tooManyRequest() {
-        return new BadRequestException(TOO_MANY_REQUESTS, TOO_MANY_REQUESTS);
-    }
-
     public static BadRequestException expiredCode() {
         return new BadRequestException(EXPIRED_CODE, EXPIRED_CODE);
     }

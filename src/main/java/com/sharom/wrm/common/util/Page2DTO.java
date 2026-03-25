@@ -8,7 +8,7 @@ public class Page2DTO {
         return PageDTO.<T>builder()
                 .next(page.hasNext())
                 .previous(page.hasPrevious())
-                .items(page.getContent())
+                .content(page.getContent())
                 .size(page.getSize())
                 .totalElements(page.getTotalElements())
                 .pageNumber(page.getNumber())
