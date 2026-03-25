@@ -7,7 +7,7 @@ import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
-public class VerificationCodeService {
+public class VerificationCodeGenerator {
     public String getCode() {
         Random random = new Random();
         int randomCode = 10000 + random.nextInt(90000); // Generates a number between 10000 and 99999

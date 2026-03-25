@@ -2,10 +2,9 @@ package com.sharom.wrm.common.exception;
 
 import com.sharom.wrm.common.response.ErrorResponse;
 import com.sharom.wrm.common.response.FieldErrorResponse;
+import com.sharom.wrm.service.MessageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -19,10 +18,10 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final MessageSource messageSource;
+    private final MessageService messageService;
 
-    public GlobalExceptionHandler(MessageSource messageSource) {
-        this.messageSource = messageSource;
+    public GlobalExceptionHandler(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -36,12 +35,7 @@ public class GlobalExceptionHandler {
                 .map(this::mapToFieldError)
                 .toList();
 
-        String message = messageSource.getMessage(
-                "validation.error",
-                null,
-                "Validation error",
-                LocaleContextHolder.getLocale()
-        );
+        String message = messageService.get("validation.error");
 
         log.warn("Validation failed: path={}, errors={}", request.getRequestURI(), errors);
 
@@ -64,12 +58,7 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 ex.getCode());
 
-        String localizedMessage = messageSource.getMessage(
-                ex.getMessage(),
-                null,
-                ex.getMessage(),
-                LocaleContextHolder.getLocale()
-        );
+        String localizedMessage = messageService.get(ex.getMessage());
 
         return buildResponse(
                 ex.getStatus(),
@@ -86,12 +75,7 @@ public class GlobalExceptionHandler {
 
         log.error("Unexpected error: path={}", request.getRequestURI(), ex);
 
-        String message = messageSource.getMessage(
-                "system.internal.error",
-                null,
-                "Internal server error",
-                LocaleContextHolder.getLocale()
-        );
+        String message = messageService.get("system.internal.error");
 
         return buildResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -118,27 +102,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(response);
     }
 
-
     private FieldErrorResponse mapToFieldError(FieldError error) {
 
         String fieldKey = "field." + error.getField();
 
-        String localizedField = messageSource.getMessage(
-                fieldKey,
-                null,
-                error.getField(), // fallback
-                LocaleContextHolder.getLocale()
-        );
-
-        String localizedMessage = messageSource.getMessage(
-                error.getDefaultMessage(),
-                null,
-                error.getDefaultMessage(),
-                LocaleContextHolder.getLocale()
-        );
+        String localizedField = messageService.get(fieldKey);
+        String localizedMessage = messageService.get(error.getDefaultMessage());
 
         return FieldErrorResponse.builder()
-                .field(localizedField) // 🔥 endi translated
+                .field(localizedField)
                 .code(error.getDefaultMessage())
                 .message(localizedMessage)
                 .build();

@@ -1,6 +1,5 @@
 package com.sharom.wrm.modules.user.service;
 
-import com.sharom.wrm.common.constant.MessageKey;
 import com.sharom.wrm.common.exception.*;
 import com.sharom.wrm.common.util.Page2DTO;
 import com.sharom.wrm.common.util.PageDTO;
@@ -9,7 +8,7 @@ import com.sharom.wrm.config.security.JwtUtil;
 import com.sharom.wrm.config.security.SecurityUtils;
 import com.sharom.wrm.modules.user.model.entity.VerificationCode;
 import com.sharom.wrm.modules.user.repository.CodeRepo;
-import com.sharom.wrm.common.util.VerificationCodeService;
+import com.sharom.wrm.common.util.VerificationCodeGenerator;
 import com.sharom.wrm.modules.user.mapper.UserMapper;
 import com.sharom.wrm.modules.user.model.dto.*;
 import com.sharom.wrm.modules.user.model.entity.User;
@@ -21,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +40,7 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
-    private final VerificationCodeService verificationCodeService;
+    private final VerificationCodeGenerator verificationCodeService;
     private final EmailTemplateService emailTemplateService;
     private final CodeRepo codeRepo;
 

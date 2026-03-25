@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Locale;
 
 @Service
-public class MessageServiceImpl implements MessageService{
+public class MessageServiceImpl implements MessageService {
 
     private final MessageSource messageSource;
 
@@ -17,19 +17,21 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     public String get(String key) {
+        return messageSource.getMessage(
+                key,
+                null,
+                key,
+                resolveLocale()
+        );
+    }
 
+    private Locale resolveLocale() {
         String lang = LangContext.getLang();
 
-        Locale locale = switch (lang) {
+        return switch (lang) {
             case "ru" -> new Locale("ru");
             case "uz" -> new Locale("uz");
             default -> new Locale("en");
         };
-
-        System.out.println("LANG = " + lang);
-        System.out.println("MESSAGE = " + messageSource.getMessage(key, null, key, locale));
-
-        return messageSource.getMessage(key, null, key, locale);
     }
-
 }
