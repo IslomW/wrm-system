@@ -16,6 +16,7 @@ public class UserInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) {
 
+
         String lang = requireNonNullElse( request.getHeader("X-Lang"), "en");
 
         LangContext.setLang(lang);

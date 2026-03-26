@@ -65,19 +65,30 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public ResponseEntity<ApiResponse<Object>> forgotPassword(@RequestBody ForgotPasswordRequest req) {
         authService.forgotPassword(req);
-        return ResponseFactory.ok(messageService.get(MessageKey.RESET_CODE_SENT_SUCCESSFULLY));
+
+        String message = messageService.get(MessageKey.RESET_CODE_SENT_SUCCESSFULLY);
+
+
+        return ResponseFactory.ok(message);
     }
 
     @PostMapping("/verify-forgot-password")
     public ResponseEntity<ApiResponse<Object>> verifyForgot(@RequestBody VerifyForgotPasswordRequest req) {
         authService.verifyForgotPassword(req);
-        return ResponseFactory.ok(MessageKey.CODE_VERIFIED);
+
+        String message = messageService.get(MessageKey.CODE_VERIFIED);
+
+        return ResponseFactory.ok(message);
     }
 
 
     @PostMapping("/reset-password")
     public ResponseEntity<ApiResponse<Object>> resetPassword(@RequestBody ResetPasswordRequest req) {
         authService.resetPassword(req);
-        return ResponseFactory.ok(MessageKey.PASSWORD_RESET_SUCCESSFULLY);
+
+        String message = messageService.get(MessageKey.PASSWORD_RESET_SUCCESSFULLY);
+
+
+        return ResponseFactory.ok(message);
     }
 }
