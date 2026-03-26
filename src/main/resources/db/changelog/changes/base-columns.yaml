@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260327-0026-base-columns
+      author: islom
+      changes:
+        - createTable:
+            tableName: base_columns_placeholder
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(27)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: version
+                  type: BIGINT

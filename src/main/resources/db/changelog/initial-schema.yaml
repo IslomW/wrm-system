@@ -1,0 +1,669 @@
+databaseChangeLog:
+- changeSet:
+    id: 1774540249336-1
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: users_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: client_code
+            type: VARCHAR(255)
+        - column:
+            name: email
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: phone
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: telegram_id
+            type: INTEGER
+        - column:
+            name: user_type
+            type: VARCHAR(255)
+        - column:
+            name: location_id
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        - column:
+            name: user_name
+            type: VARCHAR(255)
+        - column:
+            defaultValueBoolean: false
+            name: reset_password_allowed
+            type: BOOLEAN
+        tableName: users
+- changeSet:
+    id: 1774540249336-2
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: box_event_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: comment
+            type: VARCHAR(255)
+        - column:
+            name: event_time
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: location_id
+            type: VARCHAR(27)
+        - column:
+            name: location_type
+            type: VARCHAR(255)
+        - column:
+            name: type
+            type: VARCHAR(255)
+        - column:
+            name: box_id
+            type: VARCHAR(27)
+        - column:
+            name: shipment_id
+            type: VARCHAR(27)
+        - column:
+            name: operator_id
+            type: VARCHAR(255)
+        - column:
+            name: from_location
+            type: VARCHAR(255)
+        - column:
+            name: to_location
+            type: VARCHAR(255)
+        tableName: box_event
+- changeSet:
+    id: 1774540249336-3
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: box_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: box_number
+            type: VARCHAR(255)
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: qr_code
+            type: VARCHAR(255)
+        - column:
+            name: status
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: box_group_id
+            type: VARCHAR(27)
+        - column:
+            name: current_warehouse_id
+            type: VARCHAR(27)
+        - column:
+            name: qr_status
+            type: VARCHAR(255)
+        tableName: box
+- changeSet:
+    id: 1774540249336-4
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: box_status_history_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: box_status
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: box_id
+            type: VARCHAR(27)
+        tableName: box_status_history
+- changeSet:
+    id: 1774540249336-5
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: orders_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: client_id
+            type: VARCHAR(27)
+        - column:
+            name: status
+            type: VARCHAR(255)
+        tableName: orders
+- changeSet:
+    id: 1774540249336-6
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: shipment_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: shipment_number
+            type: VARCHAR(255)
+        - column:
+            name: status
+            type: VARCHAR(255)
+        tableName: shipment
+- changeSet:
+    id: 1774540249336-7
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: warehouses_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: active
+            type: BOOLEAN
+        - column:
+            constraints:
+              nullable: false
+            name: city
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: code
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: country
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        tableName: warehouses
+- changeSet:
+    id: 1774540249336-8
+    author: user (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: user_name
+        constraintName: ukk8d0f2n7n88w1a16yhua64onx
+        tableName: users
+- changeSet:
+    id: 1774540249336-9
+    author: user (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: box_id, shipment_id, type
+        constraintName: uq_box_event_once
+        tableName: box_event
+- changeSet:
+    id: 1774540249336-10
+    author: user (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: qr_code
+        constraintName: ukmhatx9nebt6fqhj5d6cddgvq5
+        tableName: box
+- changeSet:
+    id: 1774540249336-11
+    author: user (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: shipment_number
+        constraintName: uk8gftp2bg6vt9mn5pspd1iwo4
+        tableName: shipment
+- changeSet:
+    id: 1774540249336-12
+    author: user (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: code
+        constraintName: uk6herdbg4x5wp6gkor8epv73oc
+        tableName: warehouses
+- changeSet:
+    id: 1774540249336-13
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: box_group_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: created_by
+            type: VARCHAR(255)
+        - column:
+            name: updated_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: updated_by
+            type: VARCHAR(255)
+        - column:
+            name: box_group_code
+            type: VARCHAR(255)
+        - column:
+            name: box_type
+            type: VARCHAR(255)
+        - column:
+            name: description
+            type: VARCHAR(255)
+        - column:
+            name: height
+            type: numeric(38, 2)
+        - column:
+            name: length
+            type: numeric(38, 2)
+        - column:
+            constraints:
+              nullable: false
+            name: quantity
+            type: INTEGER
+        - column:
+            name: weight
+            type: numeric(38, 2)
+        - column:
+            name: width
+            type: numeric(38, 2)
+        - column:
+            constraints:
+              nullable: false
+            name: order_id
+            type: VARCHAR(27)
+        - column:
+            constraints:
+              nullable: false
+            name: warehouse_id
+            type: VARCHAR(27)
+        - column:
+            name: extra_expenses
+            type: numeric(38, 2)
+        tableName: box_group
+- changeSet:
+    id: 1774540249336-14
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: box_group_id
+            type: VARCHAR(27)
+        - column:
+            name: photo_url
+            type: VARCHAR(255)
+        tableName: box_group_photos
+- changeSet:
+    id: 1774540249336-15
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: box_location_history_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: arrived_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: transport_info
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: box_id
+            type: VARCHAR(27)
+        - column:
+            constraints:
+              nullable: false
+            name: warehouse_id
+            type: VARCHAR(27)
+        tableName: box_location_history
+- changeSet:
+    id: 1774540249336-16
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: shipment_id
+            type: VARCHAR(27)
+        - column:
+            constraints:
+              nullable: false
+            name: box_group_id
+            type: VARCHAR(27)
+        tableName: shipment_planned_groups
+- changeSet:
+    id: 1774540249336-17
+    author: user (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: verification_code_pkey
+            name: id
+            type: VARCHAR(27)
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: code
+            type: VARCHAR(255)
+        - column:
+            name: created_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: expired_at
+            type: TIMESTAMP WITHOUT TIME ZONE
+        - column:
+            name: user_id
+            type: VARCHAR(255)
+        tableName: verification_code
+- changeSet:
+    id: 1774540249336-18
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: box_id
+        baseTableName: box_location_history
+        constraintName: fk1ck30vx77vc2olqbapy3b8oqw
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: box
+        validate: true
+- changeSet:
+    id: 1774540249336-19
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: box_id
+        baseTableName: box_status_history
+        constraintName: fk1f343f6x3onxuilovwmy75b9j
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: box
+        validate: true
+- changeSet:
+    id: 1774540249336-20
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: box_group_id
+        baseTableName: box_group_photos
+        constraintName: fk2venax7e2idf95gg7axpgk7pj
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: box_group
+        validate: true
+- changeSet:
+    id: 1774540249336-21
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: order_id
+        baseTableName: box_group
+        constraintName: fk3tewiwa6vv3ygmg74h1cyy96w
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: orders
+        validate: true
+- changeSet:
+    id: 1774540249336-22
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: current_warehouse_id
+        baseTableName: box
+        constraintName: fkb8x7al4hfqugijjn4wx95cfvw
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: warehouses
+        validate: true
+- changeSet:
+    id: 1774540249336-23
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: box_id
+        baseTableName: box_event
+        constraintName: fkm663yqxvnu7n6bmnej2aksvoj
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: box
+        validate: true
+- changeSet:
+    id: 1774540249336-24
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: client_id
+        baseTableName: orders
+        constraintName: fkojjigrbyd7qrcwrxvr7e9bdr2
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: users
+        validate: true
+- changeSet:
+    id: 1774540249336-25
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: warehouse_id
+        baseTableName: box_group
+        constraintName: fkpfxkgcm2vn5y5cgchnxskc8d3
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: warehouses
+        validate: true
+- changeSet:
+    id: 1774540249336-26
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: warehouse_id
+        baseTableName: box_location_history
+        constraintName: fks7hn7tkxdmm15vmg4ab1q7q9b
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: warehouses
+        validate: true
+- changeSet:
+    id: 1774540249336-27
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: shipment_id
+        baseTableName: shipment_planned_groups
+        constraintName: fkt7clxjf1p52c0x4xww2308sqg
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: shipment
+        validate: true
+- changeSet:
+    id: 1774540249336-28
+    author: user (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: shipment_id
+        baseTableName: box_event
+        constraintName: fktm6wdgsvf5judcmwgxcw83u0a
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: NO ACTION
+        onUpdate: NO ACTION
+        referencedColumnNames: id
+        referencedTableName: shipment
+        validate: true
+

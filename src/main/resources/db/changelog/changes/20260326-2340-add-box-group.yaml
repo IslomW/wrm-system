@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - include:
+      file: base_columns.yml
+  - include:
+      file: audit_columns.yml
+
+  - changeSet:
+      id: 20260326-2340-add-box-group
+      author: islom
+      changes:
+        - createTable:
+            tableName: box_group
+            columns:
+              - column:
+                  name: box_group_code
+                  type: VARCHAR(255)
+              - column:
+                  name: box_type
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: height
+                  type: numeric(38, 2)
+              - column:
+                  name: length
+                  type: numeric(38, 2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: quantity
+                  type: INTEGER
+              - column:
+                  name: weight
+                  type: numeric(38, 2)
+              - column:
+                  name: width
+                  type: numeric(38, 2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: order_id
+                  type: VARCHAR(27)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: warehouse_id
+                  type: VARCHAR(27)
+              - column:
+                  name: extra_expenses
+                  type: numeric(38, 2)

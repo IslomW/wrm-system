@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - include:
+      file: base-columns
+  - changeSet:
+      id: 20260326-2325-add-box-event
+      author: islom
+      changes:
+        - createTable:
+            tableName: box_event
+            columns:
+              - column:
+                  name: comment
+                  type: VARCHAR(255)
+              - column:
+                  name: event_time
+                  type: TIMESTAMP_WITH_TIMEZONE
+              - column:
+                  name: location_id
+                  type: VARCHAR(27)
+              - column:
+                  name: location_type
+                  type: VARCHAR(255)
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: box_id
+                  type: VARCHAR(27)
+              - column:
+                  name: shipment_id
+                  type: VARCHAR(27)
+              - column:
+                  name: operator_id
+                  type: VARCHAR(27)
+              - column:
+                  name: from_location
+                  type: VARCHAR(255)
+              - column:
+                  name: to_location
+                  type: VARCHAR(255)

@@ -1,14 +1,1 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: sharipov
-      changes:
-        - createTable:
-            tableName: users
-            columns:
-              - column:
-                  name: id
-                  type: varchar(27)
-                  constraints:
-                    primaryKey: true
-                    nullable: false

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260327-0027-audit-columns
+      author: islom
+      changes:
+        - createTable:
+            tableName: audit_columns_placeholder
+            columns:
+              - column:
+                  name: created_at
+                  type: TIMESTAMP_WITH_TIMEZONE
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP_WITH_TIMEZONE
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)

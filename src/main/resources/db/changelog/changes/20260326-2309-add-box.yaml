@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - include:
+      file: base_columns.yml
+  - include:
+      file: audit_columns.yml
+  - changeSet:
+      id: 20260326-2309-create-box
+      author: islom
+      changes:
+        - createTable:
+            tableName: box
+            columns:
+              - column:
+                  name: box_number
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: qr_code
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: box_group_id
+                  type: VARCHAR(27)
+              - column:
+                  name: current_warehouse_id
+                  type: VARCHAR(255)
+              - column:
+                  name: qr_status
+                  type: VARCHAR(255)

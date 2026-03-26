@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/wms-service
+    url: jdbc:postgresql://localhost:5432/wms-service
     username: postgres
-    password: tawkenskiy
+    password: 1234
     driver-class-name: org.postgresql.Driver
 
   mail:
@@ -16,7 +16,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update   # ??? dev ?????????, ??? prod ? validate
+      ddl-auto: none   # ??? dev ?????????, ??? prod ? validate
     show-sql: true
     properties:
       hibernate:
