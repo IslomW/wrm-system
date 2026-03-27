@@ -50,3 +50,11 @@ databaseChangeLog:
               - column:
                   name: extra_expenses
                   type: numeric(38, 2)
+
+        # FK -> order
+        - addForeignKeyConstraint:
+            baseTableName: box_group
+            baseColumnNames: order_id
+            constraintName: fk_box_group_order
+            referencedTableName: orders
+            referencedColumnNames: id

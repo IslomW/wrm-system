@@ -38,3 +38,17 @@ databaseChangeLog:
               - column:
                   name: to_location
                   type: VARCHAR(255)
+
+        # FK -> box
+        - addForeignKeyConstraint:
+            baseTableName: box_event
+            baseColumnNames: box_id
+            constraintName: fk_box_event_box
+            referencedTableName: box
+            referencedColumnNames: id
+
+        # UNIQUE (box_id, shipment_number, type)
+        - addUniqueConstraint:
+            tableName: box_event
+            columnNames: box_id, shipment_number, type
+            constraintName: uq_box_event_once
