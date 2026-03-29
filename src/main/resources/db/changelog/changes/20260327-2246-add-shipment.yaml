@@ -1,0 +1,27 @@
+databaseChangeLog:
+#  - include:
+#      file: db/changelog/base-columns.yaml
+  - changeSet:
+      id: 20260327-2246-add-shipment
+      author: islom
+      changes:
+        - createTable:
+            tableName: shipment
+            columns:
+              # Base
+              - column:
+                  name: id
+                  type: VARCHAR(27)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: version
+                  type: BIGINT
+
+              - column:
+                  name: shipment_number
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)

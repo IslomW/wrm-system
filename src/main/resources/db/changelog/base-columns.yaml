@@ -1,0 +1,10 @@
+columns:
+  - column:
+      name: id
+      type: VARCHAR(27)
+      constraints:
+          nullable: false
+          primaryKey: true
+  - column:
+      name: version
+      type: BIGINT

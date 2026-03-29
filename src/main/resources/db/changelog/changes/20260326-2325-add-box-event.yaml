@@ -1,6 +1,6 @@
 databaseChangeLog:
-  - include:
-      file: base-columns
+#  - include:
+#      file: db/changelog/base-columns.yaml
   - changeSet:
       id: 20260326-2325-add-box-event
       author: islom
@@ -8,12 +8,23 @@ databaseChangeLog:
         - createTable:
             tableName: box_event
             columns:
+              # Base
+              - column:
+                  name: id
+                  type: VARCHAR(27)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: version
+                  type: BIGINT
+
               - column:
                   name: comment
                   type: VARCHAR(255)
               - column:
                   name: event_time
-                  type: TIMESTAMP_WITH_TIMEZONE
+                  type: TIMESTAMP WITHOUT TIME ZONE
               - column:
                   name: location_id
                   type: VARCHAR(27)
@@ -23,6 +34,9 @@ databaseChangeLog:
               - column:
                   name: type
                   type: VARCHAR(255)
+              - column:
+                  name: shipment_number
+                  type: VARCHAR(27)
               - column:
                   name: box_id
                   type: VARCHAR(27)

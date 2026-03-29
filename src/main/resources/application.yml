@@ -1,6 +1,7 @@
 spring:
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/wms-service
+    url: jdbc:postgresql://localhost:5432/test_tes
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
@@ -24,9 +25,7 @@ spring:
         format_sql: true
 
 
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/db.changelog-master.yaml
+
 
   sql:
     init:

@@ -1,8 +1,8 @@
 databaseChangeLog:
-  - include:
-      file: base_columns.yml
-  - include:
-      file: audit_columns.yml
+#  - include:
+#      file: db/changelog/base-columns.yaml
+#  - include:
+#      file: db/changelog/audit-columns.yaml
   - changeSet:
       id: 20260326-2309-create-box
       author: islom
@@ -10,6 +10,30 @@ databaseChangeLog:
         - createTable:
             tableName: box
             columns:
+              # Base
+              - column:
+                  name: id
+                  type: VARCHAR(27)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: version
+                  type: BIGINT
+              # Audit
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
+
               - column:
                   name: box_number
                   type: VARCHAR(255)
@@ -37,7 +61,7 @@ databaseChangeLog:
         # FK -> box_group
         - addForeignKeyConstraint:
             baseTableName: box
-            baseColumnNames: bbox_group_id
+            baseColumnNames: box_group_id
             constraintName: fk_box_box_group
             referencedTableName: box_group
             referencedColumnNames: id
@@ -45,7 +69,7 @@ databaseChangeLog:
         # FK -> warehouse
         - addForeignKeyConstraint:
             baseTableName: box
-            baseColumnNames: ccurrent_warehouse_id
+            baseColumnNames: current_warehouse_id
             constraintName: fk_box_warehouse
             referencedTableName: warehouses
             referencedColumnNames: id

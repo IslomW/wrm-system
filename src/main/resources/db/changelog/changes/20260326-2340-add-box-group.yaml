@@ -1,8 +1,9 @@
 databaseChangeLog:
-  - include:
-      file: base_columns.yml
-  - include:
-      file: audit_columns.yml
+
+#  - include:
+#      file: db/changelog/base-columns.yaml
+#  - include:
+#      file: db/changelog/audit-columns.yaml
 
   - changeSet:
       id: 20260326-2340-add-box-group
@@ -11,6 +12,29 @@ databaseChangeLog:
         - createTable:
             tableName: box_group
             columns:
+              # Base
+              - column:
+                  name: id
+                  type: VARCHAR(27)
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: version
+                  type: BIGINT
+              # Audit
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)
               - column:
                   name: box_group_code
                   type: VARCHAR(255)
