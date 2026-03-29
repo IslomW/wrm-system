@@ -146,8 +146,8 @@
 
 		<!-- Source: https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
 		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-liquibase</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -182,6 +182,21 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>4.27.0</version>
+				<configuration>
+					<url>jdbc:postgresql://localhost:5432/wms-service</url>
+					<username>asqarov</username>
+					<password>asqarov</password>
+					<driver>org.postgresql.Driver</driver>
+					<defaultSchemaName>public</defaultSchemaName>
+					<outputChangeLogFile>
+						src/main/resources/db/changelog/001-initial-schema.yaml
+					</outputChangeLogFile>
 				</configuration>
 			</plugin>
 		</plugins>

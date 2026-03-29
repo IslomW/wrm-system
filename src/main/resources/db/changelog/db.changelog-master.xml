@@ -1,7 +1,0 @@
-<databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
-
-
-    <include file="db/changelog/changes/001-baseline.sql"/>
-
-</databaseChangeLog>
