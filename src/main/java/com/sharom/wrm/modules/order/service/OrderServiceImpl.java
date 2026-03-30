@@ -1,5 +1,6 @@
 package com.sharom.wrm.modules.order.service;
 
+import com.sharom.wrm.common.exception.NotFoundException;
 import com.sharom.wrm.modules.order.model.entity.Order;
 import com.sharom.wrm.modules.order.model.entity.OrderStatus;
 import com.sharom.wrm.modules.user.model.entity.User;
@@ -21,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(String clientId) {
         User client = userRepo.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found"));
+                .orElseThrow(NotFoundException::userNotFound);
 
         Order order = new Order();
         order.setClient(client);
