@@ -29,4 +29,11 @@ public class BadRequestException extends ApiException {
     public static BadRequestException expiredCode() {
         return new BadRequestException(EXPIRED_CODE, EXPIRED_CODE);
     }
+
+    public static BadRequestException errorInvalidFileFormat() {
+        return new BadRequestException(
+                ERROR_INVALID_FILE_FORMAT,
+                ERROR_INVALID_FILE_FORMAT
+        );
+    }
 }

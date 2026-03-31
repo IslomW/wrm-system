@@ -34,4 +34,7 @@ public class NotFoundException extends ApiException {
     public static NotFoundException boxNotFound() {
         return new NotFoundException(BOX_NOT_FOUND, BOX_NOT_FOUND);
     }
+    public static NotFoundException orderNotFound() {
+        return new NotFoundException(ORDER_NOT_FOUND, ORDER_NOT_FOUND);
+    }
 }

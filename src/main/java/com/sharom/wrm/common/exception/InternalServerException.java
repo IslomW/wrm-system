@@ -2,7 +2,7 @@ package com.sharom.wrm.common.exception;
 
 import org.springframework.http.HttpStatus;
 
-import static com.sharom.wrm.common.constant.MessageKey.ERROR_SEND_CODE_TO_EMAIL;
+import static com.sharom.wrm.common.constant.MessageKey.*;
 
 public class InternalServerException extends ApiException {
     private static final String LOG_MESSAGE = "Internal Server Error";
@@ -18,5 +18,13 @@ public class InternalServerException extends ApiException {
 
     public static InternalServerException errorSentCode(){
         return new InternalServerException(ERROR_SEND_CODE_TO_EMAIL, ERROR_SEND_CODE_TO_EMAIL);
+    }
+
+    public static InternalServerException errorQrCodeGeneration(){
+        return new InternalServerException(ERROR_QR_CODE_GENERATION, ERROR_QR_CODE_GENERATION);
+    }
+
+    public static InternalServerException errorUploadingPhoto() {
+        return new InternalServerException(ERROR_PHOTO_UPLOAD, ERROR_PHOTO_UPLOAD);
     }
 }

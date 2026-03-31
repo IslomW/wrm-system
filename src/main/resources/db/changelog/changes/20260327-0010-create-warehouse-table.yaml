@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260327-0010-create-warehouse
+      author: abrorxon
+      changes:
+        - createTable:
+            tableName: warehouses
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: warehouses_pkey
+                    # BaseEntity
+                  name: id
+                  type: VARCHAR(27)
+              - column:
+                  name: version
+                  type: BIGINT
+                  # warehouse
+              - column:
+                  constraints:
+                    nullable: false
+                  name: active
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: city
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: uk_code
+                  name: code
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: country
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)

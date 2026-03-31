@@ -22,10 +22,14 @@ public final class MessageKey {
     public static final String CODE_VERIFIED = "code.verified.you.can.now.reset.password";
     public static final String PASSWORD_RESET_SUCCESSFULLY = "password.reset.successfully";
 
+    public static final String ERROR_INVALID_FILE_FORMAT = "error.invalid.file.format";
+    /* === Order === */
+    public static final String ORDER_NOT_FOUND = "order.not.found";
 
-    public static final String VERIFICATION_CODE_INVALID ="invalid.verification.code";
-    public static final String RESET_PASSWORD_NOT_ALLOWED ="reset.password.not.allowed";
-    public static final String EXPIRED_CODE ="expired.code";
+
+    public static final String VERIFICATION_CODE_INVALID = "invalid.verification.code";
+    public static final String RESET_PASSWORD_NOT_ALLOWED = "reset.password.not.allowed";
+    public static final String EXPIRED_CODE = "expired.code";
 
 
     /* === Registration === */
@@ -57,7 +61,8 @@ public final class MessageKey {
     public static final String BOX_NOT_FOUND = "box.not.found";
 
     public static final String WAREHOUSE_INACTIVE = "warehouse.inactive";
-    public static final String WAREHOUSE_NOT_FOUND = "warehouse.already.exists";
+    public static final String WAREHOUSE_NOT_FOUND = "warehouse.not.found";
+    public static final String WAREHOUSE_ALREADY_EXISTS = "warehouse.already.exists";
 
     /* === Validation === */
     public static final String VALIDATION_ERROR = "validation.error";
@@ -68,5 +73,8 @@ public final class MessageKey {
     public static final String INTERNAL_ERROR = "system.internal.error";
     public static final String ACCESS_DENIED = "system.access.denied";
 
-    public static final String ERROR_SEND_CODE_TO_EMAIL = "error.sent.code.to.email";}
+    public static final String ERROR_SEND_CODE_TO_EMAIL = "error.sent.code.to.email";
+    public static final String ERROR_QR_CODE_GENERATION = "error.qr.code.generation";
+    public static final String ERROR_PHOTO_UPLOAD = "error.photo.upload";
+}
 

@@ -1,5 +1,7 @@
 package com.sharom.wrm.modules.inventory.service;
 
+import com.sharom.wrm.common.exception.BadRequestException;
+import com.sharom.wrm.common.exception.InternalServerException;
 import com.sharom.wrm.common.exception.NotFoundException;
 import com.sharom.wrm.modules.inventory.mapper.BoxMapper;
 import com.sharom.wrm.modules.inventory.model.entity.Box;
@@ -25,9 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static com.sharom.wrm.modules.inventory.model.entity.BoxStatus.CREATED;
 
@@ -48,7 +48,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
     public BoxGroupResponseDTO createGroup(String orderId, BoxGroupDTO dto, List<MultipartFile> photos) {
 
         Order order = orderRepo.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(NotFoundException::orderNotFound);
 
 //        if (dto.quantity() <= 0) {
 //            throw new IllegalArgumentException("Quantity must be greater than 0");
@@ -88,7 +88,8 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 
             try {
                 // Генерируем уникальный путь для PNG
-                String tempFilePath = "/tmp/box_" + box.getBoxNumber() + ".png";
+                String tempFilePath = System.getProperty("java.io.tmpdir")
+                        + File.separator + "box_" + box.getBoxNumber() + ".png";
 
                 // Генерируем PNG с QR + текстом
                 QrCodeGenerator.generateBoxQrPng(box, tempFilePath);
@@ -103,7 +104,8 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                 // Можно удалить временный файл после загрузки
                 qrFile.delete();
             } catch (Exception e) {
-                throw new RuntimeException("Ошибка генерации или загрузки QR-кода", e);
+//                throw new RuntimeException("Ошибка генерации или загрузки QR-кода", e);
+                throw InternalServerException.errorQrCodeGeneration();
             }
 
             boxRepo.save(box);
@@ -116,7 +118,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                 savedGroup.getQuantity(),
                 mapper.toDtoList(savedGroup.getBoxes()),
                 savedGroup.getPhotoUrls()
-                );
+        );
     }
 
     @Override
@@ -153,7 +155,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
             throw new RuntimeException("Box does not belong to this group");
         }
 
-       boxRepo.delete(box);
+        boxRepo.delete(box);
     }
 
     @Override
@@ -165,19 +167,34 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         return mapper.toDtoList(group.getBoxes());
     }
 
-    private List<String> uploadPhotos(List<MultipartFile> files){
+    private List<String> uploadPhotos(List<MultipartFile> files) {
         List<String> urls = new ArrayList<>();
         if (files != null && !files.isEmpty()) {
             for (MultipartFile photo : files) {
 
                 if (photo.isEmpty()) continue;
 
-                if (!photo.getContentType().startsWith("image/")) {
+                long maxSize = 50 * 1024 * 1024;
+
+                String contentType = photo.getContentType();
+                if (contentType == null || !contentType.startsWith("image/")) {
                     throw new RuntimeException("Only images allowed");
                 }
 
+                if (photo.getSize() > maxSize) {
+                    throw new RuntimeException("File size must be less than 50MB");
+                }
+
+                String originalName = photo.getOriginalFilename();
+                if (originalName == null ||
+                        !(originalName.toLowerCase().endsWith(".jpg") ||
+                                originalName.toLowerCase().endsWith(".jpeg") ||
+                                originalName.toLowerCase().endsWith(".png"))) {
+                    throw  BadRequestException.errorInvalidFileFormat();
+                }
+
                 try {
-                    String fileName = UUID.randomUUID() + "_" + photo.getOriginalFilename();
+                    String fileName = originalName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
 
                     String photoUrl = minioService.uploadPhoto(
                             photo.getBytes(),
@@ -187,7 +204,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                     urls.add(photoUrl);
 
                 } catch (Exception e) {
-                    throw new RuntimeException("Error uploading photo", e);
+                    throw InternalServerException.errorUploadingPhoto();
                 }
             }
         }

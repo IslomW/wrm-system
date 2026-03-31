@@ -24,7 +24,7 @@ public class BoxGroupController {
     @PostMapping("/{orderId}")
     public ResponseEntity<ApiResponse<BoxGroupResponseDTO>> createGroup(
             @PathVariable String orderId,
-            @RequestBody BoxGroupDTO dto,
+            @RequestPart("dto") BoxGroupDTO dto,
             @RequestPart(value = "photos", required = false) List<MultipartFile> photos
     ) {
         BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
