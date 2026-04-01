@@ -24,11 +24,20 @@ public class BoxGroupController {
     @PostMapping("/{orderId}")
     public ResponseEntity<ApiResponse<BoxGroupResponseDTO>> createGroup(
             @PathVariable String orderId,
-            @RequestPart("dto") BoxGroupDTO dto,
-            @RequestPart(value = "photos", required = false) List<MultipartFile> photos
+            @RequestBody BoxGroupDTO dto
     ) {
-        BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto, photos);
+        BoxGroupResponseDTO responseDTO = boxGroupService.createGroup(orderId, dto);
         return ResponseFactory.created(responseDTO);
+    }
+
+
+    @PostMapping("/{groupId}/photos")
+    public ResponseEntity<ApiResponse<List<String>>> uploadGroupPhotos(
+            @PathVariable String groupId,
+            @RequestPart("photos") List<MultipartFile> photos
+    ) {
+        List<String> photoUrls = boxGroupService.uploadPhotosToGroup(groupId, photos);
+        return ResponseFactory.created(photoUrls);
     }
 
     @PostMapping("/{groupId}/boxes/{boxId}")

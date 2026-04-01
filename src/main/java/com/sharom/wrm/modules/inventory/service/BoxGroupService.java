@@ -10,8 +10,7 @@ import java.util.List;
 public interface BoxGroupService {
     BoxGroupResponseDTO createGroup(
             String orderId,
-            BoxGroupDTO dto,
-            List<MultipartFile> photos
+            BoxGroupDTO dto
     );
 
     void addBoxToGroup(String groupId, String boxId);
@@ -19,4 +18,6 @@ public interface BoxGroupService {
     void removeBoxFromGroup(String groupId, String boxId);
 
     List<BoxDTO> getBoxes(String groupId);
+
+    List<String> uploadPhotosToGroup(String boxGroupId, List<MultipartFile> files);
 }
