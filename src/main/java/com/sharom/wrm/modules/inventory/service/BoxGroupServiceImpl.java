@@ -45,7 +45,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
 
     @Override
     @Transactional
-    public BoxGroupResponseDTO createGroup(String orderId, BoxGroupDTO dto, List<MultipartFile> photos) {
+    public BoxGroupResponseDTO createGroup(String orderId, BoxGroupDTO dto) {
 
         Order order = orderRepo.findById(orderId)
                 .orElseThrow(NotFoundException::orderNotFound);
@@ -67,7 +67,6 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         boxGroup.setHeight(dto.height());
         boxGroup.setBoxType(dto.boxType());
         boxGroup.setQuantity(dto.quantity());
-        boxGroup.setPhotoUrls(uploadPhotos(photos));
 
         String groupCode = BoxNumberGenerator.generateGroupCode(boxGroupRepo.countByOrderId(orderId) + 1);
 
@@ -104,7 +103,6 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                 // Можно удалить временный файл после загрузки
                 qrFile.delete();
             } catch (Exception e) {
-//                throw new RuntimeException("Ошибка генерации или загрузки QR-кода", e);
                 throw InternalServerException.errorQrCodeGeneration();
             }
 
@@ -167,6 +165,20 @@ public class BoxGroupServiceImpl implements BoxGroupService {
         return mapper.toDtoList(group.getBoxes());
     }
 
+    @Override
+    public List<String> uploadPhotosToGroup(String boxGroupId, List<MultipartFile> files) {
+        BoxGroup boxGroup = boxGroupRepo.findById(boxGroupId)
+                .orElseThrow(NotFoundException::groupNotFound);
+
+        List<String> photoUrls = uploadPhotos(files);
+
+        boxGroup.getPhotoUrls().addAll(photoUrls);
+
+        boxGroupRepo.save(boxGroup);
+
+        return photoUrls;
+    }
+
     private List<String> uploadPhotos(List<MultipartFile> files) {
         List<String> urls = new ArrayList<>();
         if (files != null && !files.isEmpty()) {
@@ -190,7 +202,7 @@ public class BoxGroupServiceImpl implements BoxGroupService {
                         !(originalName.toLowerCase().endsWith(".jpg") ||
                                 originalName.toLowerCase().endsWith(".jpeg") ||
                                 originalName.toLowerCase().endsWith(".png"))) {
-                    throw  BadRequestException.errorInvalidFileFormat();
+                    throw BadRequestException.errorInvalidFileFormat();
                 }
 
                 try {
