@@ -16,6 +16,7 @@ import com.sharom.wrm.modules.user.model.entity.UserType;
 import com.sharom.wrm.modules.user.repository.UserRepo;
 import com.sharom.wrm.modules.warehouse.model.entity.Warehouse;
 import com.sharom.wrm.modules.warehouse.repository.WarehouseRepo;
+import com.sharom.wrm.service.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private final VerificationCodeGenerator verificationCodeService;
     private final EmailTemplateService emailTemplateService;
     private final CodeRepo codeRepo;
+    private final KafkaProducerService producerService;
 
 
     @Override
@@ -80,12 +82,16 @@ public class UserServiceImpl implements UserService {
 
         userRepo.save(user);
 
-        try {
-            emailTemplateService.sendWelcomeEmail(user.getEmail(), user.getUserName());
-        } catch (Exception e) {
-            log.error("User registered but failed to send welcome email. email={}", user.getEmail(), e);
-        }
+        producerService.send(
+                new UserRegisteredEvent(user.getEmail(), user.getUserName())
+        );
+//        try {
+//            emailTemplateService.sendWelcomeEmail(user.getEmail(), user.getUserName());
+//        } catch (Exception e) {
+//            log.error("User registered but failed to send welcome email. email={}", user.getEmail(), e);
+//        }
 
+        System.out.println("Kafka SEND BO‘LDI");
         String accessToken = jwtUtil.generateToken(user);
         String refreshToken = refreshTokenService.createRefreshToken(user.getUserName());
 
